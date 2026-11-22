@@ -1,0 +1,4 @@
+export default function AdminPage(){
+ const stats=[["Total registrations","128"],["Solo entries","74"],["Squad entries","54"],["Verified repositories","96"],["Pending invitations","18"],["Submitted projects","112"],["Judging progress","82%"],["Prizes pending","11"]];
+ return <><p className="eyebrow">Mock administration</p><h1 className="text-3xl font-semibold">Operations overview</h1><div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{stats.map(([label,value])=><div key={label} className="card p-5"><p className="text-xs text-slate-500">{label}</p><p className="mt-3 text-3xl font-semibold">{value}</p></div>)}</div><div className="mt-6 card p-6"><h2 className="font-semibold">Demo status</h2><p className="mt-3 text-sm leading-6 text-slate-400">All figures and actions on this interface are mock data. This UI does not provide authentication, permissions or backend administration.</p></div></>;
+}

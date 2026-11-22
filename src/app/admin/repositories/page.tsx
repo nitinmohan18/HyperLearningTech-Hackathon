@@ -1,0 +1,4 @@
+export default function RepositoriesPage(){
+ const rows=[["Team Null","github.com/demo/carbon-lens","Accepted","Verified","Initial snapshot pending"],["Aarav Sharma","github.com/demo/signbridge","Accepted","Pending","Invitation accepted"],["Pulse Makers","github.com/demo/campus-pulse","Pending","Pending","Follow up requested"]];
+ return <><p className="eyebrow">Mock repositories</p><h1 className="text-3xl font-semibold">Repository management</h1><div className="table-wrap mt-8"><table className="table"><thead><tr><th>Team</th><th>Repository</th><th>Invitation</th><th>Access</th><th>Admin note</th></tr></thead><tbody>{rows.map(r=><tr key={r[0]}>{r.map((v,i)=><td key={i} className={i===0?"text-white":""}>{v}</td>)}</tr>)}</tbody></table></div></>;
+}

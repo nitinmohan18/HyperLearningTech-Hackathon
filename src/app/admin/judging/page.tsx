@@ -1,0 +1,4 @@
+export default function JudgingPage(){
+ const rows=[["Carbon Lens","94","Functionality 38 · UI 28 · Innovation 28","Provisional"],["Campus Pulse","91","Functionality 36 · UI 29 · Innovation 26","Provisional"],["SignBridge","89","Functionality 35 · UI 27 · Innovation 27","Provisional"]];
+ return <><p className="eyebrow">Mock judging</p><h1 className="text-3xl font-semibold">Project scores</h1><div className="table-wrap mt-8"><table className="table"><thead><tr><th>Project</th><th>Total / 100</th><th>Score breakdown</th><th>Judging status</th></tr></thead><tbody>{rows.map(r=><tr key={r[0]}>{r.map((v,i)=><td key={i} className={i===0?"text-white":i===1?"font-bold text-cyan":""}>{v}</td>)}</tr>)}</tbody></table></div><label className="mt-6 block max-w-xl text-sm">Judge notes<textarea className="input mt-2 h-28 py-3" placeholder="Demo judge notes"/></label></>;
+}

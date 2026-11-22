@@ -1,0 +1,18 @@
+export const event = {
+  name: "HyperLearningTech – Winter Hackathon '26",
+  shortName: "Winter Hackathon '26",
+  edition: "1st Edition",
+  mode: "Online",
+  tagline: "BUILD. PROVE. EARN.",
+  organiser: "HyperLearningTech",
+  competitionStart: "2026-12-26T22:00:00+05:30",
+  competitionEnd: "2026-12-27T22:00:00+05:30",
+  results: "27 December 2026, 11:00 PM IST",
+  prizeDistribution: "By 11:05 PM IST",
+  preparationDay: "25 December 2026",
+  registrationClose: "25 December 2026",
+  duration: "24 Hours",
+  prizePool: "₹9000",
+  soloFee: "₹99",
+  squadFee: "₹200",
+};

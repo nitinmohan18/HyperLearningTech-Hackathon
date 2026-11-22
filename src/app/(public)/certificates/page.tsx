@@ -1,0 +1,10 @@
+"use client";
+import { useState } from "react";
+import { CheckCircle2, ShieldX } from "lucide-react";
+
+export default function CertificatesPage() {
+  const [id,setId]=useState("");
+  const [state,setState]=useState<"idle"|"valid"|"invalid">("idle");
+  const verify=()=>setState(id.trim().toUpperCase()==="HLT-W26-DEMO"?"valid":"invalid");
+  return <div className="container-site section-pad"><p className="eyebrow">Certificate verification</p><h1 className="section-title">Verify a certificate.</h1><p className="section-copy">Demo verification UI. Try certificate ID <strong className="text-slate-200">HLT-W26-DEMO</strong>.</p><div className="mt-8 max-w-xl rounded-xl border border-line bg-panel p-5"><label className="mb-2 block text-sm font-semibold" htmlFor="certificate">Certificate ID</label><div className="flex flex-col gap-3 sm:flex-row"><input id="certificate" className="input" value={id} onChange={e=>{setId(e.target.value);setState("idle")}} placeholder="Enter certificate ID" /><button type="button" className="btn-primary" onClick={verify}>Verify</button></div></div>{state==="valid"&&<div className="mt-5 max-w-xl border border-emerald-500/30 bg-emerald-500/5 p-5"><div className="flex gap-3"><CheckCircle2 className="text-emerald-400"/><div><p className="font-semibold text-emerald-300">Demo certificate verified</p><p className="mt-1 text-sm text-slate-400">Certificate preview placeholder for HLT-W26-DEMO.</p></div></div></div>}{state==="invalid"&&<div className="mt-5 max-w-xl border border-red-500/30 bg-red-500/5 p-5"><div className="flex gap-3"><ShieldX className="text-red-400"/><div><p className="font-semibold text-red-300">Certificate not found</p><p className="mt-1 text-sm text-slate-400">Check the ID and try again. This demo does not verify real certificates.</p></div></div></div>}</div>;
+}

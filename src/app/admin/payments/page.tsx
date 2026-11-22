@@ -1,0 +1,4 @@
+export default function PaymentsPage(){
+ const rows=[["Overall 1st","Team Null","₹2,999","Pending","—"],["Overall 2nd","Pulse Makers","₹1,999","Pending","—"],["Overall 3rd","Aarav Sharma","₹999","Pending","—"]];
+ return <><p className="eyebrow">Mock prize operations</p><h1 className="text-3xl font-semibold">Payment status</h1><div className="table-wrap mt-8"><table className="table"><thead><tr><th>Award</th><th>Winner / leader</th><th>Amount</th><th>Status</th><th>Reference placeholder</th></tr></thead><tbody>{rows.map(r=><tr key={r[0]}>{r.map((v,i)=><td key={i} className={i===0?"text-white":i===2?"text-cyan":""}>{v}</td>)}</tr>)}</tbody></table></div><p className="mt-5 text-xs text-slate-500">No real payment processing or transaction handling is implemented.</p></>;
+}
