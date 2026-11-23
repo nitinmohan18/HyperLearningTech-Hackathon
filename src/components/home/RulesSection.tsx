@@ -20,7 +20,7 @@ export default function RulesSection() {
           <div>
             <p className="eyebrow">Fair Competition Standards</p>
             <h2 className="section-title">
-              Rules & <span className="font-serif italic text-[#c89f6d]">Guidelines</span>
+              Rules & <span className="font-serif italic text-[#e0b885]">Guidelines</span>
             </h2>
             <p className="section-copy">
               Clear, transparent operational policies governing eligibility, AI assistance, repository integrity, and intellectual property.
@@ -30,74 +30,67 @@ export default function RulesSection() {
           <div className="flex shrink-0 items-center gap-3">
             <Link
               href="/rules"
-              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-[#c89f6d] hover:text-[#f0eae1] transition-colors"
+              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-[#e0b885] hover:text-white transition-colors"
             >
               Full Rules Document <ArrowRight size={14} />
             </Link>
           </div>
         </div>
 
-        {/* 8 Expandable Accordion Groups */}
-        <div className="mt-12 space-y-3">
+        {/* 8 Expandable Accordion Groups - Clean rows */}
+        <div className="mt-12 divide-y divide-white/[0.08] border-y border-white/[0.08]">
           {rulesData.map((group) => {
             const isOpen = openGroup === group.id;
 
             return (
               <div
                 key={group.id}
-                className={`overflow-hidden rounded-2xl border transition-all duration-200 ${
-                  isOpen
-                    ? "border-[#c89f6d]/45 bg-[#16100c]/70 shadow-md"
-                    : "border-sand-border/15 bg-[#120d09]/40 hover:border-sand-border/30"
-                } backdrop-blur-xl`}
+                className="transition-colors hover:bg-white/[0.01]"
               >
                 <button
                   type="button"
                   onClick={() => toggleGroup(group.id)}
-                  className="flex w-full items-center justify-between p-5 sm:p-6 text-left transition-colors"
+                  className="flex w-full items-center justify-between py-5 text-left transition-colors"
                   aria-expanded={isOpen}
                 >
-                  <div className="flex items-center gap-3.5 pr-4">
-                    <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d]">
-                      <Shield size={16} />
-                    </div>
+                  <div className="flex items-center gap-4 pr-4">
+                    <Shield size={18} className="text-[#e0b885] shrink-0" />
                     <div>
-                      <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#f0eae1]">
+                      <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
                         {group.category}
                       </h3>
-                      <p className="mt-0.5 text-xs text-[#9e8e7c]">
+                      <p className="mt-0.5 text-xs text-[#d6cec2]">
                         {group.summary}
                       </p>
                     </div>
                   </div>
 
-                  <div
-                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sand-border/20 transition-transform duration-200 ${
-                      isOpen ? "rotate-180 text-[#c89f6d]" : "text-[#8e7a68]"
+                  <ChevronDown
+                    size={16}
+                    className={`text-[#b8ada0] shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-[#e0b885]" : ""
                     }`}
-                  >
-                    <ChevronDown size={16} />
-                  </div>
+                  />
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-sand-border/15 p-5 sm:p-6 pt-4 space-y-4">
+                  <div className="pb-6 pt-1 space-y-4">
                     {group.rules.map((rule, idx) => (
                       <div
                         key={idx}
-                        className="rounded-xl border border-sand-border/10 bg-[#120d09]/50 p-4 transition-colors"
+                        className="border-l border-white/[0.12] pl-4 py-1"
                       >
                         <div className="flex flex-wrap items-center justify-between gap-2">
-                          <h4 className="font-serif text-base font-normal text-[#f0eae1]">
+                          <h4 className="font-serif text-base font-normal text-white">
                             {rule.title}
                           </h4>
                           {rule.tag && (
-                            <span className="rounded-full border border-sand-border/25 bg-[#1e1712]/50 px-2.5 py-0.5 font-mono text-[10px] text-[#c89f6d]">
+                            <span className="font-mono text-[10px] text-[#e0b885]">
                               {rule.tag}
                             </span>
                           )}
                         </div>
-                        <p className="mt-2 text-xs leading-relaxed text-[#9e8e7c]">
+                        <p className="mt-1 text-xs leading-relaxed text-[#d6cec2]">
                           {rule.description}
                         </p>
                       </div>

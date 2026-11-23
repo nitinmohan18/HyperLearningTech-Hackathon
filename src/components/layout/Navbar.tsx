@@ -52,7 +52,7 @@ export default function Navbar() {
       const targetId = href.replace("#", "");
       const targetEl = document.getElementById(targetId);
       if (targetEl) {
-        const offset = 80;
+        const offset = 90;
         const bodyRect = document.body.getBoundingClientRect().top;
         const elementRect = targetEl.getBoundingClientRect().top;
         const elementPosition = elementRect - bodyRect;
@@ -71,24 +71,24 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Announcements Banner */}
-      <div className="border-b border-sand-border/15 bg-[#100b08]/85 px-4 py-2 text-center font-mono text-[11px] sm:text-xs text-[#8e7a68] backdrop-blur-md">
+      {/* Top Status Bar */}
+      <div className="border-b border-white/[0.1] bg-[#0d0a08]/50 px-4 py-2 text-center font-mono text-[11px] sm:text-xs text-[#d6cec2] backdrop-blur-md">
         <div className="container-site flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 text-[#c89f6d] font-semibold">
+          <span className="inline-flex items-center gap-1.5 text-[#e0b885] font-semibold">
             <Sparkles size={13} />
             <span>Winter Hackathon ’26</span>
           </span>
-          <span className="hidden sm:inline text-sand-muted">·</span>
-          <span className="text-[#f0eae1]">26–27 December 2026 (24-Hour Online)</span>
-          <span className="hidden sm:inline text-sand-muted">·</span>
-          <span className="text-[#c89f6d]">Registrations close 25 Dec</span>
+          <span className="hidden sm:inline text-white/30">·</span>
+          <span className="text-white">26–27 December 2026 (24-Hour Online)</span>
+          <span className="hidden sm:inline text-white/30">·</span>
+          <span className="text-[#e0b885]">Registrations close 25 Dec</span>
         </div>
       </div>
 
-      {/* Main Conventional Header */}
-      <header className="sticky top-0 z-50 border-b border-sand-border/20 bg-[#0d0a08]/90 backdrop-blur-xl transition-all">
+      {/* Floating Apple iOS Reflective Translucent Navigation Bar */}
+      <header className="sticky top-3.5 z-50 px-3 sm:px-6 transition-all pointer-events-none">
         <nav
-          className="container-site flex h-16 items-center justify-between gap-3 sm:gap-4"
+          className="glass apple-glass-nav pointer-events-auto mx-auto max-w-[1240px] px-3.5 sm:px-5 py-2 flex items-center justify-between gap-2 sm:gap-4"
           aria-label="Main Navigation"
         >
           {/* Logo Branding */}
@@ -100,8 +100,8 @@ export default function Navbar() {
             <Logo size="default" showSubtitle={true} />
           </Link>
 
-          {/* Desktop Conventional Navigation Bar (All 8 links visible on lg and up) */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-1.5 2xl:gap-2">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center gap-1 rounded-full bg-white/[0.04] border border-white/[0.08] px-1.5 py-1">
             {navLinks.map(({ label, href }) => {
               const targetId = href.replace("#", "");
               const isActive = isHome && activeSection === targetId;
@@ -112,10 +112,10 @@ export default function Navbar() {
                   key={label}
                   href={linkUrl}
                   onClick={(e) => handleNavClick(e, href)}
-                  className={`rounded-full px-2.5 xl:px-3 py-1 font-mono text-xs font-medium tracking-wide transition-all ${
+                  className={`rounded-full px-3 py-1 font-mono text-xs tracking-wide transition-colors ${
                     isActive
-                      ? "bg-[#c89f6d]/15 text-[#f0eae1] border border-[#c89f6d]/40 shadow-sm"
-                      : "text-[#9e8e7c] hover:bg-white/[0.04] hover:text-[#f0eae1]"
+                      ? "bg-white/[0.15] text-white font-medium border border-white/20"
+                      : "text-[#b8ada0] hover:text-white"
                   }`}
                 >
                   {label}
@@ -125,32 +125,32 @@ export default function Navbar() {
           </div>
 
           {/* Action CTAs (Desktop) */}
-          <div className="hidden sm:flex items-center gap-3.5">
+          <div className="hidden sm:flex items-center gap-3">
             <Link
               href="/login"
-              className="font-mono text-xs uppercase tracking-[0.18em] text-[#8e7a68] transition-colors hover:text-[#f0eae1]"
+              className="font-mono text-xs uppercase tracking-[0.18em] text-[#b8ada0] transition-colors hover:text-white px-2 py-1"
             >
               Login
             </Link>
             <Link
               href="/register"
-              className="btn-primary h-9 px-4 xl:px-5 text-xs font-semibold tracking-wide shadow-sm"
+              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-white px-4 xl:px-5 text-xs font-semibold text-[#120d09] hover:bg-[#f0eae1] transition-colors"
             >
               Register Now →
             </Link>
           </div>
 
-          {/* Mobile Menu Hamburger (Visible below lg) */}
-          <div className="flex items-center gap-2.5 lg:hidden">
+          {/* Mobile Menu Actions (Visible below lg) */}
+          <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/register"
-              className="btn-primary h-8 px-3 text-[11px] font-semibold sm:hidden"
+              className="inline-flex h-8 items-center justify-center rounded-full bg-white px-3 text-[11px] font-semibold text-[#120d09] sm:hidden"
             >
               Register
             </Link>
             <button
               type="button"
-              className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/30 bg-[#16100c]/80 text-[#f0eae1] transition hover:border-[#c89f6d]/50"
+              className="rounded-full p-2 text-white hover:bg-white/10 transition-colors"
               aria-label="Toggle navigation menu"
               aria-expanded={open}
               onClick={() => setOpen(!open)}
@@ -160,9 +160,9 @@ export default function Navbar() {
           </div>
         </nav>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile Navigation Drawer (Apple iOS Floating Sheet) */}
         {open && (
-          <div className="border-t border-sand-border/20 bg-[#0d0a08]/98 px-6 py-6 backdrop-blur-2xl lg:hidden">
+          <div className="glass apple-glass-panel pointer-events-auto mx-auto mt-2.5 max-w-[1240px] p-5 lg:hidden shadow-2xl">
             <div className="flex flex-col gap-2 font-mono text-xs uppercase tracking-wider">
               {navLinks.map(({ label, href }) => {
                 const targetId = href.replace("#", "");
@@ -174,10 +174,10 @@ export default function Navbar() {
                     key={label}
                     href={linkUrl}
                     onClick={(e) => handleNavClick(e, href)}
-                    className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    className={`flex items-center justify-between rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors ${
                       isActive
-                        ? "bg-[#c89f6d]/15 text-[#f0eae1] font-semibold"
-                        : "text-[#9e8e7c] hover:bg-white/[0.03] hover:text-[#f0eae1]"
+                        ? "bg-white/[0.12] text-white font-medium"
+                        : "text-[#b8ada0] hover:bg-white/[0.04] hover:text-white"
                     }`}
                   >
                     <span>{label}</span>
@@ -186,7 +186,7 @@ export default function Navbar() {
                 );
               })}
 
-              <div className="mt-4 flex flex-col gap-3 border-t border-sand-border/15 pt-4">
+              <div className="mt-4 flex flex-col gap-2.5 border-t border-white/[0.1] pt-4">
                 <Link
                   href="/login"
                   className="btn-secondary h-11 justify-center text-xs"
@@ -196,7 +196,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/register"
-                  className="btn-primary h-11 justify-center text-xs font-semibold"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f5efe6] to-[#ded2c3] text-xs font-semibold text-[#120d09] shadow-md"
                   onClick={() => setOpen(false)}
                 >
                   Register Now <ArrowRight size={15} />
