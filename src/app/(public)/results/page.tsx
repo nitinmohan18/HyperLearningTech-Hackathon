@@ -1,6 +1,133 @@
+import Link from "next/link";
+import { Award, Sparkles, Trophy, Medal, ArrowRight, ShieldCheck } from "lucide-react";
 import { overallPrizes, specialPrizes } from "@/data/prizes";
 import { leaderboard } from "@/data/mock-data";
 
 export default function ResultsPage() {
-  return <div className="container-site section-pad"><p className="eyebrow">Demo results</p><h1 className="section-title">Results and recognition.</h1><p className="mt-4 text-sm text-amber-300">Demo data only — this is not an official results declaration.</p><div className="mt-10 grid gap-5 lg:grid-cols-3">{overallPrizes.map((p,i)=><div key={p.place} className="card p-5"><p className="text-xs text-slate-500">{p.place} place · {p.amount}</p><p className="mt-4 font-semibold">{leaderboard[i]?.project ?? "Demo project"}</p><p className="mt-1 text-sm text-slate-400">{leaderboard[i]?.team ?? "Demo team"}</p></div>)}</div><div className="mt-8 grid gap-5 md:grid-cols-2">{specialPrizes.map(a=><div key={a.category} className="card p-6"><h2 className="font-semibold">{a.category}</h2>{a.prizes.map((prize,i)=><div key={prize} className="mt-3 flex justify-between border-t border-line pt-3 text-sm"><span>Demo winner {i+1}</span><span className="text-cyan">{prize}</span></div>)}</div>)}</div><h2 className="mt-12 text-2xl font-semibold">Top 25 ranking</h2><p className="mt-3 text-sm leading-7 text-slate-400">The complete official Top 25 ranking will appear here after declaration. Every ranked project will receive a ranking certificate; every ranked squad member will receive an individual certificate.</p><div className="mt-6 card p-6 border-dashed"><p className="font-semibold">Hidden surprise recognition</p><p className="mt-2 text-sm text-slate-400">Additional recognition may be announced for selected promising projects outside the cash-prize positions.</p></div></div>;
+  const getPodiumIcon = (index: number) => {
+    switch (index) {
+      case 0:
+        return <Trophy size={20} className="text-[#c89f6d]" />;
+      case 1:
+        return <Medal size={20} className="text-[#c89f6d]/80" />;
+      default:
+        return <Medal size={20} className="text-[#8e7a68]" />;
+    }
+  };
+
+  return (
+    <div className="bg-cream">
+      <div className="container-site section-pad">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
+              Declaration & Honors
+            </p>
+            <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
+              Official Event Results
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
+              Honoring champions, category pioneers, and all Top 25 certified projects for Winter Hackathon ’26.
+            </p>
+          </div>
+          <span className="font-mono text-xs text-[#8e7a68]">
+            Provisional Results Standings
+          </span>
+        </div>
+
+        {/* Top 3 Podium Highlights */}
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {overallPrizes.slice(0, 3).map((p, i) => (
+            <div
+              key={p.place}
+              className={`flex flex-col justify-between rounded-2xl border bg-[#120d09]/35 p-7 backdrop-blur-xl transition-all duration-300 ${
+                i === 0
+                  ? "border-[#c89f6d]/40 shadow-card"
+                  : "border-sand-border/15 hover:border-sand-border/30"
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-semibold uppercase tracking-widest text-[#8e7a68]">
+                    {p.place} Place Award
+                  </span>
+                  {getPodiumIcon(i)}
+                </div>
+                <h3 className="mt-5 font-serif text-3xl font-normal text-[#f0eae1]">
+                  {leaderboard[i]?.project ?? "Project"}
+                </h3>
+                <p className="mt-1 font-mono text-xs text-[#8e7a68]">
+                  Team: {leaderboard[i]?.team ?? "Team"}
+                </p>
+              </div>
+
+              <div className="mt-8 border-t border-sand-border/15 pt-4 flex items-center justify-between">
+                <span className="font-mono text-xs text-[#8e7a68]">Cash Reward:</span>
+                <span className="font-serif text-2xl font-normal text-[#c89f6d]">{p.amount}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Special Category Winners */}
+        <div className="mt-14">
+          <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
+            Special Excellence Winners
+          </h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            {specialPrizes.map((a) => (
+              <div key={a.category} className="rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 backdrop-blur-xl">
+                <div className="flex items-center gap-3.5">
+                  <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm">
+                    <Sparkles size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-2xl font-normal text-[#f0eae1]">
+                      {a.category}
+                    </h3>
+                    <p className="text-xs text-[#9e8e7c]">Excellence Track Honors</p>
+                  </div>
+                </div>
+
+                <div className="mt-6 divide-y divide-sand-border/15">
+                  {a.prizes.map((prize) => (
+                    <div key={prize.place} className="flex items-center justify-between py-3 text-sm">
+                      <span className="font-mono text-xs text-[#8e7a68]">{prize.place} Place Winner</span>
+                      <span className="font-mono font-semibold text-[#c89f6d]">{prize.amount}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Top 25 Ranking Announcement */}
+        <div className="mt-14 rounded-2xl border border-sand-border/20 bg-[#16100c]/40 p-8 sm:p-10 backdrop-blur-xl">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#c89f6d]">
+                <ShieldCheck size={16} />
+                <span>Certification Program</span>
+              </div>
+              <h2 className="mt-3 font-serif text-3xl font-normal text-[#f0eae1]">
+                Top 25 Official Rankings & Certificates
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
+                Every project qualifying in the Top 25 receives an authenticated ranking certificate. Every squad member receives an individual credential with unique verification ID.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-4">
+              <Link href="/leaderboard" className="btn-primary">
+                View Full Leaderboard <ArrowRight size={16} />
+              </Link>
+              <Link href="/certificates" className="btn-secondary">
+                Verify Credentials
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

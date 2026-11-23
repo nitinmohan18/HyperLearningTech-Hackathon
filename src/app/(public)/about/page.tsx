@@ -1,16 +1,95 @@
+import Link from "next/link";
+import { ArrowRight, Code, ShieldCheck, Terminal, Users } from "lucide-react";
+import { event } from "@/data/event";
+
 export default function AboutPage() {
+  const pillars = [
+    {
+      title: "What you will build",
+      icon: Code,
+      copy: "Choose a meaningful problem and deliver a functional project with a clear user journey, working features, and inspectable source code.",
+    },
+    {
+      title: "What makes it different",
+      icon: ShieldCheck,
+      copy: "Repository snapshots, hourly checkpoints, and collaborator inspection are used to keep development effort visible, credible, and fair.",
+    },
+    {
+      title: "Genuine development effort",
+      icon: Terminal,
+      copy: "Participants must document genuine contributions, disclose AI and existing-code assistance honestly, and build the core solution during the competition.",
+    },
+    {
+      title: "Solo or Squad format",
+      icon: Users,
+      copy: `Solo entry is ${event.soloFee} per individual builder. Squads contain 2–4 members and pay ${event.squadFee} flat for one unified project submission.`,
+    },
+  ];
+
   return (
-    <div className="container-site section-pad">
-      <p className="eyebrow">About the event</p>
-      <h1 className="section-title">A 24-hour test of ideas, execution and proof.</h1>
-      <p className="section-copy">HyperLearningTech – Winter Hackathon '26 is the first edition of an independently organised online competition for individual builders and squads.</p>
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {[
-          ["What you will build", "Choose a meaningful problem and deliver a functional project with a clear user journey, working features and inspectable source."],
-          ["What makes it different", "Repository snapshots, hourly checkpoints and collaborator inspection are used to keep development effort visible and credible."],
-          ["Development effort", "Participants must document genuine contribution, disclose AI and existing-code assistance, and build the core solution during the competition."],
-          ["Solo or squad", "Solo entry costs ₹99. Squads contain 2–4 members and pay ₹200 flat for one project."],
-        ].map(([title, copy]) => <article key={title} className="card p-6"><h2 className="text-xl font-semibold">{title}</h2><p className="mt-3 text-sm leading-7 text-slate-400">{copy}</p></article>)}
+    <div className="bg-cream">
+      <div className="container-site section-pad">
+        <div className="max-w-3xl">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
+            About the Event
+          </p>
+          <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
+            A 24-hour test of <br />
+            <span className="font-serif italic font-normal text-[#c89f6d]">
+              ideas, execution & proof.
+            </span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
+            HyperLearningTech – Winter Hackathon ’26 is the inaugural edition of an independently organised online competition designed for serious individual builders and collaborative squads.
+          </p>
+        </div>
+
+        {/* Pillars Grid */}
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
+          {pillars.map(({ title, icon: Icon, copy }) => (
+            <article
+              key={title}
+              className="group relative rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-8 shadow-card backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/50 hover:-translate-y-1"
+            >
+              <div className="flex items-center gap-4">
+                <div className="grid h-11 w-11 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm transition-colors group-hover:border-[#c89f6d]/50">
+                  <Icon size={20} />
+                </div>
+                <h2 className="font-serif text-2xl font-normal text-[#f0eae1] tracking-tight">
+                  {title}
+                </h2>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-[#9e8e7c]">
+                {copy}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        {/* Highlight Callout */}
+        <div className="mt-12 rounded-2xl border border-sand-border/20 bg-[#120d09]/40 p-8 sm:p-12 shadow-card backdrop-blur-xl">
+          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
+            <div className="max-w-2xl">
+              <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#c89f6d]">
+                Guiding Principle
+              </span>
+              <h3 className="mt-3 font-serif text-3xl font-normal tracking-tight text-[#f0eae1] sm:text-4xl">
+                {event.tagline}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
+                We believe in verifiable progress over exaggerated pitches. Every team will maintain an inspectable git commit log from kickoff to the final reveal.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-4">
+              <Link href="/register" className="btn-primary">
+                Register for Hackathon →
+              </Link>
+              <Link href="/rules" className="btn-secondary">
+                Read Competition Rules
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
