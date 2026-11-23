@@ -1,10 +1,133 @@
 "use client";
+
 import { useMemo, useState } from "react";
+import { Search, Trophy } from "lucide-react";
 import { leaderboard } from "@/data/mock-data";
 
 export default function LeaderboardPage() {
-  const [filter,setFilter]=useState("All");
-  const [query,setQuery]=useState("");
-  const rows=useMemo(()=>leaderboard.filter(r=>(filter==="All"||r.type===filter)&&(`${r.project} ${r.team}`.toLowerCase().includes(query.toLowerCase()))),[filter,query]);
-  return <div className="container-site section-pad"><p className="eyebrow">Demo leaderboard</p><h1 className="section-title">Overall ranking.</h1><p className="mt-4 text-sm text-amber-300">Mock UI data — not live or official results.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"><input className="input sm:max-w-sm" placeholder="Search project or team" value={query} onChange={e=>setQuery(e.target.value)} /><div className="flex gap-2">{["All","Solo","Squad"].map(v=><button key={v} type="button" onClick={()=>setFilter(v)} className={`h-10 rounded-lg border px-4 text-sm ${filter===v?"border-electric bg-electric/10 text-white":"border-line text-slate-400"}`}>{v}</button>)}</div></div><div className="table-wrap mt-6"><table className="table"><thead><tr><th>Rank</th><th>Project</th><th>Team</th><th>Score</th><th>Status</th><th>Updated</th></tr></thead><tbody>{rows.map(r=><tr key={r.rank}><td className="font-bold text-cyan">#{r.rank}</td><td className="font-semibold text-white">{r.project}</td><td>{r.team}</td><td>{r.score}/100</td><td><span className="rounded-full border border-amber-400/30 px-2 py-1 text-xs text-amber-300">{r.status}</span></td><td className="text-xs">{r.updated}</td></tr>)}</tbody></table></div>{rows.length===0&&<div className="card mt-4 p-8 text-center text-slate-400">No matching demo entries.</div>}</div>;
+  const [filter, setFilter] = useState("All");
+  const [query, setQuery] = useState("");
+
+  const rows = useMemo(
+    () =>
+      leaderboard.filter(
+        (r) =>
+          (filter === "All" || r.type === filter) &&
+          `${r.project} ${r.team}`.toLowerCase().includes(query.toLowerCase())
+      ),
+    [filter, query]
+  );
+
+  return (
+    <div className="bg-cream">
+      <div className="container-site section-pad">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
+              Event Standings
+            </p>
+            <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
+              Competition Leaderboard
+            </h1>
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
+              Real-time rankings and verified checkpoint scores. Official results declared on 27 Dec, 11:00 PM IST.
+            </p>
+          </div>
+          <span className="font-mono text-xs text-[#8e7a68]">
+            Provisional Preview · Live Sync
+          </span>
+        </div>
+
+        {/* Search & Filters */}
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="relative w-full sm:max-w-md">
+            <Search
+              size={16}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8e7a68]"
+            />
+            <input
+              className="input pl-11"
+              placeholder="Search by project or team name..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs text-[#8e7a68] mr-1">Filter:</span>
+            {["All", "Solo", "Squad"].map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setFilter(v)}
+                className={`h-10 rounded-full px-5 font-mono text-xs font-medium transition-all ${
+                  filter === v
+                    ? "bg-[#f0eae1] text-[#120d09] shadow-sm font-semibold"
+                    : "border border-sand-border/20 bg-[#16100c]/40 text-[#9e8e7c] hover:border-sand-border/40 hover:text-[#f0eae1]"
+                }`}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Leaderboard Table Container */}
+        <div className="mt-6 overflow-hidden rounded-2xl border border-sand-border/15 bg-[#120d09]/35 backdrop-blur-xl">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-sand-border/15 bg-[#16100c]/60">
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68] w-20">Rank</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Project</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Team</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Type</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Score</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Status</th>
+                  <th className="px-6 py-4 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#8e7a68]">Updated</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-sand-border/10">
+                {rows.map((r) => (
+                  <tr key={r.rank} className="transition-colors hover:bg-white/[0.02]">
+                    <td className="px-6 py-4 font-mono font-semibold text-[#c89f6d]">
+                      #{String(r.rank).padStart(2, "0")}
+                    </td>
+                    <td className="px-6 py-4 font-serif text-lg font-normal text-[#f0eae1]">
+                      {r.project}
+                    </td>
+                    <td className="px-6 py-4 text-[#9e8e7c]">{r.team}</td>
+                    <td className="px-6 py-4">
+                      <span className="font-mono text-xs text-[#8e7a68]">{r.type}</span>
+                    </td>
+                    <td className="px-6 py-4 font-mono font-semibold text-[#f0eae1]">
+                      {r.score}<span className="text-xs text-[#8e7a68] font-normal">/100</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center gap-1.5 font-mono text-xs text-[#c89f6d]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#c89f6d]" />
+                        {r.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 font-mono text-xs text-[#8e7a68]">{r.updated}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {rows.length === 0 && (
+          <div className="mt-6 rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-12 text-center backdrop-blur-xl">
+            <p className="font-serif text-xl font-normal text-[#f0eae1]">
+              No matching entries found
+            </p>
+            <p className="mt-1 text-xs text-[#8e7a68]">
+              Try adjusting your search query or filter selection.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
