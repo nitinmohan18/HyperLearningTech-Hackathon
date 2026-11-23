@@ -44,7 +44,7 @@ export default function RegistrationPricing() {
           <p className="eyebrow">Participation & Pricing</p>
           <h2 className="section-title">
             Simple, Transparent <br />
-            <span className="font-serif italic text-[#c89f6d]">Entry Formats</span>
+            <span className="font-serif italic text-[#e0b885]">Entry Formats</span>
           </h2>
           <p className="section-copy mx-auto">
             Choose your participation track. Whether you build alone or collaborate with a squad, registration includes full competition access, inspection review, and certificate eligibility.
@@ -54,61 +54,59 @@ export default function RegistrationPricing() {
         {/* Pricing Cards */}
         <div className="mt-14 grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
           {/* SOLO CARD */}
-          <div className="relative flex flex-col justify-between rounded-2xl border border-sand-border/20 bg-[#120d09]/45 p-8 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:-translate-y-1">
+          <div className="glass rounded-2xl flex flex-col justify-between p-7 sm:p-8 border border-white/[0.08]">
             <div>
               <div className="flex items-center justify-between">
-                <div className="grid h-11 w-11 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d]">
-                  <User size={20} />
-                </div>
-                <span className="rounded-full border border-sand-border/30 bg-[#16100c] px-3 py-1 font-mono text-xs font-medium text-[#8e7a68]">
+                <User size={24} className="text-[#e0b885]" />
+                <span className="font-mono text-xs text-[#b8ada0]">
                   Individual Builder
                 </span>
               </div>
 
-              <h3 className="mt-6 font-serif text-3xl font-normal text-[#f0eae1]">
+              <h3 className="mt-5 font-serif text-3xl font-normal text-white">
                 Solo Entry
               </h3>
-              <p className="mt-2 text-xs text-[#9e8e7c]">
+              <p className="mt-1 text-xs text-[#d6cec2]">
                 For independent developers building and shipping an original project end-to-end.
               </p>
 
-              <div className="mt-6 border-y border-sand-border/15 py-5">
+              <div className="mt-5 border-y border-white/[0.08] py-4">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-5xl font-semibold text-[#f0eae1]">
+                  <span className="font-serif text-5xl font-semibold text-white">
                     ₹99
                   </span>
-                  <span className="font-mono text-xs text-[#8e7a68]">
+                  <span className="font-mono text-xs text-[#b8ada0]">
                     per participant
                   </span>
                 </div>
-                <p className="mt-1 font-mono text-[11px] text-[#c89f6d]">
+                <p className="mt-1 font-mono text-[11px] text-[#e0b885]">
                   Effective cost: ₹99 flat
                 </p>
               </div>
 
-              <ul className="mt-6 space-y-3 text-xs text-[#9e8e7c]">
+              <ul className="mt-6 space-y-3 text-xs text-[#d6cec2]">
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>One solo participant entry</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>One project submission</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Normalized 100-point rubric evaluation</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Eligible for Overall Top 5 & Special Category cash awards</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Individual verifiable participation certificate</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Eligible for Top 25 Ranking Certificate</span>
                 </li>
               </ul>
@@ -122,67 +120,59 @@ export default function RegistrationPricing() {
           </div>
 
           {/* SQUAD CARD */}
-          <div className="relative flex flex-col justify-between rounded-2xl border-2 border-[#c89f6d]/50 bg-[#16100c]/65 p-8 shadow-xl shadow-[#c89f6d]/5 backdrop-blur-xl transition-all duration-300 hover:border-[#c89f6d] hover:-translate-y-1">
-            <span className="absolute -top-3.5 left-8 inline-flex items-center gap-1 rounded-full border border-[#c89f6d]/50 bg-[#0d0a08] px-3 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wider text-[#c89f6d]">
-              ★ Popular Format
-            </span>
-
+          <div className="relative glass glass-accent rounded-2xl flex flex-col justify-between p-7 sm:p-8 border border-[#e0b885]/40">
             <div>
               <div className="flex items-center justify-between">
-                <div className="grid h-11 w-11 place-items-center rounded-xl border border-[#c89f6d]/40 bg-[#1c140d]/80 text-[#c89f6d]">
-                  <Users size={20} />
-                </div>
-                <span className="rounded-full border border-[#c89f6d]/30 bg-[#c89f6d]/10 px-3 py-1 font-mono text-xs font-semibold text-[#c89f6d]">
-                  2–4 Collaborators
+                <Users size={24} className="text-[#e0b885]" />
+                <span className="font-mono text-xs font-semibold text-[#e0b885]">
+                  2–4 Collaborators · Popular
                 </span>
               </div>
 
-              <h3 className="mt-6 font-serif text-3xl font-normal text-[#f0eae1]">
+              <h3 className="mt-5 font-serif text-3xl font-normal text-white">
                 Squad Entry
               </h3>
-              <p className="mt-2 text-xs text-[#9e8e7c]">
+              <p className="mt-1 text-xs text-[#d6cec2]">
                 For teams of 2 to 4 members. One flat fee covers the whole squad with a nominated team leader.
               </p>
 
-              <div className="mt-6 border-y border-sand-border/20 py-5">
+              <div className="mt-5 border-y border-white/[0.08] py-4">
                 <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-5xl font-semibold text-[#f0eae1]">
+                  <span className="font-serif text-5xl font-semibold text-white">
                     ₹200
                   </span>
-                  <span className="font-mono text-xs text-[#8e7a68]">
+                  <span className="font-mono text-xs text-[#b8ada0]">
                     flat fee per squad (not per person)
                   </span>
                 </div>
-                <div className="mt-2 flex flex-wrap gap-2 font-mono text-[11px] text-[#c89f6d]">
-                  <span className="rounded bg-[#120d09] px-2 py-0.5 border border-sand-border/15">2 members: ₹100/ea</span>
-                  <span className="rounded bg-[#120d09] px-2 py-0.5 border border-sand-border/15">3 members: ~₹66.67/ea</span>
-                  <span className="rounded bg-[#120d09] px-2 py-0.5 border border-sand-border/15">4 members: ₹50/ea</span>
-                </div>
+                <p className="mt-1 font-mono text-[11px] text-[#b8ada0]">
+                  Effective cost: 2 members: ₹100/ea · 3 members: ~₹66.7/ea · 4 members: ₹50/ea
+                </p>
               </div>
 
-              <ul className="mt-6 space-y-3 text-xs text-[#9e8e7c]">
+              <ul className="mt-6 space-y-3 text-xs text-[#d6cec2]">
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>2–4 participants with one nominated team leader</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>One shared project repository and submission</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Evaluated on collaborative contribution & execution</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Eligible for Overall Top 5 & Special Category cash awards</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Individual participation certificates for every squad member</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <Check size={16} className="text-[#c89f6d] shrink-0" />
+                  <Check size={16} className="text-[#e0b885] shrink-0" />
                   <span>Individual Top 25 Ranking Certificates for all squad members</span>
                 </li>
               </ul>
@@ -197,41 +187,34 @@ export default function RegistrationPricing() {
         </div>
 
         {/* Squad Membership Lock Notice */}
-        <div className="mt-8 max-w-4xl mx-auto rounded-2xl border border-sand-border/25 bg-[#120d09]/40 p-5 backdrop-blur-md">
-          <div className="flex items-start gap-3.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-[#c89f6d]/30 bg-[#c89f6d]/10 text-[#c89f6d]">
-              <Lock size={16} />
-            </div>
-            <div className="text-xs leading-relaxed text-[#9e8e7c]">
-              <strong className="text-[#f0eae1] font-semibold">Important Roster Rule: </strong>
-              Squad membership and roster details are permanently locked at the official competition start (10:00 PM IST on 26 December). Any member changes after kickoff require organiser approval with documented justification.
-            </div>
-          </div>
+        <div className="mt-8 max-w-4xl mx-auto border-l-2 border-[#e0b885] bg-white/[0.02] p-4 text-xs leading-relaxed text-[#d6cec2]">
+          <strong className="text-white font-medium">Important Roster Rule: </strong>
+          Squad membership and roster details are permanently locked at the official competition start (10:00 PM IST on 26 December). Any member changes after kickoff require organiser approval with documented justification.
         </div>
 
-        {/* 6-Step Registration Workflow */}
-        <div className="mt-14 max-w-4xl mx-auto">
-          <h3 className="text-center font-serif text-2xl font-normal text-[#f0eae1]">
+        {/* 6-Step Registration Workflow - Clean open list */}
+        <div className="mt-16 max-w-4xl mx-auto border-t border-white/[0.08] pt-10">
+          <h3 className="text-center font-serif text-2xl font-normal text-white">
             Registration Workflow (6 Simple Steps)
           </h3>
-          <p className="text-center text-xs text-[#9e8e7c] mt-1">
+          <p className="text-center text-xs text-[#d6cec2] mt-1">
             Everything you complete before the 25 December deadline
           </p>
 
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((st) => (
               <div
                 key={st.num}
-                className="flex items-start gap-3 rounded-xl border border-sand-border/15 bg-[#120d09]/30 p-4"
+                className="flex items-start gap-3.5"
               >
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#c89f6d]/15 font-mono text-xs font-semibold text-[#c89f6d]">
-                  {st.num}
+                <span className="font-mono text-sm font-semibold text-[#e0b885]">
+                  {st.num}.
                 </span>
                 <div>
-                  <h4 className="font-serif text-base font-normal text-[#f0eae1]">
+                  <h4 className="font-serif text-base font-normal text-white">
                     {st.title}
                   </h4>
-                  <p className="mt-0.5 text-xs text-[#9e8e7c]">
+                  <p className="mt-1 text-xs text-[#d6cec2] leading-relaxed">
                     {st.desc}
                   </p>
                 </div>
@@ -241,12 +224,10 @@ export default function RegistrationPricing() {
         </div>
 
         {/* Organiser Confirmation Status Note */}
-        <div className="mt-10 max-w-4xl mx-auto rounded-xl border border-sand-border/15 bg-[#16100c]/40 p-4 text-center">
-          <p className="font-mono text-[11px] text-[#8e7a68]">
-            <span className="text-[#c89f6d]">ℹ Note: </span>
-            Registration closes 25 December 2026. The exact closing time, refund policy, and capacity limits are awaiting final organiser confirmation before payment processing.
-          </p>
-        </div>
+        <p className="mt-10 max-w-2xl mx-auto text-center font-mono text-xs text-[#b8ada0]">
+          <span className="text-[#e0b885]">ℹ Note: </span>
+          Registration closes 25 December 2026. The exact closing time, refund policy, and capacity limits are awaiting final organiser confirmation before payment processing.
+        </p>
       </div>
     </section>
   );

@@ -33,44 +33,42 @@ export default function EventHighlights() {
   ];
 
   return (
-    <section id="overview" className="border-b border-sand-border/20 bg-cream-alt backdrop-blur-md">
+    <section id="overview" className="border-b border-white/[0.08] bg-cream-alt">
       <div className="container-site py-12 sm:py-16">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <p className="eyebrow">At A Glance</p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#f0eae1]">
+            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-white">
               Event Highlights
             </h2>
           </div>
-          <span className="hidden font-mono text-xs text-[#8e7a68] sm:inline">
+          <span className="hidden font-mono text-xs text-[#b8ada0] sm:inline">
             Official Edition 1.0
           </span>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {highlights.map(({ title, subtitle, metric, icon: Icon, detail }) => (
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 lg:divide-x divide-white/[0.08]">
+          {highlights.map(({ title, subtitle, metric, icon: Icon, detail }, idx) => (
             <div
               key={title}
-              className="group relative flex flex-col justify-between rounded-2xl border border-sand-border/15 bg-[#120d09]/45 p-6 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/60 hover:-translate-y-1"
+              className={`flex flex-col justify-between ${idx > 0 ? "lg:pl-8" : ""} pt-6 sm:pt-0`}
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm transition-colors group-hover:border-[#c89f6d]/50">
-                    <Icon size={18} />
-                  </div>
-                  <span className="font-mono text-xs font-semibold text-[#c89f6d]">
+                  <Icon size={20} className="text-[#e0b885]" />
+                  <span className="font-mono text-xs font-semibold text-[#e0b885]">
                     {metric}
                   </span>
                 </div>
-                <h3 className="mt-4 font-serif text-xl font-normal text-[#f0eae1] leading-snug">
+                <h3 className="mt-4 font-serif text-xl sm:text-2xl font-normal text-white leading-snug">
                   {title}
                 </h3>
               </div>
-              <div className="mt-4 border-t border-sand-border/15 pt-3">
-                <p className="font-mono text-[11px] text-[#8e7a68] uppercase tracking-wider">
+              <div className="mt-5 border-t border-white/[0.08] pt-3">
+                <p className="font-mono text-[10px] text-[#b8ada0] uppercase tracking-wider">
                   {subtitle}
                 </p>
-                <p className="mt-0.5 text-xs text-[#9e8e7c]">
+                <p className="mt-0.5 text-xs text-[#d6cec2]">
                   {detail}
                 </p>
               </div>

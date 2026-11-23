@@ -126,19 +126,17 @@ export default function RulesPage() {
           </p>
         </div>
 
-        {/* Grouped Rules Layout */}
-        <div className="mt-14 space-y-8">
+        {/* Grouped Rules Layout - Clean open sections without nested boxes */}
+        <div className="mt-14 space-y-12">
           {ruleGroups.map(({ group, icon: Icon, description, rules }) => (
             <section
               key={group}
-              className="rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-6 backdrop-blur-xl sm:p-8"
+              className="border-t border-sand-border/15 pt-8"
             >
               {/* Group Header */}
-              <div className="flex flex-col gap-3 pb-6 border-b border-sand-border/15 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm">
-                    <Icon size={18} />
-                  </div>
+              <div className="flex flex-col gap-2 pb-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <Icon size={20} className="text-[#c89f6d]" />
                   <div>
                     <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
                       {group}
@@ -153,26 +151,22 @@ export default function RulesPage() {
                 </span>
               </div>
 
-              {/* Group Rules List */}
-              <div className="mt-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {/* Group Rules List - Clean open grid */}
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 divide-y sm:divide-y-0">
                 {rules.map((rule) => (
                   <div
                     key={rule.num}
-                    className="flex flex-col justify-between rounded-xl border border-sand-border/10 bg-[#140e0a]/40 p-5 transition-colors hover:border-sand-border/25"
+                    className="pt-4 sm:pt-0"
                   >
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-xs font-semibold text-[#c89f6d]">
-                          RULE {rule.num}
-                        </span>
-                      </div>
-                      <h3 className="mt-3 font-serif text-lg font-normal text-[#f0eae1]">
-                        {rule.title}
-                      </h3>
-                      <p className="mt-2 text-xs leading-relaxed text-[#9e8e7c]">
-                        {rule.copy}
-                      </p>
-                    </div>
+                    <span className="font-mono text-xs font-semibold text-[#c89f6d]">
+                      RULE {rule.num}
+                    </span>
+                    <h3 className="mt-1.5 font-serif text-lg font-normal text-[#f0eae1]">
+                      {rule.title}
+                    </h3>
+                    <p className="mt-1.5 text-xs leading-relaxed text-[#9e8e7c]">
+                      {rule.copy}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -181,12 +175,10 @@ export default function RulesPage() {
         </div>
 
         {/* Verification Warning Box */}
-        <div className="mt-12 rounded-2xl border border-sand-border/20 bg-[#16100c]/40 p-7 sm:p-8 backdrop-blur-xl">
+        <div className="mt-16 border-l-2 border-[#c89f6d] bg-white/[0.02] p-6 text-sm text-[#9e8e7c]">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3.5">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d]">
-                <ShieldAlert size={18} />
-              </div>
+              <ShieldAlert size={20} className="text-[#c89f6d] shrink-0 mt-0.5" />
               <div>
                 <h3 className="font-serif text-xl font-normal text-[#f0eae1]">
                   Strict Repository Inspection

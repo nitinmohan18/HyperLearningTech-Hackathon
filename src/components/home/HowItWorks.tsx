@@ -40,44 +40,42 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section id="how-it-works" className="section-pad border-b border-sand-border/20 bg-cream-alt backdrop-blur-md">
+    <section id="how-it-works" className="section-pad border-b border-white/[0.08] bg-cream-alt">
       <div className="container-site">
         <div className="text-center max-w-3xl mx-auto">
           <p className="eyebrow">Participation Flow</p>
           <h2 className="section-title">
-            How It <span className="font-serif italic text-[#c89f6d]">Works</span>
+            How It <span className="font-serif italic text-[#e0b885]">Works</span>
           </h2>
           <p className="section-copy mx-auto">
             From registration to final project freeze, here is your five-step builder journey through Winter Hackathon ’26.
           </p>
         </div>
 
-        {/* 5-Step Grid */}
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          {steps.map((st) => {
+        {/* 5-Step Clean Flow */}
+        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 divide-y sm:divide-y-0 lg:divide-x divide-white/[0.08]">
+          {steps.map((st, idx) => {
             const Icon = st.icon;
             return (
               <div
                 key={st.num}
-                className="group relative flex flex-col justify-between rounded-2xl border border-sand-border/15 bg-[#120d09]/45 p-6 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/60 hover:-translate-y-1"
+                className={`flex flex-col justify-between ${idx > 0 ? "lg:pl-6" : ""} pt-6 sm:pt-0`}
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-[#c89f6d]">
+                    <span className="font-mono text-xs font-semibold text-[#e0b885]">
                       {st.num}
                     </span>
-                    <div className="grid h-9 w-9 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm transition-colors group-hover:border-[#c89f6d]/50">
-                      <Icon size={17} />
-                    </div>
+                    <Icon size={18} className="text-[#b8ada0]" />
                   </div>
 
-                  <p className="mt-4 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8e7a68]">
+                  <p className="mt-4 font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#b8ada0]">
                     {st.name}
                   </p>
-                  <h3 className="mt-1 font-serif text-xl font-normal text-[#f0eae1]">
+                  <h3 className="mt-1 font-serif text-xl font-normal text-white">
                     {st.headline}
                   </h3>
-                  <p className="mt-2.5 text-xs leading-relaxed text-[#9e8e7c]">
+                  <p className="mt-2 text-xs leading-relaxed text-[#d6cec2]">
                     {st.desc}
                   </p>
                 </div>
@@ -87,16 +85,9 @@ export default function HowItWorks() {
         </div>
 
         {/* Preparation-Day Boundary Notice */}
-        <div className="mt-10 rounded-2xl border border-sand-border/25 bg-[#16100c]/60 p-5 backdrop-blur-md">
-          <div className="flex items-start gap-3.5">
-            <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-[#c89f6d]/30 bg-[#c89f6d]/10 text-[#c89f6d]">
-              <AlertCircle size={16} />
-            </div>
-            <div className="text-xs leading-relaxed text-[#9e8e7c]">
-              <strong className="text-[#f0eae1] font-semibold">Important Boundary: </strong>
-              Preparation-day work (25 December) does not count as competition-period development. Pre-event commits do not earn 24-hour effort points. The 24-hour evaluation strictly measures work engineered between 10:00 PM IST on 26 December and 10:00 PM IST on 27 December 2026.
-            </div>
-          </div>
+        <div className="mt-12 border-l-2 border-[#e0b885] bg-white/[0.02] p-4 text-xs leading-relaxed text-[#d6cec2]">
+          <strong className="text-white font-medium">Important Boundary: </strong>
+          Preparation-day work (25 December) does not count as competition-period development. Pre-event commits do not earn 24-hour effort points. The 24-hour evaluation strictly measures work engineered between 10:00 PM IST on 26 December and 10:00 PM IST on 27 December 2026.
         </div>
       </div>
     </section>

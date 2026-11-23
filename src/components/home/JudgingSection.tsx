@@ -51,7 +51,7 @@ export default function JudgingSection() {
           <div>
             <p className="eyebrow">Transparent Evaluation</p>
             <h2 className="section-title">
-              Judging & <span className="font-serif italic text-[#c89f6d]">Scoring</span>
+              Judging & <span className="font-serif italic text-[#e0b885]">Scoring</span>
             </h2>
             <p className="section-copy">
               A normalised 100-point rubric designed to reward working functionality and verifiable development effort over superficial presentations or commit spam.
@@ -59,90 +59,84 @@ export default function JudgingSection() {
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
-            <div className="rounded-2xl border border-[#c89f6d]/35 bg-[#18110b]/70 px-5 py-3 text-right backdrop-blur-xl">
-              <p className="font-mono text-[10px] uppercase tracking-wider text-[#8e7a68]">
+            <div className="text-right">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-[#b8ada0]">
                 Evaluation Total
               </p>
-              <p className="font-serif text-3xl font-semibold text-[#c89f6d]">
+              <p className="font-serif text-3xl sm:text-4xl font-normal text-[#e0b885]">
                 100 Points
               </p>
             </div>
           </div>
         </div>
 
-        {/* Visual Points Allocation Bar */}
-        <div className="mt-10 rounded-2xl border border-sand-border/20 bg-[#120d09]/45 p-6 backdrop-blur-xl">
-          <div className="flex items-center justify-between font-mono text-xs text-[#8e7a68] mb-3">
+        {/* Visual Points Allocation Bar - Clean, open container */}
+        <div className="mt-12 border-t border-white/[0.08] pt-8">
+          <div className="flex items-center justify-between font-mono text-xs text-[#b8ada0] mb-3">
             <span>Point Allocation Summary</span>
-            <span className="text-[#f0eae1]">100% Normalized</span>
+            <span className="text-white">100% Normalized</span>
           </div>
 
-          <div className="flex h-3 w-full overflow-hidden rounded-full bg-[#1e1712]">
-            <div style={{ width: "25%" }} className="bg-[#c89f6d] title='Working MVP (25pts)'" />
-            <div style={{ width: "25%" }} className="bg-[#e4be8c] title='Verified Effort (25pts)'" />
-            <div style={{ width: "15%" }} className="bg-[#9e7f59] title='Technical Implementation (15pts)'" />
-            <div style={{ width: "15%" }} className="bg-[#b39169] title='Team Contribution (15pts)'" />
-            <div style={{ width: "10%" }} className="bg-[#6b553c] title='Deployment (10pts)'" />
-            <div style={{ width: "5%" }} className="bg-[#523e2a] title='Documentation (5pts)'" />
-            <div style={{ width: "5%" }} className="bg-[#382a1d] title='Demonstration (5pts)'" />
+          <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/[0.08]">
+            <div style={{ width: "25%" }} className="bg-[#e0b885]" title="Working MVP (25pts)" />
+            <div style={{ width: "25%" }} className="bg-[#edd2b1]" title="Verified Effort (25pts)" />
+            <div style={{ width: "15%" }} className="bg-[#c49a65]" title="Technical Implementation (15pts)" />
+            <div style={{ width: "15%" }} className="bg-[#af8654]" title="Team Contribution (15pts)" />
+            <div style={{ width: "10%" }} className="bg-[#8d693d]" title="Deployment (10pts)" />
+            <div style={{ width: "5%" }} className="bg-[#71522d]" title="Documentation (5pts)" />
+            <div style={{ width: "5%" }} className="bg-[#563c1f]" title="Demonstration (5pts)" />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-4 font-mono text-[11px] text-[#9e8e7c]">
+          <div className="mt-4 flex flex-wrap gap-4 font-mono text-[11px] text-[#d6cec2]">
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#c89f6d]" /> MVP: 25 pts
+              <span className="h-2 w-2 rounded-full bg-[#e0b885]" /> MVP: 25 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#e4be8c]" /> Verified Effort: 25 pts
+              <span className="h-2 w-2 rounded-full bg-[#edd2b1]" /> Verified Effort: 25 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#9e7f59]" /> Tech Stack: 15 pts
+              <span className="h-2 w-2 rounded-full bg-[#c49a65]" /> Tech Stack: 15 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#b39169]" /> Contribution: 15 pts
+              <span className="h-2 w-2 rounded-full bg-[#af8654]" /> Contribution: 15 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#6b553c]" /> Deployment: 10 pts
+              <span className="h-2 w-2 rounded-full bg-[#8d693d]" /> Deployment: 10 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#523e2a]" /> Docs: 5 pts
+              <span className="h-2 w-2 rounded-full bg-[#71522d]" /> Docs: 5 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#382a1d]" /> Demo: 5 pts
+              <span className="h-2 w-2 rounded-full bg-[#563c1f]" /> Demo: 5 pts
             </span>
           </div>
         </div>
 
-        {/* Expandable Criteria Cards */}
-        <div className="mt-8 space-y-3">
+        {/* Expandable Criteria Rows - Clean accordion rows without heavy box containers */}
+        <div className="mt-10 divide-y divide-white/[0.08] border-y border-white/[0.08]">
           {judgingCriteria.map((c) => {
             const isExpanded = expandedId === c.id;
 
             return (
               <div
                 key={c.id}
-                className={`overflow-hidden rounded-2xl border transition-all duration-200 ${
-                  isExpanded
-                    ? "border-[#c89f6d]/45 bg-[#16100c]/70 shadow-md"
-                    : "border-sand-border/15 bg-[#120d09]/40 hover:border-sand-border/35"
-                } backdrop-blur-xl`}
+                className="transition-colors hover:bg-white/[0.01]"
               >
                 <button
                   type="button"
                   onClick={() => toggleExpand(c.id)}
-                  className="flex w-full items-center justify-between p-5 text-left transition-colors"
+                  className="flex w-full items-center justify-between py-5 text-left transition-colors"
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60">
-                      {getIcon(c.id)}
-                    </div>
+                    <span className="text-[#e0b885]">{getIcon(c.id)}</span>
                     <div>
                       <div className="flex items-center gap-3">
-                        <h3 className="font-serif text-xl sm:text-2xl font-normal text-[#f0eae1]">
+                        <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
                           {c.name}
                         </h3>
                       </div>
-                      <p className="mt-0.5 text-xs text-[#9e8e7c] line-clamp-1">
+                      <p className="mt-0.5 text-xs text-[#d6cec2] line-clamp-1">
                         {c.evaluates}
                       </p>
                     </div>
@@ -150,54 +144,53 @@ export default function JudgingSection() {
 
                   <div className="flex items-center gap-4 shrink-0">
                     <div className="text-right">
-                      <span className="font-serif text-2xl font-semibold text-[#c89f6d]">
+                      <span className="font-serif text-2xl font-normal text-[#e0b885]">
                         {c.points}
                       </span>
-                      <span className="font-mono text-xs text-[#8e7a68] ml-1">pts</span>
+                      <span className="font-mono text-xs text-[#b8ada0] ml-1">pts</span>
                     </div>
-                    <div
-                      className={`grid h-8 w-8 place-items-center rounded-lg border border-sand-border/20 transition-transform duration-200 ${
-                        isExpanded ? "rotate-180 text-[#c89f6d]" : "text-[#8e7a68]"
+                    <ChevronDown
+                      size={16}
+                      className={`text-[#b8ada0] transition-transform duration-200 ${
+                        isExpanded ? "rotate-180 text-[#e0b885]" : ""
                       }`}
-                    >
-                      <ChevronDown size={16} />
-                    </div>
+                    />
                   </div>
                 </button>
 
                 {isExpanded && (
-                  <div className="border-t border-sand-border/15 p-5 pt-4 text-xs">
-                    <p className="text-sm font-medium text-[#f0eae1] mb-3">
-                      What judges evaluate:
+                  <div className="pb-6 pt-2 text-xs">
+                    <p className="text-xs font-mono uppercase tracking-wider text-[#b8ada0] mb-3">
+                      Evaluation Criteria:
                     </p>
-                    <ul className="space-y-2 text-[#9e8e7c]">
+                    <ul className="space-y-2 text-[#d6cec2]">
                       {c.details.map((detail, idx) => (
                         <li key={idx} className="flex items-start gap-2.5">
-                          <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#c89f6d]" />
+                          <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-[#e0b885]" />
                           <span className="leading-relaxed">{detail}</span>
                         </li>
                       ))}
                     </ul>
 
-                    {/* Sub-breakdown if present (e.g. Verified Effort) */}
+                    {/* Sub-breakdown if present - Clean open layout, zero card-in-card */}
                     {c.subBreakdown && (
-                      <div className="mt-5 rounded-xl border border-sand-border/20 bg-[#120d09]/60 p-4">
-                        <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#c89f6d] mb-3">
+                      <div className="mt-6 border-t border-white/[0.08] pt-4">
+                        <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-[#e0b885] mb-3">
                           Verified Development Effort Breakdown (25 Points)
                         </p>
-                        <div className="grid gap-2.5 sm:grid-cols-2">
+                        <div className="grid gap-4 sm:grid-cols-2">
                           {c.subBreakdown.map((sub) => (
                             <div
                               key={sub.item}
-                              className="rounded-lg border border-sand-border/15 bg-[#18110b]/50 p-3"
+                              className="border-l border-white/[0.1] pl-3 py-1"
                             >
                               <div className="flex items-center justify-between">
-                                <span className="font-medium text-[#f0eae1]">{sub.item}</span>
-                                <span className="font-mono font-semibold text-[#c89f6d]">
+                                <span className="font-medium text-white">{sub.item}</span>
+                                <span className="font-mono font-semibold text-[#e0b885]">
                                   {sub.points} pts
                                 </span>
                               </div>
-                              <p className="mt-1 text-[11px] text-[#9e8e7c]">{sub.note}</p>
+                              <p className="mt-0.5 text-[11px] text-[#b8ada0]">{sub.note}</p>
                             </div>
                           ))}
                         </div>
@@ -211,20 +204,9 @@ export default function JudgingSection() {
         </div>
 
         {/* Scoring Fairness Principles Callout */}
-        <div className="mt-8 rounded-2xl border border-sand-border/20 bg-[#16100c]/60 p-6 backdrop-blur-xl">
-          <div className="flex items-start gap-3.5">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-[#c89f6d]/30 bg-[#c89f6d]/10 text-[#c89f6d]">
-              <Info size={18} />
-            </div>
-            <div>
-              <h4 className="font-serif text-lg font-normal text-[#f0eae1]">
-                Scoring Fairness Principle: Genuine Engineering over Raw Volume
-              </h4>
-              <p className="mt-1.5 text-xs leading-relaxed text-[#9e8e7c]">
-                Meaningful engineering progress, genuine individual/team contribution, and working functionality matter far more than raw commit counts, trivial formatting changes, or sheer lines of code. The same normalised 100-point rubric is applied fairly to Solo and Squad entries, without arbitrary multipliers.
-              </p>
-            </div>
-          </div>
+        <div className="mt-10 border-l-2 border-[#e0b885] bg-white/[0.02] p-4 text-xs leading-relaxed text-[#d6cec2]">
+          <strong className="text-white font-medium">Scoring Fairness Principle: Genuine Engineering over Raw Volume. </strong>
+          Meaningful engineering progress, genuine individual/team contribution, and working functionality matter far more than raw commit counts, trivial formatting changes, or sheer lines of code. The same normalised 100-point rubric is applied fairly to Solo and Squad entries, without arbitrary multipliers.
         </div>
       </div>
     </section>

@@ -44,22 +44,20 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* Pillars Grid */}
-        <div className="mt-16 grid gap-6 md:grid-cols-2">
+        {/* Pillars Grid - Clean open layout */}
+        <div className="mt-16 grid gap-10 md:grid-cols-2 divide-y md:divide-y-0 md:gap-x-12 border-t border-sand-border/15 pt-10">
           {pillars.map(({ title, icon: Icon, copy }) => (
             <article
               key={title}
-              className="group relative rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-8 shadow-card backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/50 hover:-translate-y-1"
+              className="pt-6 md:pt-0"
             >
-              <div className="flex items-center gap-4">
-                <div className="grid h-11 w-11 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm transition-colors group-hover:border-[#c89f6d]/50">
-                  <Icon size={20} />
-                </div>
+              <div className="flex items-center gap-3">
+                <Icon size={20} className="text-[#c89f6d]" />
                 <h2 className="font-serif text-2xl font-normal text-[#f0eae1] tracking-tight">
                   {title}
                 </h2>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-[#9e8e7c]">
+              <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
                 {copy}
               </p>
             </article>
@@ -67,13 +65,13 @@ export default function AboutPage() {
         </div>
 
         {/* Highlight Callout */}
-        <div className="mt-12 rounded-2xl border border-sand-border/20 bg-[#120d09]/40 p-8 sm:p-12 shadow-card backdrop-blur-xl">
+        <div className="mt-16 border-t border-sand-border/15 pt-12">
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
             <div className="max-w-2xl">
               <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#c89f6d]">
                 Guiding Principle
               </span>
-              <h3 className="mt-3 font-serif text-3xl font-normal tracking-tight text-[#f0eae1] sm:text-4xl">
+              <h3 className="mt-2 font-serif text-3xl font-normal tracking-tight text-[#f0eae1] sm:text-4xl">
                 {event.tagline}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
