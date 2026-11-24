@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RegistrationType {
+  SOLO
+  SQUAD
+}
+
+enum RegistrationStatus {
+  DRAFT
+  SUBMITTED
+  PAYMENT_REJECTED
+  CONFIRMED
+  CANCELLED
+}
+
+enum ParticipantRole {
+  LEADER
+  MEMBER
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum EmailType {
+  PARTICIPANT_ACK
+  OWNER_NOTICE
+  SPOT_CONFIRMED
+}
+
+enum EmailStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
+}
+
+model Registration {
+  id                     String             @id @default(uuid()) @db.Uuid
+  registrationNumber     String             @unique
+  type                   RegistrationType
+  teamName               String?
+  status                 RegistrationStatus @default(DRAFT)
+  feePaise               Int
+  projectTitle           String
+  techStack              String
+  problemStatement       String
+  existingCodeDisclosure String
+  aiUsageDisclosure      String
+  draftTokenHash         String?            @unique
+  idempotencyKey         String?            @unique
+  draftData              Json?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  submittedAt            DateTime?
+  confirmedAt            DateTime?
+
+  participants Participant[]
+  payment      Payment?
+  proposalFile ProposalFile?
+  emailOutbox  EmailOutbox[]
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([draftTokenHash])
+}
+
+model Participant {
+  id                       String          @id @default(uuid()) @db.Uuid
+  registrationId           String          @db.Uuid
+  role                     ParticipantRole
+  fullName                 String
+  email                    String
+  normalizedEmail          String          @unique
+  phone                    String
+  normalizedPhone          String          @unique
+  college                  String
+  githubUsername           String
+  normalizedGithubUsername String          @unique
+  sortOrder                Int
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([registrationId])
+  @@unique([registrationId, sortOrder])
+}
+
+model Payment {
+  id                   String        @id @default(uuid()) @db.Uuid
+  registrationId       String        @unique @db.Uuid
+  expectedPaise        Int
+  transactionReference String?
+  status               PaymentStatus @default(PENDING)
+  verifiedAt           DateTime?
+  verifiedBy           String?
+  note                 String?
+  createdAt            DateTime      @default(now())
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model ProposalFile {
+  id             String   @id @default(uuid()) @db.Uuid
+  registrationId String   @unique @db.Uuid
+  storageKey     String   @unique
+  originalName   String
+  mimeType       String
+  sizeBytes      Int
+  pageCount      Int
+  uploadedAt     DateTime @default(now())
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+}
+
+model EmailOutbox {
+  id                String      @id @default(uuid()) @db.Uuid
+  registrationId    String      @db.Uuid
+  recipient         String
+  emailType         EmailType
+  payload           Json
+  status            EmailStatus @default(PENDING)
+  retryCount        Int         @default(0)
+  lastError         String?
+  providerMessageId String?
+  nextRetryAt       DateTime?
+  createdAt         DateTime    @default(now())
+  sentAt            DateTime?
+
+  registration Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([registrationId])
+  @@index([status, nextRetryAt])
+}
+
+model RateLimit {
+  key       String   @id
+  points    Int      @default(0)
+  expireAt  DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expireAt])
+}

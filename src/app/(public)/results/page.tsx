@@ -31,7 +31,7 @@ export default function ResultsPage() {
             </p>
           </div>
           <span className="font-mono text-xs text-[#8e7a68]">
-            Provisional Results Standings
+            Declaration: 27 Dec 2026, 11:00 PM IST
           </span>
         </div>
 
@@ -53,11 +53,11 @@ export default function ResultsPage() {
                   </span>
                   {getPodiumIcon(i)}
                 </div>
-                <h3 className="mt-5 font-serif text-3xl font-normal text-[#f0eae1]">
-                  {leaderboard[i]?.project ?? "Project"}
+                <h3 className="mt-5 font-serif text-2xl sm:text-3xl font-normal text-[#f0eae1]">
+                  {leaderboard[i]?.project ?? "Evaluation Pending"}
                 </h3>
                 <p className="mt-1 font-mono text-xs text-[#8e7a68]">
-                  Team: {leaderboard[i]?.team ?? "Team"}
+                  {leaderboard[i]?.team ? `Team: ${leaderboard[i].team}` : "Declaration Post-Freeze"}
                 </p>
               </div>
 
@@ -92,7 +92,7 @@ export default function ResultsPage() {
                 <div className="mt-6 divide-y divide-sand-border/15">
                   {a.prizes.map((prize) => (
                     <div key={prize.place} className="flex items-center justify-between py-3 text-sm">
-                      <span className="font-mono text-xs text-[#8e7a68]">{prize.place} Place Winner</span>
+                      <span className="font-mono text-xs text-[#8e7a68]">{prize.place} Cash Reward</span>
                       <span className="font-mono font-semibold text-[#c89f6d]">{prize.amount}</span>
                     </div>
                   ))}

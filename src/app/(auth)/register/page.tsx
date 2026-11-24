@@ -1,9 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Check, ArrowRight, ArrowLeft, Users, User, ShieldCheck, FileText } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  ArrowLeft,
+  Users,
+  User,
+  ShieldCheck,
+  FileText,
+  Upload,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
+  QrCode,
+  FileDown,
+} from "lucide-react";
 import { event } from "@/data/event";
+import {
+  saveLocalDraft,
+  getLocalDraft,
+  clearLocalDraft,
+} from "@/lib/idb-draft";
 
 const steps = [
   { id: 1, title: "Type", label: "Entry Type" },
@@ -13,10 +32,36 @@ const steps = [
   { id: 5, title: "Review", label: "Summary" },
 ];
 
+interface MemberDetails {
+  fullName: string;
+  email: string;
+  phone: string;
+  college: string;
+  githubUsername: string;
+}
+
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
   const [type, setType] = useState<"Solo" | "Squad">("Solo");
-  const [success, setSuccess] = useState(false);
+  const [submittedData, setSubmittedData] = useState<{
+    registrationNumber: string;
+    type: string;
+    feeFormatted: string;
+  } | null>(null);
+
+  const [loadingDraft, setLoadingDraft] = useState(true);
+  const [savingDraft, setSavingDraft] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Proposal upload state
+  const [proposalFile, setProposalFile] = useState<File | null>(null);
+  const [proposalFileInfo, setProposalFileInfo] = useState<{
+    id?: string;
+    originalName: string;
+    sizeBytes: number;
+    pageCount?: number;
+  } | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -26,24 +71,337 @@ export default function RegisterPage() {
     github: "",
     teamName: "",
     teamLeader: "",
-    member2: "",
-    member3: "",
-    member4: "",
+    // Member 2
+    member2Name: "",
+    member2Email: "",
+    member2Phone: "",
+    member2College: "",
+    member2Github: "",
+    // Member 3 (Optional)
+    member3Name: "",
+    member3Email: "",
+    member3Phone: "",
+    member3College: "",
+    member3Github: "",
+    // Member 4 (Optional)
+    member4Name: "",
+    member4Email: "",
+    member4Phone: "",
+    member4College: "",
+    member4Github: "",
+    // Step 4
     projectTitle: "",
     techStack: "",
     problemStatement: "",
     existingCode: "",
     aiUsage: "",
+    // Step 5 payment
+    transactionReference: "",
   });
 
-  const next = () => setStep((s) => Math.min(5, s + 1));
-  const back = () => setStep((s) => Math.max(1, s - 1));
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  if (success) {
+  // Load active draft from IndexedDB on mount
+  useEffect(() => {
+    async function loadDraft() {
+      try {
+        const d = await getLocalDraft();
+        if (d) {
+          if (d.type) setType(d.type);
+          if (d.formData) setFormData((prev) => ({ ...prev, ...d.formData }));
+          if (d.step && d.step >= 1 && d.step <= 5) setStep(d.step);
+
+          if (d.proposalFile?.blob) {
+            const reconstructed = new File(
+              [d.proposalFile.blob],
+              d.proposalFile.name,
+              {
+                type: d.proposalFile.type,
+                lastModified: d.proposalFile.lastModified || Date.now(),
+              }
+            );
+            setProposalFile(reconstructed);
+            setProposalFileInfo({
+              originalName: d.proposalFile.name,
+              sizeBytes: d.proposalFile.size,
+              pageCount: d.proposalFile.pageCount,
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to load local IndexedDB draft:", err);
+      } finally {
+        setLoadingDraft(false);
+      }
+    }
+    loadDraft();
+  }, []);
+
+  // Save draft locally to IndexedDB helper
+  const persistLocalDraft = (
+    customStep?: number,
+    customFile?: File | null
+  ) => {
+    const fileToPersist = customFile !== undefined ? customFile : proposalFile;
+    setSavingDraft(true);
+    saveLocalDraft({
+      type,
+      step: customStep ?? step,
+      formData,
+      proposalFile: fileToPersist
+        ? {
+            name: fileToPersist.name,
+            size: fileToPersist.size,
+            type: fileToPersist.type,
+            lastModified: fileToPersist.lastModified,
+            blob: fileToPersist,
+            pageCount: proposalFileInfo?.pageCount,
+          }
+        : null,
+    }).finally(() => {
+      setTimeout(() => setSavingDraft(false), 400);
+    });
+  };
+
+  // Debounced auto-persist on form changes (purely local, zero network calls)
+  useEffect(() => {
+    if (loadingDraft) return;
+    const timer = setTimeout(() => {
+      persistLocalDraft();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [formData, type, step, proposalFile, loadingDraft]);
+
+  const next = () => {
+    setErrorMessage(null);
+
+    // Validation per step
+    if (step === 2) {
+      if (!formData.fullName.trim()) return setErrorMessage("Please enter your full name.");
+      if (!formData.email.trim() || !formData.email.includes("@")) return setErrorMessage("Please enter a valid email address.");
+      if (!formData.phone.trim()) return setErrorMessage("Please enter a valid phone number.");
+      if (!formData.college.trim()) return setErrorMessage("Please enter your college or organisation.");
+      if (!formData.github.trim()) return setErrorMessage("Please enter your GitHub username.");
+    }
+
+    if (step === 3) {
+      if (!formData.teamName.trim() || formData.teamName.trim().length < 2) {
+        return setErrorMessage("Please provide a valid team name (at least 2 characters).");
+      }
+      if (type === "Squad") {
+        if (!formData.member2Github.trim()) return setErrorMessage("Member 2 GitHub username is required for a squad.");
+        if (!formData.member2Name.trim()) return setErrorMessage("Member 2 full name is required.");
+        if (!formData.member2Email.trim() || !formData.member2Email.includes("@")) return setErrorMessage("Member 2 valid email is required.");
+        if (!formData.member2Phone.trim()) return setErrorMessage("Member 2 phone number is required.");
+      }
+    }
+
+    if (step === 4) {
+      if (!formData.projectTitle.trim()) return setErrorMessage("Please enter your project title.");
+      if (!formData.techStack.trim()) return setErrorMessage("Please specify your planned technology stack.");
+      if (!formData.problemStatement.trim() || formData.problemStatement.trim().length < 10) {
+        return setErrorMessage("Please provide a brief problem statement (at least 10 characters).");
+      }
+    }
+
+    const nextStep = Math.min(5, step + 1);
+    setStep(nextStep);
+    persistLocalDraft(nextStep);
+  };
+
+  const back = () => {
+    setErrorMessage(null);
+    const prevStep = Math.max(1, step - 1);
+    setStep(prevStep);
+    persistLocalDraft(prevStep);
+  };
+
+  // Local proposal file selection (Saved to IndexedDB, uploaded only on final submission)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setErrorMessage(null);
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErrorMessage("File exceeds 5 MB limit. Please select a smaller deck or PDF.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (ext !== "pdf" && ext !== "pptx") {
+      setErrorMessage("Unsupported file type. Please upload a PDF (.pdf) or PowerPoint (.pptx) file.");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
+    }
+
+    setProposalFile(file);
+    setProposalFileInfo({
+      originalName: file.name,
+      sizeBytes: file.size,
+    });
+    persistLocalDraft(step, file);
+  };
+
+  const handleRemoveFile = () => {
+    setProposalFile(null);
+    setProposalFileInfo(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+    persistLocalDraft(step, null);
+  };
+
+  // Final submission: validates, uploads proposal to B2, and creates records in Neon
+  const handleSubmit = async () => {
+    setErrorMessage(null);
+    setSubmitting(true);
+
+    try {
+      let proposalPayload: { storageKey: string; originalName: string } | null = null;
+
+      // 1. Upload proposal deck to Backblaze B2 on final submission only
+      if (proposalFile) {
+        const resolvedMime = proposalFile.name.toLowerCase().endsWith(".pptx")
+          ? "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+          : "application/pdf";
+
+        const urlRes = await fetch("/api/registrations/upload-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            filename: proposalFile.name,
+            mimeType: resolvedMime,
+            sizeBytes: proposalFile.size,
+          }),
+        });
+
+        const urlData = await urlRes.json();
+        if (!urlRes.ok) {
+          throw new Error(urlData.error || "Failed to generate storage upload URL.");
+        }
+
+        const uploadRes = await fetch(urlData.uploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": resolvedMime },
+          body: proposalFile,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error("Failed to upload proposal deck to private storage. Please try again.");
+        }
+
+        proposalPayload = {
+          storageKey: urlData.storageKey,
+          originalName: proposalFile.name,
+        };
+      }
+
+      // 2. Assemble participants
+      const participantsList: Array<{
+        fullName: string;
+        email: string;
+        phone: string;
+        college: string;
+        githubUsername: string;
+        role: "LEADER" | "MEMBER";
+        sortOrder: number;
+      }> = [
+        {
+          fullName: formData.fullName.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          college: formData.college.trim(),
+          githubUsername: formData.github.trim(),
+          role: "LEADER",
+          sortOrder: 0,
+        },
+      ];
+
+      if (type === "Squad") {
+        participantsList.push({
+          fullName: formData.member2Name.trim(),
+          email: formData.member2Email.trim(),
+          phone: formData.member2Phone.trim(),
+          college: (formData.member2College || formData.college).trim(),
+          githubUsername: formData.member2Github.trim(),
+          role: "MEMBER" as const,
+          sortOrder: 1,
+        });
+
+        if (formData.member3Github.trim()) {
+          participantsList.push({
+            fullName: formData.member3Name.trim() || `Member 3`,
+            email: formData.member3Email.trim(),
+            phone: formData.member3Phone.trim(),
+            college: (formData.member3College || formData.college).trim(),
+            githubUsername: formData.member3Github.trim(),
+            role: "MEMBER" as const,
+            sortOrder: 2,
+          });
+        }
+
+        if (formData.member4Github.trim()) {
+          participantsList.push({
+            fullName: formData.member4Name.trim() || `Member 4`,
+            email: formData.member4Email.trim(),
+            phone: formData.member4Phone.trim(),
+            college: (formData.member4College || formData.college).trim(),
+            githubUsername: formData.member4Github.trim(),
+            role: "MEMBER" as const,
+            sortOrder: 3,
+          });
+        }
+      }
+
+      // Generate a client idempotency key to prevent double-click duplicates
+      const idempotencyKey = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+      const payload = {
+        type: type.toUpperCase() as "SOLO" | "SQUAD",
+        teamName: formData.teamName.trim(),
+        projectTitle: formData.projectTitle.trim() || "Untitled Project",
+        techStack: formData.techStack.trim() || "TypeScript, Next.js",
+        problemStatement: formData.problemStatement.trim() || "Hackathon project brief",
+        existingCodeDisclosure: formData.existingCode.trim() || "None",
+        aiUsageDisclosure: formData.aiUsage.trim() || "None",
+        transactionReference: formData.transactionReference.trim() || null,
+        idempotencyKey,
+        proposal: proposalPayload,
+        participants: participantsList,
+      };
+
+      const res = await fetch("/api/registrations/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit registration");
+      }
+
+      // Clear local IndexedDB draft ONLY after verified submission
+      await clearLocalDraft();
+
+      setSubmittedData({
+        registrationNumber: data.registrationNumber,
+        type: `${type} Entry`,
+        feeFormatted: data.feeFormatted,
+      });
+    } catch (err: any) {
+      // Preserve local IndexedDB draft on failure so user doesn't lose data
+      setErrorMessage(err.message || "Failed to submit registration");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (submittedData) {
     return (
       <div className="bg-cream min-h-[calc(100vh-140px)] flex items-center justify-center py-20">
         <div className="container-site max-w-lg">
-          <div className="rounded-2xl border border-[#c89f6d]/30 bg-[#120d09]/45 p-8 sm:p-10 text-center shadow-card backdrop-blur-xl">
+          <div className="rounded-2xl border border-[#c89f6d]/30 bg-[#120d09]/60 p-8 sm:p-10 text-center shadow-card backdrop-blur-xl">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-[#c89f6d]/30 bg-[#c89f6d]/10 text-[#c89f6d]">
               <Check size={28} />
             </div>
@@ -51,30 +409,38 @@ export default function RegisterPage() {
               Registration Recorded
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
-              Your registration for <span className="text-[#f0eae1] font-medium">{type} Entry</span> has been successfully logged for Winter Hackathon ’26.
+              Your registration application has been successfully logged for{" "}
+              <span className="text-[#f0eae1] font-medium">{submittedData.type}</span> at Winter Hackathon ’26.
             </p>
 
-            <div className="mt-6 rounded-xl border border-sand-border/15 bg-[#16100c]/60 p-5 text-left font-mono text-xs space-y-2.5">
+            <div className="mt-6 rounded-xl border border-sand-border/15 bg-[#16100c]/80 p-5 text-left font-mono text-xs space-y-2.5">
               <div className="flex justify-between border-b border-sand-border/10 pb-2">
-                <span className="text-[#8e7a68]">Category:</span>
-                <span className="text-[#f0eae1] font-semibold">{type} ({type === "Solo" ? event.soloFee : event.squadFee})</span>
+                <span className="text-[#8e7a68]">Registration ID:</span>
+                <span className="text-[#c89f6d] font-bold text-sm tracking-wider">
+                  {submittedData.registrationNumber}
+                </span>
               </div>
               <div className="flex justify-between border-b border-sand-border/10 pb-2">
-                <span className="text-[#8e7a68]">Kickoff:</span>
-                <span className="text-[#c89f6d] font-semibold">26 Dec 2026, 10:00 PM IST</span>
+                <span className="text-[#8e7a68]">Participation Tier:</span>
+                <span className="text-[#f0eae1] font-semibold">{submittedData.feeFormatted}</span>
+              </div>
+              <div className="flex justify-between border-b border-sand-border/10 pb-2">
+                <span className="text-[#8e7a68]">Payment Status:</span>
+                <span className="text-amber-400 font-semibold">Pending Verification</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#8e7a68]">Status:</span>
-                <span className="text-[#f0eae1] font-semibold">Awaiting Repository Inspection</span>
+                <span className="text-[#8e7a68]">Kickoff Window:</span>
+                <span className="text-[#f0eae1] font-semibold">26 Dec 2026, 10:00 PM IST</span>
               </div>
             </div>
 
-            <p className="mt-4 text-xs text-[#8e7a68]">
-              Explore your live participant portal to check off early preparation steps.
-            </p>
+            <div className="mt-5 rounded-xl border border-amber-500/20 bg-amber-950/20 p-4 text-left font-mono text-xs text-amber-200/90 leading-relaxed">
+              <p className="font-semibold text-amber-300 mb-1">Next Steps:</p>
+              An acknowledgement email has been queued to your registered address. Once our organizing team matches your transaction reference with official bank statements, your participation spot will be marked <strong>CONFIRMED</strong>.
+            </div>
 
-            <Link href="/dashboard" className="btn-primary mt-6 w-full justify-center">
-              Enter Participant Dashboard <ArrowRight size={16} />
+            <Link href="/" className="btn-primary mt-6 w-full justify-center">
+              Return to Hackathon Home <ArrowRight size={16} />
             </Link>
           </div>
         </div>
@@ -86,9 +452,16 @@ export default function RegisterPage() {
     <div className="bg-cream min-h-[calc(100vh-140px)] py-16">
       <div className="container-site max-w-3xl">
         <div className="text-center sm:text-left">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
-            Registration · 1st Edition
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
+              Registration · 1st Edition
+            </p>
+            {savingDraft && (
+              <span className="font-mono text-[10px] text-[#c89f6d] flex items-center gap-1">
+                <Loader2 size={10} className="animate-spin" /> Saving draft...
+              </span>
+            )}
+          </div>
           <h1 className="mt-4 font-serif text-4xl sm:text-6xl font-normal leading-tight text-[#f0eae1]">
             Register for <span className="font-serif italic font-normal text-[#c89f6d]">Winter Hackathon ’26</span>
           </h1>
@@ -106,26 +479,28 @@ export default function RegisterPage() {
               <button
                 key={s.id}
                 type="button"
-                onClick={() => setStep(s.id)}
+                onClick={() => {
+                  setErrorMessage(null);
+                  setStep(s.id);
+                  persistLocalDraft(s.id);
+                }}
                 className="group flex flex-col items-center gap-2 text-left"
               >
                 <div
-                  className={`h-1.5 w-full rounded-full transition-colors ${
-                    isCompleted
-                      ? "bg-[#c89f6d]"
-                      : isCurrent
+                  className={`h-1.5 w-full rounded-full transition-colors ${isCompleted
+                    ? "bg-[#c89f6d]"
+                    : isCurrent
                       ? "bg-[#f0eae1]"
                       : "bg-sand-border/20"
-                  }`}
+                    }`}
                 />
                 <span
-                  className={`hidden font-mono text-[11px] sm:inline uppercase tracking-wider transition ${
-                    isCurrent
-                      ? "text-[#f0eae1] font-semibold"
-                      : isCompleted
+                  className={`hidden font-mono text-[11px] sm:inline uppercase tracking-wider transition ${isCurrent
+                    ? "text-[#f0eae1] font-semibold"
+                    : isCompleted
                       ? "text-[#c89f6d]"
                       : "text-[#8e7a68]"
-                  }`}
+                    }`}
                 >
                   {s.id}. {s.title}
                 </span>
@@ -134,8 +509,15 @@ export default function RegisterPage() {
           })}
         </div>
 
+        {errorMessage && (
+          <div className="mt-6 flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-950/40 p-4 text-xs text-red-200">
+            <AlertCircle size={18} className="shrink-0 text-red-400" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
         {/* Step Container */}
-        <div className="mt-8 rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-6 backdrop-blur-xl sm:p-10 shadow-card">
+        <div className="mt-8 rounded-2xl border border-sand-border/15 bg-[#120d09]/45 p-6 backdrop-blur-xl sm:p-10 shadow-card">
           {/* STEP 1: Entry Type */}
           {step === 1 && (
             <div>
@@ -153,11 +535,10 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setType("Solo")}
-                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${
-                    type === "Solo"
-                      ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
-                      : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
-                  }`}
+                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${type === "Solo"
+                    ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
+                    : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
+                    }`}
                 >
                   <div>
                     <div className="flex items-center justify-between">
@@ -180,11 +561,10 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setType("Squad")}
-                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${
-                    type === "Squad"
-                      ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
-                      : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
-                  }`}
+                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${type === "Squad"
+                    ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
+                    : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
+                    }`}
                 >
                   <div>
                     <div className="flex items-center justify-between">
@@ -221,7 +601,7 @@ export default function RegisterPage() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="fullName">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     id="fullName"
@@ -234,7 +614,7 @@ export default function RegisterPage() {
 
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="email">
-                    Email Address
+                    Email Address *
                   </label>
                   <input
                     id="email"
@@ -248,7 +628,7 @@ export default function RegisterPage() {
 
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="phone">
-                    Phone Number
+                    Phone Number *
                   </label>
                   <input
                     id="phone"
@@ -262,7 +642,7 @@ export default function RegisterPage() {
 
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="college">
-                    College / Organisation
+                    College / Organisation *
                   </label>
                   <input
                     id="college"
@@ -275,7 +655,7 @@ export default function RegisterPage() {
 
                 <div className="sm:col-span-2">
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="github">
-                    GitHub Username
+                    GitHub Username *
                   </label>
                   <input
                     id="github"
@@ -294,88 +674,219 @@ export default function RegisterPage() {
             <div>
               <div className="border-b border-sand-border/15 pb-4">
                 <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
-                  Squad Configuration
+                  {type === "Solo" ? "Solo Team Configuration" : "Squad Configuration"}
                 </h2>
                 <p className="text-xs text-[#9e8e7c] mt-1">
-                  Define squad name and github handles for team collaborators.
+                  {type === "Solo"
+                    ? "Define your official team handle and verify builder details."
+                    : "Define squad name and verified credentials for all team collaborators (2–4 members)."}
                 </p>
               </div>
 
               {type === "Solo" ? (
-                <div className="mt-6 rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-8 text-center">
-                  <User size={32} className="mx-auto text-[#8e7a68]" />
-                  <h3 className="mt-3 font-serif text-xl font-normal text-[#f0eae1]">
-                    Solo Entry Active
-                  </h3>
-                  <p className="mt-1 text-xs text-[#9e8e7c] max-w-sm mx-auto">
-                    Squad details are not required for solo participation. You can proceed directly to your project proposal.
-                  </p>
+                <div className="mt-6 space-y-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="soloTeamName">
+                        Team Name *
+                      </label>
+                      <input
+                        id="soloTeamName"
+                        className="input mt-1.5"
+                        placeholder="e.g. Solo - Aarav or Binary Forge"
+                        value={formData.teamName}
+                        onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
+                      />
+                      <p className="mt-1 font-mono text-[10px] text-[#8e7a68]">
+                        Mandatory official name for leaderboard, evaluations, and certifications.
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="soloBuilderName">
+                        Builder Name
+                      </label>
+                      <input
+                        id="soloBuilderName"
+                        className="input mt-1.5 bg-[#140e0a]/40 text-[#9e8e7c]"
+                        value={formData.fullName || "Solo Builder"}
+                        readOnly
+                      />
+                    </div>
+                  </div>
                 </div>
               ) : (
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamName">
-                      Team Name
-                    </label>
-                    <input
-                      id="teamName"
-                      className="input mt-1.5"
-                      placeholder="e.g. Team Null"
-                      value={formData.teamName}
-                      onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
-                    />
+                <div className="mt-6 space-y-6">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamName">
+                        Team Name *
+                      </label>
+                      <input
+                        id="teamName"
+                        className="input mt-1.5"
+                        placeholder="e.g. Team Null"
+                        value={formData.teamName}
+                        onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamLeader">
+                        Team Leader Name
+                      </label>
+                      <input
+                        id="teamLeader"
+                        className="input mt-1.5"
+                        placeholder="Lead coordinator"
+                        value={formData.fullName || formData.teamLeader}
+                        readOnly
+                      />
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamLeader">
-                      Team Leader Name
-                    </label>
-                    <input
-                      id="teamLeader"
-                      className="input mt-1.5"
-                      placeholder="Lead coordinator"
-                      value={formData.teamLeader}
-                      onChange={(e) => setFormData({ ...formData, teamLeader: e.target.value })}
-                    />
+                  {/* Member 2 Section (Required for Squad) */}
+                  <div className="rounded-xl border border-sand-border/20 bg-[#160f0a]/60 p-5">
+                    <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
+                      <span>Member 2 (Required)</span>
+                      <span className="font-mono text-[10px] text-[#c89f6d]">Squad Member</span>
+                    </h3>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name *</label>
+                        <input
+                          className="input mt-1.5"
+                          placeholder="e.g. Rohan Verma"
+                          value={formData.member2Name}
+                          onChange={(e) => setFormData({ ...formData, member2Name: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address *</label>
+                        <input
+                          type="email"
+                          className="input mt-1.5"
+                          placeholder="e.g. rohan@example.com"
+                          value={formData.member2Email}
+                          onChange={(e) => setFormData({ ...formData, member2Email: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number *</label>
+                        <input
+                          type="tel"
+                          className="input mt-1.5"
+                          placeholder="e.g. +91 91234 56789"
+                          value={formData.member2Phone}
+                          onChange={(e) => setFormData({ ...formData, member2Phone: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle *</label>
+                        <input
+                          className="input mt-1.5 font-mono"
+                          placeholder="e.g. rohan-dev"
+                          value={formData.member2Github}
+                          onChange={(e) => setFormData({ ...formData, member2Github: e.target.value })}
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="sm:col-span-2">
-                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="member2">
-                      Member 2 GitHub Username (Required)
-                    </label>
-                    <input
-                      id="member2"
-                      className="input mt-1.5 font-mono"
-                      placeholder="GitHub handle"
-                      value={formData.member2}
-                      onChange={(e) => setFormData({ ...formData, member2: e.target.value })}
-                    />
+                  {/* Member 3 Section (Optional) */}
+                  <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
+                    <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
+                      <span>Member 3 (Optional)</span>
+                      <span className="font-mono text-[10px] text-[#8e7a68]">Optional</span>
+                    </h3>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name</label>
+                        <input
+                          className="input mt-1.5"
+                          placeholder="Full Name"
+                          value={formData.member3Name}
+                          onChange={(e) => setFormData({ ...formData, member3Name: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address</label>
+                        <input
+                          type="email"
+                          className="input mt-1.5"
+                          placeholder="Email"
+                          value={formData.member3Email}
+                          onChange={(e) => setFormData({ ...formData, member3Email: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number</label>
+                        <input
+                          type="tel"
+                          className="input mt-1.5"
+                          placeholder="Phone"
+                          value={formData.member3Phone}
+                          onChange={(e) => setFormData({ ...formData, member3Phone: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle</label>
+                        <input
+                          className="input mt-1.5 font-mono"
+                          placeholder="GitHub handle"
+                          value={formData.member3Github}
+                          onChange={(e) => setFormData({ ...formData, member3Github: e.target.value })}
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="member3">
-                      Member 3 GitHub (Optional)
-                    </label>
-                    <input
-                      id="member3"
-                      className="input mt-1.5 font-mono"
-                      placeholder="Optional handle"
-                      value={formData.member3}
-                      onChange={(e) => setFormData({ ...formData, member3: e.target.value })}
-                    />
-                  </div>
-
-                  <div>
-                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="member4">
-                      Member 4 GitHub (Optional)
-                    </label>
-                    <input
-                      id="member4"
-                      className="input mt-1.5 font-mono"
-                      placeholder="Optional handle"
-                      value={formData.member4}
-                      onChange={(e) => setFormData({ ...formData, member4: e.target.value })}
-                    />
+                  {/* Member 4 Section (Optional) */}
+                  <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
+                    <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
+                      <span>Member 4 (Optional)</span>
+                      <span className="font-mono text-[10px] text-[#8e7a68]">Optional</span>
+                    </h3>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name</label>
+                        <input
+                          className="input mt-1.5"
+                          placeholder="Full Name"
+                          value={formData.member4Name}
+                          onChange={(e) => setFormData({ ...formData, member4Name: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address</label>
+                        <input
+                          type="email"
+                          className="input mt-1.5"
+                          placeholder="Email"
+                          value={formData.member4Email}
+                          onChange={(e) => setFormData({ ...formData, member4Email: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number</label>
+                        <input
+                          type="tel"
+                          className="input mt-1.5"
+                          placeholder="Phone"
+                          value={formData.member4Phone}
+                          onChange={(e) => setFormData({ ...formData, member4Phone: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle</label>
+                        <input
+                          className="input mt-1.5 font-mono"
+                          placeholder="GitHub handle"
+                          value={formData.member4Github}
+                          onChange={(e) => setFormData({ ...formData, member4Github: e.target.value })}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -397,7 +908,7 @@ export default function RegisterPage() {
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="projectTitle">
-                    Project Working Title
+                    Project Working Title *
                   </label>
                   <input
                     id="projectTitle"
@@ -410,7 +921,7 @@ export default function RegisterPage() {
 
                 <div>
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="techStack">
-                    Planned Technology Stack
+                    Planned Technology Stack *
                   </label>
                   <input
                     id="techStack"
@@ -423,7 +934,7 @@ export default function RegisterPage() {
 
                 <div className="sm:col-span-2">
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="problemStatement">
-                    Problem Statement & Scope
+                    Problem Statement & Scope *
                   </label>
                   <textarea
                     id="problemStatement"
@@ -460,22 +971,46 @@ export default function RegisterPage() {
                   />
                 </div>
 
+                {/* Proposal File Upload Section */}
                 <div className="sm:col-span-2">
                   <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="proposalPdf">
-                    Proposal Architecture Deck / PDF (Optional)
+                    Proposal Architecture Deck / PDF (Optional, max 5 MB, max 7 pages)
                   </label>
-                  <input
-                    id="proposalPdf"
-                    type="file"
-                    accept=".pdf"
-                    className="input mt-1.5 file:mr-4 file:rounded-full file:border-0 file:bg-sand-border/20 file:px-4 file:py-1 file:font-mono file:text-xs file:text-[#f0eae1] hover:file:bg-sand-border/40"
-                  />
+
+                  <div className="mt-2 flex flex-col gap-3">
+                    <input
+                      ref={fileInputRef}
+                      id="proposalPdf"
+                      type="file"
+                      accept=".pdf,.pptx"
+                      onChange={handleFileUpload}
+                      className="input file:mr-4 file:rounded-full file:border-0 file:bg-sand-border/20 file:px-4 file:py-1 file:font-mono file:text-xs file:text-[#f0eae1] hover:file:bg-sand-border/40"
+                    />
+
+                    {proposalFileInfo && (
+                      <div className="flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3 text-xs font-mono">
+                        <div className="flex items-center gap-2.5 text-emerald-300">
+                          <CheckCircle2 size={16} />
+                          <span>
+                            <strong>{proposalFileInfo.originalName}</strong> ({(proposalFileInfo.sizeBytes / (1024 * 1024)).toFixed(2)} MB) attached locally.
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleRemoveFile}
+                          className="text-xs text-[#9e8e7c] hover:text-rose-400 font-mono transition-colors ml-2"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* STEP 5: Registration Summary */}
+          {/* STEP 5: Registration Summary & UPI Payment */}
           {step === 5 && (
             <div>
               <div className="border-b border-sand-border/15 pb-4">
@@ -483,29 +1018,112 @@ export default function RegisterPage() {
                   Review & Confirm Registration
                 </h2>
                 <p className="text-xs text-[#9e8e7c] mt-1">
-                  Verify participation details and accept hackathon integrity declarations.
+                  Verify participation details and complete manual UPI payment reference.
                 </p>
               </div>
 
+              {/* Review Summary */}
               <div className="mt-6 divide-y divide-sand-border/15 rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-6 font-mono text-xs">
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#8e7a68]">Entry Format:</span>
                   <span className="font-semibold text-[#f0eae1]">{type}</span>
                 </div>
+                {type === "Squad" && (
+                  <div className="flex justify-between py-2.5">
+                    <span className="text-[#8e7a68]">Team Name:</span>
+                    <span className="font-semibold text-[#f0eae1]">{formData.teamName || "—"}</span>
+                  </div>
+                )}
+                <div className="flex justify-between py-2.5">
+                  <span className="text-[#8e7a68]">Lead Participant:</span>
+                  <span className="text-[#f0eae1]">
+                    {formData.fullName} ({formData.github})
+                  </span>
+                </div>
+                <div className="flex justify-between py-2.5">
+                  <span className="text-[#8e7a68]">Project Title:</span>
+                  <span className="text-[#f0eae1]">{formData.projectTitle}</span>
+                </div>
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#8e7a68]">Registration Fee:</span>
-                  <span className="font-semibold text-[#c89f6d]">{type === "Solo" ? event.soloFee : event.squadFee}</span>
+                  <span className="font-semibold text-[#c89f6d]">
+                    {type === "Solo" ? event.soloFee : event.squadFee}
+                  </span>
                 </div>
                 <div className="flex justify-between py-2.5">
-                  <span className="text-[#8e7a68]">Build Window:</span>
-                  <span className="text-[#f0eae1] font-semibold">26 Dec 10:00 PM – 27 Dec 10:00 PM IST</span>
-                </div>
-                <div className="flex justify-between py-2.5">
-                  <span className="text-[#8e7a68]">Payment Mode:</span>
-                  <span className="text-[#9e8e7c]">Demo Mode — No payment gateway required</span>
+                  <span className="text-[#8e7a68]">Proposal Deck:</span>
+                  <span className="text-[#9e8e7c]">
+                    {proposalFileInfo ? `${proposalFileInfo.originalName} (${(proposalFileInfo.sizeBytes / (1024 * 1024)).toFixed(2)} MB)` : "None attached"}
+                  </span>
                 </div>
               </div>
 
+              {/* Organiser UPI Payment Section */}
+              <div className="mt-6 rounded-2xl border border-[#c89f6d]/30 bg-[#160f0b]/80 p-6">
+                <div className="flex items-center gap-2 border-b border-sand-border/20 pb-3">
+                  <QrCode size={18} className="text-[#c89f6d]" />
+                  <h3 className="font-serif text-lg font-normal text-[#f0eae1]">
+                    Manual UPI Payment ({type === "Solo" ? event.soloFee : event.squadFee})
+                  </h3>
+                </div>
+
+                <div className="mt-4 grid sm:grid-cols-2 gap-6 items-center">
+                  {/* QR Image Container */}
+                  <div className="flex flex-col items-center justify-center p-4 bg-[#1f150f] rounded-xl border border-sand-border/20 text-center">
+                    <img
+                      key={type}
+                      src={type === "Solo" ? "/images/payment-qr-99.png" : "/images/payment-qr-200.png"}
+                      alt={type === "Solo" ? "Official Payment QR (₹99)" : "Official Payment QR (₹200)"}
+                      className="h-44 w-44 object-contain rounded-lg bg-white p-2"
+                      onError={(e) => {
+                        // If image not yet uploaded by organizer, show official instructions card
+                        (e.target as HTMLElement).style.display = "none";
+                        const fallback = document.getElementById("qr-fallback");
+                        if (fallback) fallback.style.display = "block";
+                      }}
+                    />
+                    <div id="qr-fallback" className="hidden py-6">
+                      <QrCode size={48} className="mx-auto text-[#c89f6d] mb-2" />
+                      <p className="font-serif text-sm text-[#f0eae1]">Official Organiser QR Code</p>
+                      <p className="font-mono text-[11px] text-[#9e8e7c] mt-1">
+                        Scan via GPay / PhonePe / Paytm / BHIM
+                      </p>
+                    </div>
+                    <span className="mt-2 font-mono text-[11px] text-[#c89f6d]">
+                      UPI ID: singhshivraj89969@okaxis
+                    </span>
+                  </div>
+
+                  {/* Payment Instructions & UTR input */}
+                  <div className="space-y-4">
+                    <p className="text-xs text-[#9e8e7c] leading-relaxed">
+                      1. Scan the official QR code via GPay, PhonePe, Paytm, or any UPI app.<br />
+                      2. Transfer the exact amount of <strong className="text-[#f0eae1]">{type === "Solo" ? "₹99" : "₹200"}</strong> (incorrect amounts will not be verified).<br />
+                      3. Mandatory: Mention your team name in the UPI payment note before paying.<br />
+                      4. Submit the 12-digit UPI UTR / Transaction Reference Number below to confirm your slot.
+
+                    </p>
+
+                    <div>
+                      <label
+                        htmlFor="transactionReference"
+                        className="block font-mono text-xs uppercase tracking-wider text-[#8e7a68] mb-1.5"
+                      >
+                        UPI Transaction Reference / UTR Number *
+                      </label>
+                      <input
+                        id="transactionReference"
+                        className="input font-mono text-sm tracking-wider"
+                        placeholder="e.g. 432109876543 / UPI-REF-XXX"
+                        value={formData.transactionReference}
+                        onChange={(e) => setFormData({ ...formData, transactionReference: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Integrity Declaration */}
               <div className="mt-6 rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-4">
                 <label className="flex items-start gap-3 text-xs leading-relaxed text-[#9e8e7c] cursor-pointer">
                   <input
@@ -515,7 +1133,7 @@ export default function RegisterPage() {
                     className="mt-0.5 h-4 w-4 rounded border-sand-border/30 bg-[#120d09] accent-[#c89f6d]"
                   />
                   <span>
-                    I confirm that the code committed during Winter Hackathon ’26 will represent our own original work. I agree to maintain an inspectable git log, invite the official inspection collaborator account, and accept all competition rules.
+                    I confirm that all team members have consented to this registration and that our hackathon submission will represent our original work. I understand that our participation spot is confirmed upon verification of our payment reference.
                   </span>
                 </label>
               </div>
@@ -528,7 +1146,7 @@ export default function RegisterPage() {
               type="button"
               className="btn-secondary"
               onClick={back}
-              disabled={step === 1}
+              disabled={step === 1 || submitting}
             >
               <ArrowLeft size={16} /> Back
             </button>
@@ -545,9 +1163,18 @@ export default function RegisterPage() {
               <button
                 type="button"
                 className="btn-primary"
-                onClick={() => setSuccess(true)}
+                onClick={handleSubmit}
+                disabled={submitting}
               >
-                Submit Demo Registration <Check size={16} />
+                {submitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Submitting Application...
+                  </>
+                ) : (
+                  <>
+                    Submit Final Registration <Check size={16} />
+                  </>
+                )}
               </button>
             )}
           </div>

@@ -40,7 +40,7 @@ export default function EventHighlights() {
       id: "prize",
       title: "Direct Cash Prize Pool",
       subtitle: "GUARANTEED AWARDS",
-      stat: "₹8,789 Pool",
+      stat: "₹15,000 Pool",
       description: "Guaranteed liquid cash disbursement directly via UPI to 11 verified positions: top 5 general podiums plus 2 special technical categories.",
       schedule: "11 Winners · Immediate UPI Payout",
       image: "/highlights/prize.jpg",

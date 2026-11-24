@@ -17,11 +17,11 @@ export interface SpecialCategory {
 }
 
 export const overallPrizes: PrizeItem[] = [
-  { place: "1st", amount: "₹2,999", rawAmount: 2999, label: "Overall Champion" },
-  { place: "2nd", amount: "₹1,999", rawAmount: 1999, label: "Runner Up" },
-  { place: "3rd", amount: "₹999", rawAmount: 999, label: "2nd Runner Up" },
-  { place: "4th", amount: "₹499", rawAmount: 499, label: "4th Place Finalist" },
-  { place: "5th", amount: "₹299", rawAmount: 299, label: "5th Place Finalist" },
+  { place: "1st", amount: "₹5,999", rawAmount: 2999, label: "Overall Champion" },
+  { place: "2nd", amount: "₹3,499", rawAmount: 1999, label: "Runner Up" },
+  { place: "3rd", amount: "₹2,499", rawAmount: 999, label: "2nd Runner Up" },
+  { place: "4th", amount: "₹999", rawAmount: 499, label: "4th Place Finalist" },
+  { place: "5th", amount: "₹499", rawAmount: 299, label: "5th Place Finalist" },
 ];
 
 export const specialPrizes: SpecialCategory[] = [
@@ -48,7 +48,7 @@ export const specialPrizes: SpecialCategory[] = [
 ];
 
 export const prizePoolMeta = {
-  totalCash: "₹8,789",
+  totalCash: "₹15,000",
   positions: "11 Cash Award Positions",
   overallTotal: "₹6,795",
   specialTotal: "₹1,994",

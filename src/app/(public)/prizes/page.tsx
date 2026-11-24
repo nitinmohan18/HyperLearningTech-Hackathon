@@ -41,13 +41,13 @@ export default function PrizesPage() {
             Prize Pool & Awards
           </p>
           <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
-            ₹8,789 in <br />
+            ₹15,000 in <br />
             <span className="font-serif italic font-normal text-[#c89f6d]">
               direct cash prizes.
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-            A total announced cash prize pool of ₹8,789 distributed across 11 winner positions (Overall Top 5 and two specialized categories), guaranteed by verifiable repository evaluations.
+            A total announced cash prize pool of ₹15,000 distributed across 11 winner positions (Overall Top 5 and two specialized categories), guaranteed by verifiable repository evaluations.
           </p>
         </div>
 
