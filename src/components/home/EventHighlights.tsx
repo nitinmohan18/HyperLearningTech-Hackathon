@@ -1,80 +1,56 @@
+"use client";
+
+import React from "react";
 import { Clock, Globe, Users, Trophy } from "lucide-react";
+import { StaggeredGrid, type BentoItem } from "@/components/core/staggered-grid";
 
 export default function EventHighlights() {
-  const highlights = [
+  const bentoItems: BentoItem[] = [
     {
-      title: "24-Hour Development Challenge",
-      subtitle: "Continuous build window",
-      metric: "24 Hours",
-      icon: Clock,
-      detail: "26 Dec 10:00 PM – 27 Dec 10:00 PM IST",
+      id: "build",
+      title: "24-Hour Continuous Sprint",
+      subtitle: "BUILD WINDOW",
+      stat: "24 Hours",
+      description: "Non-stop synchronized development sprint. Live commit logging starts sharp at 10:00 PM with an automated repository freeze after 24 hours.",
+      schedule: "26 Dec 10:00 PM – 27 Dec 10:00 PM IST",
+      icon: <Clock size={18} />,
     },
     {
-      title: "Fully Online",
-      subtitle: "100% remote participation",
-      metric: "Remote",
-      icon: Globe,
-      detail: "Briefings, check-ins & judging online",
+      id: "remote",
+      title: "100% Fully Virtual",
+      subtitle: "REMOTE ACCESS",
+      stat: "Worldwide",
+      description: "Compete from anywhere globally. Everything is coordinated online through GitHub, Discord live stages, and digital mentor check-in desks.",
+      schedule: "GitHub · Discord Stage · Video Demos",
+      icon: <Globe size={18} />,
     },
     {
-      title: "Solo or Teams of 2–4",
-      subtitle: "Flexible entry formats",
-      metric: "1 to 4",
-      icon: Users,
-      detail: "Solo (₹99) or Squad (₹200 flat)",
+      id: "teams",
+      title: "Solo or Squad Formats",
+      subtitle: "TEAM STRUCTURE",
+      stat: "1 to 4 Devs",
+      description: "Full flexibility to compete independently or coordinate as a team of up to 4 contributors with complete IP ownership retained.",
+      schedule: "₹99 Solo Pass · ₹200 Flat Squad Pass",
+      icon: <Users size={18} />,
     },
     {
-      title: "₹8,789 Total Cash Prize Pool",
-      subtitle: "11 cash positions",
-      metric: "₹8,789",
-      icon: Trophy,
-      detail: "Top 5 overall + 2 special categories",
+      id: "prize",
+      title: "Direct Cash Prize Pool",
+      subtitle: "GUARANTEED AWARDS",
+      stat: "₹8,789 Pool",
+      description: "Guaranteed liquid cash disbursement directly via UPI to 11 verified positions: top 5 general podiums plus 2 special technical categories.",
+      schedule: "11 Winners · Immediate UPI Payout",
+      icon: <Trophy size={18} />,
     },
   ];
 
   return (
-    <section id="overview" className="border-b border-white/[0.08] bg-cream-alt">
-      <div className="container-site py-12 sm:py-16">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <p className="eyebrow">At A Glance</p>
-            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-white">
-              Event Highlights
-            </h2>
-          </div>
-          <span className="hidden font-mono text-xs text-[#b8ada0] sm:inline">
-            Official Edition 1.0
-          </span>
-        </div>
-
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 lg:divide-x divide-white/[0.08]">
-          {highlights.map(({ title, subtitle, metric, icon: Icon, detail }, idx) => (
-            <div
-              key={title}
-              className={`flex flex-col justify-between ${idx > 0 ? "lg:pl-8" : ""} pt-6 sm:pt-0`}
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <Icon size={20} className="text-[#e0b885]" />
-                  <span className="font-mono text-xs font-semibold text-[#e0b885]">
-                    {metric}
-                  </span>
-                </div>
-                <h3 className="mt-4 font-serif text-xl sm:text-2xl font-normal text-white leading-snug">
-                  {title}
-                </h3>
-              </div>
-              <div className="mt-5 border-t border-white/[0.08] pt-3">
-                <p className="font-mono text-[10px] text-[#b8ada0] uppercase tracking-wider">
-                  {subtitle}
-                </p>
-                <p className="mt-0.5 text-xs text-[#d6cec2]">
-                  {detail}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section id="overview" className="border-b border-white/[0.08] bg-[#1a120c] py-16 sm:py-24">
+      <div className="container-site">
+        <StaggeredGrid
+          centerText="EVENT HIGHLIGHTS"
+          bentoItems={bentoItems}
+        />
       </div>
     </section>
   );

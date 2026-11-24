@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 import Logo from "./Logo";
+import { LiquidMetalButton } from "@/components/core/liquid-metal-button";
+import { MorphText } from "@/components/core/morph-text";
 
 const navLinks = [
   { label: "Overview", href: "#overview" },
@@ -125,18 +127,33 @@ export default function Navbar() {
           </div>
 
           {/* Action CTAs (Desktop) */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-3.5">
             <Link
               href="/login"
-              className="font-mono text-xs uppercase tracking-[0.18em] text-[#b8ada0] transition-colors hover:text-white px-2 py-1"
+              className="group relative inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] w-[86px] h-[34px] px-2 transition-all duration-200 hover:border-[#e0b885]/40 hover:bg-[#e0b885]/10 shadow-[0_2px_10px_rgba(0,0,0,0.3)] shrink-0"
             >
-              Login
+              <MorphText
+                words={["LOGIN", "PORTAL", "SIGN IN"]}
+                interval={4000}
+                fontSize="11px"
+                className="w-full text-center text-[#f5efe5] group-hover:text-white"
+                textClassName="tracking-[0.2em] font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
+              />
             </Link>
-            <Link
-              href="/register"
-              className="inline-flex h-9 items-center justify-center gap-1.5 rounded-full bg-white px-4 xl:px-5 text-xs font-semibold text-[#120d09] hover:bg-[#f0eae1] transition-colors"
-            >
-              Register Now →
+            <Link href="/register">
+              <LiquidMetalButton
+                borderWidth={2}
+                metalConfig={{
+                  colorBack: "#c99a5e",
+                  colorTint: "#ffffff",
+                  speed: 0.6,
+                  distortion: 0.2,
+                  repetition: 4,
+                }}
+              >
+                <span>Register Now</span>
+                <ArrowRight size={13} />
+              </LiquidMetalButton>
             </Link>
           </div>
 

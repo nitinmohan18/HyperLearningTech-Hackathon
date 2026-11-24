@@ -5,13 +5,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Transparent / Glass surfaces to showcase the live rotating background
+        // Elevated warm bronze-espresso surfaces
         cream: {
-          DEFAULT: "transparent",
-          canvas: "#0d0a08",
-          surface: "rgba(22, 17, 13, 0.72)",
-          alt: "rgba(58, 44, 31, 0.22)",
-          deep: "#18120e",
+          DEFAULT: "#1a120c",
+          canvas: "#160e0a",
+          surface: "rgba(42, 29, 20, 0.75)",
+          alt: "#1d140d",
+          deep: "#231810",
         },
         // Warm Sand & Bronze palette
         sand: {

@@ -36,7 +36,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
-      <body className="min-h-screen font-sans text-espresso-body antialiased selection:bg-orange selection:text-white">
+      <body className="min-h-screen font-sans text-espresso-body antialiased selection:bg-orange selection:text-white bg-[#140d09]">
+        {/* Dynamic conic shine background covering Header + Hero, fading seamlessly into the sections below */}
         <LuxuryBackground />
         <GlassCursorTracker />
         <div className="relative z-10 flex min-h-screen flex-col">

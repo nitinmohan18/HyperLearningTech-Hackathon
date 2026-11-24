@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Trophy,
@@ -6,21 +8,92 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
-import { overallPrizes, specialPrizes } from "@/data/prizes";
+import { specialPrizes } from "@/data/prizes";
+import { TestimonialsCard, type PrizeStackItem } from "@/components/core/testimonials-card";
 
 export default function PrizesSection() {
-  const getRankBadge = (place: string) => {
-    switch (place) {
-      case "1st":
-        return <Trophy size={18} className="text-[#e0b885]" />;
-      case "2nd":
-        return <Medal size={18} className="text-[#e0b885]/80" />;
-      case "3rd":
-        return <Medal size={18} className="text-[#a58f68]" />;
-      default:
-        return <Award size={16} className="text-[#8e7a68]" />;
-    }
-  };
+  const prizeStackItems: PrizeStackItem[] = [
+    {
+      id: "1st",
+      place: "1st",
+      amount: "₹2,999",
+      title: "Overall Champion",
+      description: "Awarded to the most outstanding engineering solution with superior architecture, provable commit progression, and high product utility.",
+      image: "/prizes/1st.jpg",
+      perks: [
+        "Direct ₹2,999 instant UPI cash transfer",
+        "Winner Certificate with tamper-proof verification hash",
+        "Featured spotlight on HyperLearningTech network",
+      ],
+      gradient: "linear-gradient(145deg, rgba(65, 42, 22, 0.9) 0%, rgba(28, 18, 10, 0.96) 100%)",
+      badgeColor: "#ffd89b",
+      accentColor: "#ffd89b",
+    },
+    {
+      id: "2nd",
+      place: "2nd",
+      amount: "₹1,999",
+      title: "Runner Up",
+      description: "Awarded to the second-highest scoring project demonstrating excellent execution, clean code discipline, and seamless UX.",
+      image: "/prizes/2nd.jpg",
+      perks: [
+        "Direct ₹1,999 instant UPI cash transfer",
+        "Runner-Up Certificate with digital credential ID",
+        "Community showcase inclusion",
+      ],
+      gradient: "linear-gradient(145deg, rgba(46, 36, 28, 0.9) 0%, rgba(22, 16, 12, 0.96) 100%)",
+      badgeColor: "#e0b885",
+      accentColor: "#e0b885",
+    },
+    {
+      id: "3rd",
+      place: "3rd",
+      amount: "₹999",
+      title: "2nd Runner Up",
+      description: "Recognizing outstanding technical depth and functional delivery built entirely within the 24-hour sprint window.",
+      image: "/prizes/3rd.jpg",
+      perks: [
+        "Direct ₹999 instant UPI cash transfer",
+        "Podium Finalist digital certificate",
+        "GitHub repository showcase",
+      ],
+      gradient: "linear-gradient(145deg, rgba(42, 28, 18, 0.9) 0%, rgba(18, 12, 8, 0.96) 100%)",
+      badgeColor: "#d4af7a",
+      accentColor: "#d4af7a",
+    },
+    {
+      id: "4th",
+      place: "4th",
+      amount: "₹499",
+      title: "4th Place Finalist",
+      description: "Awarded for exceptional implementation and strong submission quality among all top general contenders.",
+      image: "/prizes/4th.jpg",
+      perks: [
+        "Direct ₹499 instant UPI cash transfer",
+        "Honorary Finalist credentials",
+        "Official leaderboard listing",
+      ],
+      gradient: "linear-gradient(145deg, rgba(32, 23, 16, 0.9) 0%, rgba(16, 11, 8, 0.96) 100%)",
+      badgeColor: "#b5a794",
+      accentColor: "#b5a794",
+    },
+    {
+      id: "5th",
+      place: "5th",
+      amount: "₹299",
+      title: "5th Place Finalist",
+      description: "Awarded for completing a functional, inspectable project achieving Top 5 overall ranking across jury rubrics.",
+      image: "/prizes/5th.jpg",
+      perks: [
+        "Direct ₹299 instant UPI cash transfer",
+        "Top 5 Merit Certificate",
+        "Official leaderboard listing",
+      ],
+      gradient: "linear-gradient(145deg, rgba(28, 20, 14, 0.9) 0%, rgba(14, 10, 7, 0.96) 100%)",
+      badgeColor: "#a89d90",
+      accentColor: "#a89d90",
+    },
+  ];
 
   return (
     <section id="prizes" className="section-pad border-b border-white/[0.08] bg-cream">
@@ -49,59 +122,28 @@ export default function PrizesSection() {
           </div>
         </div>
 
-        {/* 1. Overall Top 5 Standings - Clean minimal line-divided cards */}
-        <div className="mt-14">
-          <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-3">
+        {/* 1. Overall Top 5 Standings: Interactive 3D Card Stack with Real Trophies */}
+        <div className="mt-12 sm:mt-16">
+          <div className="mb-4 flex items-center justify-between border-b border-white/[0.08] pb-3">
             <div className="flex items-center gap-2">
-              <Trophy size={16} className="text-[#e0b885]" />
+              <Trophy size={16} className="text-[#ffd89b]" />
               <h3 className="font-serif text-xl sm:text-2xl font-normal text-white">
                 Overall Top 5 Standings
               </h3>
             </div>
-            <span className="font-mono text-xs text-[#b8ada0]">₹6,795 Pool</span>
+            <span className="font-mono text-xs text-[#ffd89b] font-medium">₹6,795 Pool</span>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-px bg-white/[0.08] rounded-xl overflow-hidden border border-white/[0.08]">
-            {overallPrizes.map((prize) => {
-              const isFirst = prize.place === "1st";
-
-              return (
-                <div
-                  key={prize.place}
-                  className={`flex flex-col justify-between p-5 sm:p-6 transition-colors ${
-                    isFirst
-                      ? "col-span-2 sm:col-span-1 bg-[#23170e]/85"
-                      : "bg-[#140e0a]/80 hover:bg-[#18110c]"
-                  }`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-[11px] font-medium uppercase tracking-[0.2em] text-[#b8ada0]">
-                        {prize.place} Place
-                      </span>
-                      {getRankBadge(prize.place)}
-                    </div>
-                    <p className="mt-3 text-xs text-[#d6cec2]">
-                      {prize.label}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 border-t border-white/[0.08] pt-3">
-                    <p className="font-serif text-2xl sm:text-3xl font-normal text-white">
-                      {prize.amount}
-                    </p>
-                    <p className="mt-0.5 font-mono text-[9px] uppercase tracking-wider text-[#b8ada0]">
-                      Cash Award
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* TestimonialsCard 3D Interactive Stack Template */}
+          <TestimonialsCard
+            items={prizeStackItems}
+            showNavigation={true}
+            showCounter={true}
+          />
         </div>
 
         {/* 2. Special Category Awards */}
-        <div className="mt-14">
+        <div className="mt-16">
           <div className="mb-6 flex items-center justify-between border-b border-white/[0.08] pb-3">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-[#e0b885]" />
@@ -109,62 +151,61 @@ export default function PrizesSection() {
                 Special Category Awards
               </h3>
             </div>
-            <span className="font-mono text-xs text-[#b8ada0]">₹1,994 Pool</span>
+            <span className="font-mono text-xs text-[#b8ada0]">₹1,994 Total</span>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
             {specialPrizes.map((category) => (
               <div
                 key={category.category}
-                className="rounded-xl border border-white/[0.08] bg-[#140e0a]/60 p-6 transition-colors hover:border-white/[0.15]"
+                className="flex flex-col justify-between rounded-xl border border-white/[0.08] bg-[#140e0a]/80 p-6 sm:p-7 backdrop-blur-md transition-all hover:border-[#e0b885]/30 hover:bg-[#18110c]"
               >
                 <div>
-                  <h4 className="font-serif text-2xl font-normal text-white">
-                    {category.category}
-                  </h4>
-                  <p className="mt-1 text-xs text-[#d6cec2]">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#e0b885]">
+                        Special Track
+                      </span>
+                      <h4 className="mt-1 font-serif text-xl sm:text-2xl font-normal text-white">
+                        {category.category}
+                      </h4>
+                    </div>
+                    <span className="font-serif text-xl sm:text-2xl font-normal text-[#e0b885]">
+                      {category.total}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-xs sm:text-sm text-[#d6cec2] leading-relaxed">
                     {category.description}
                   </p>
                 </div>
 
-                <div className="mt-6 grid grid-cols-3 gap-3 border-t border-white/[0.08] pt-4">
-                  {category.prizes.map((p) => (
-                    <div key={p.place}>
-                      <span className="font-mono text-[10px] uppercase tracking-wider text-[#b8ada0]">
-                        {p.place}
-                      </span>
-                      <p className="mt-1 font-serif text-xl font-normal text-white">
-                        {p.amount}
-                      </p>
-                    </div>
-                  ))}
+                <div className="mt-6 border-t border-white/[0.08] pt-4">
+                  <div className="grid grid-cols-3 gap-3">
+                    {category.prizes.map((p) => (
+                      <div
+                        key={p.place}
+                        className="rounded-lg border border-white/[0.06] bg-black/30 p-2.5 text-center"
+                      >
+                        <p className="font-mono text-[10px] text-[#b8ada0]">
+                          {p.place}
+                        </p>
+                        <p className="mt-0.5 font-mono text-sm sm:text-base font-semibold text-white">
+                          {p.amount}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Certificates & Recognition */}
-        <div className="mt-14 border-t border-white/[0.08] pt-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-[#b8ada0]">
-                Verifiable Credentials
-              </p>
-              <h4 className="mt-1 font-serif text-xl font-normal text-white">
-                Official Digital Certificates for All Eligible Submissions
-              </h4>
-              <p className="mt-1 text-xs text-[#d6cec2] max-w-2xl">
-                Every participant who completes the 24h sprint with verified repository activity receives a cryptographically verifiable certificate.
-              </p>
-            </div>
-            <Link
-              href="/certificates"
-              className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-[#e0b885] hover:text-white transition-colors shrink-0"
-            >
-              Verify Certificate <ArrowRight size={14} />
-            </Link>
-          </div>
+        {/* Prize Assurance Note */}
+        <div className="mt-12 rounded-xl border border-white/[0.08] bg-black/20 p-5 text-center sm:p-6 backdrop-blur-sm">
+          <p className="font-mono text-xs text-[#b8ada0]">
+            <span className="text-[#e0b885] font-semibold">Immediate Settlement:</span> All cash awards are paid directly via UPI to verified winners within 48 hours of final repository verification.
+          </p>
         </div>
       </div>
     </section>

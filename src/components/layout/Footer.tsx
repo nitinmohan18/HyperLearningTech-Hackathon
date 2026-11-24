@@ -3,74 +3,119 @@ import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/[0.08] bg-[#0d0a08]/80 backdrop-blur-xl">
-      <div className="container-site grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <Link href="/" className="inline-block transition-opacity hover:opacity-90">
-            <Logo size="default" showSubtitle={false} />
-          </Link>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-[#d6cec2]">
-            An independently organised, 24-hour online technology hackathon built for serious participation, inspectable code, and genuine execution.
-          </p>
-          <div className="mt-6 flex items-center gap-2 font-mono text-xs text-[#b8ada0]">
-            <span className="text-[#e0b885]">✦</span>
-            <span>Winter Hackathon ’26 · 1st Edition</span>
+    <footer className="relative border-t border-white/[0.08] bg-[#0c0806]/95 backdrop-blur-2xl">
+      <div className="container-site py-12 sm:py-16">
+        <div className="grid gap-10 md:grid-cols-12 md:gap-8 items-start">
+          {/* Brand Column: Clean, minimal editorial typography without clutter */}
+          <div className="md:col-span-5 flex flex-col items-start">
+            <Link href="/" className="inline-block transition-opacity hover:opacity-90">
+              <Logo size="default" showSubtitle={false} />
+            </Link>
+            <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.25em] text-[#e0b885]">
+              Winter Hackathon ’26 · 1st Edition
+            </p>
+            <div className="mt-4 flex items-center gap-4 text-xs font-mono text-[#a89d90]">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>24-Hour Online</span>
+              </span>
+              <span>·</span>
+              <span>26–27 Dec 2026</span>
+            </div>
+          </div>
+
+          {/* Quick Nav Columns */}
+          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            <div>
+              <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[#8e8275] font-semibold">
+                Event
+              </p>
+              <ul className="mt-3.5 space-y-2 text-xs">
+                <li>
+                  <Link href="#overview" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Overview
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#prizes" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Prizes & Grants
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#schedule" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Schedule (IST)
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#judging" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Judging Criteria
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[#8e8275] font-semibold">
+                Participation
+              </p>
+              <ul className="mt-3.5 space-y-2 text-xs">
+                <li>
+                  <Link href="/register" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Register (Solo / Squad)
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/login" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Participant Login
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/dashboard" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Live Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#faq" className="text-[#d6cec2] transition-colors hover:text-white">
+                    FAQ
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[#8e8275] font-semibold">
+                Governance
+              </p>
+              <ul className="mt-3.5 space-y-2 text-xs">
+                <li>
+                  <Link href="/rules" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Official Rules
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/certificates" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Certificate Verification
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="mailto:support@hyperlearningtech.in"
+                    className="text-[#d6cec2] transition-colors hover:text-white"
+                  >
+                    Direct Support
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-[#b8ada0]">
-            Event & Info
-          </p>
-          <div className="mt-4 flex flex-col gap-2.5 text-sm">
-            <Link href="/about" className="text-[#d6cec2] transition-colors hover:text-white">
-              About the Event
-            </Link>
-            <Link href="/prizes" className="text-[#d6cec2] transition-colors hover:text-white">
-              Prize Distribution
-            </Link>
-            <Link href="/schedule" className="text-[#d6cec2] transition-colors hover:text-white">
-              IST Schedule
-            </Link>
-            <Link href="/rules" className="text-[#d6cec2] transition-colors hover:text-white">
-              Rules & Guidelines
-            </Link>
-            <Link href="/certificates" className="text-[#d6cec2] transition-colors hover:text-white">
-              Certificate Verification
-            </Link>
-          </div>
-        </div>
-
-        <div>
-          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-[#b8ada0]">
-            Participation
-          </p>
-          <div className="mt-4 flex flex-col gap-2.5 text-sm">
-            <Link href="/register" className="text-[#d6cec2] transition-colors hover:text-white">
-              Register (Solo & Squad)
-            </Link>
-            <Link href="/login" className="text-[#d6cec2] transition-colors hover:text-white">
-              Participant Login
-            </Link>
-            <Link href="/dashboard" className="text-[#d6cec2] transition-colors hover:text-white">
-              Participant Dashboard
-            </Link>
-            <Link href="/leaderboard" className="text-[#d6cec2] transition-colors hover:text-white">
-              Live Leaderboard
-            </Link>
-            <Link href="/faq" className="text-[#d6cec2] transition-colors hover:text-white">
-              Frequently Asked Questions
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/[0.08] bg-[#0d0a08]/80">
-        <div className="container-site flex flex-col items-center justify-between gap-3 py-6 font-mono text-xs text-[#b8ada0] sm:flex-row">
+        {/* Minimal Bottom Bar */}
+        <div className="mt-12 pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-[#8a7f72]">
           <span>© 2026 HyperLearningTech. All rights reserved.</span>
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-[#e0b885]" />
-            <span className="text-[#d6cec2]">Official Portal: hackathon.hyperlearningtech.in</span>
+            <span className="text-[#b8ada0]">hackathon.hyperlearningtech.in</span>
           </div>
         </div>
       </div>
