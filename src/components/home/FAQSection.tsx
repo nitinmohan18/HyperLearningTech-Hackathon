@@ -17,21 +17,21 @@ export default function FAQSection() {
       : faqs.filter((f) => f.category === selectedCategory);
 
   return (
-    <section id="faq" className="section-pad border-b border-sand-border/20 bg-cream-alt backdrop-blur-md">
+    <section id="faq" className="section-pad border-b border-white/[0.08] bg-cream-alt">
       <div className="container-site">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto">
           <p className="eyebrow">Clear Answers</p>
           <h2 className="section-title">
-            Frequently Asked <span className="font-serif italic text-[#c89f6d]">Questions</span>
+            Frequently Asked <span className="font-serif italic text-[#e0b885]">Questions</span>
           </h2>
           <p className="section-copy mx-auto">
             Everything you need to know about format, timeline, repository inspection, scoring, and awards before you build.
           </p>
         </div>
 
-        {/* Category Pills Filter */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+        {/* Category Filter */}
+        <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -40,10 +40,10 @@ export default function FAQSection() {
                 setSelectedCategory(cat);
                 setOpenIndex(null);
               }}
-              className={`rounded-full px-4 py-1.5 font-mono text-xs transition-all ${
+              className={`rounded-full px-3 py-1 text-[11px] sm:px-4 sm:py-1.5 sm:text-xs font-mono transition-colors ${
                 selectedCategory === cat
-                  ? "bg-[#f0eae1] text-[#120d09] font-semibold shadow-sm"
-                  : "border border-sand-border/25 bg-[#120d09]/40 text-[#8e7a68] hover:text-[#f0eae1]"
+                  ? "bg-white/[0.15] text-white font-medium border border-white/20"
+                  : "text-[#b8ada0] hover:text-white"
               }`}
             >
               {cat}
@@ -51,55 +51,47 @@ export default function FAQSection() {
           ))}
         </div>
 
-        {/* Accordion List */}
-        <div className="mt-8 max-w-3xl mx-auto rounded-2xl border border-sand-border/15 bg-[#120d09]/45 p-3 sm:p-5 backdrop-blur-xl">
-          <div className="divide-y divide-sand-border/15">
-            {filteredFaqs.map((faq, idx) => {
-              const isOpen = openIndex === idx;
+        {/* Accordion List - Clean open rows */}
+        <div className="mt-10 max-w-3xl mx-auto divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {filteredFaqs.map((faq, idx) => {
+            const isOpen = openIndex === idx;
 
-              return (
-                <div key={idx} className="transition-colors">
-                  <button
-                    type="button"
-                    onClick={() => setOpenIndex(isOpen ? null : idx)}
-                    className="flex w-full items-center justify-between p-4 sm:p-5 text-left transition-colors hover:text-[#f0eae1]"
-                    aria-expanded={isOpen}
-                  >
-                    <span className="pr-4 font-serif text-lg sm:text-xl font-normal text-[#f0eae1]">
-                      {faq.question}
-                    </span>
-                    <div
-                      className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl border transition-all ${
-                        isOpen
-                          ? "border-[#c89f6d]/50 bg-[#c89f6d]/15 text-[#c89f6d]"
-                          : "border-sand-border/20 bg-[#16100c]/60 text-[#8e7a68]"
-                      }`}
-                    >
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </div>
-                  </button>
+            return (
+              <div key={idx} className="transition-colors hover:bg-white/[0.01]">
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(isOpen ? null : idx)}
+                  className="flex w-full items-center justify-between py-5 text-left transition-colors"
+                  aria-expanded={isOpen}
+                >
+                  <span className="pr-4 font-serif text-lg sm:text-xl font-normal text-white">
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    size={16}
+                    className={`text-[#b8ada0] shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-[#e0b885]" : ""
+                    }`}
+                  />
+                </button>
 
-                  {isOpen && (
-                    <div className="px-4 pb-5 pt-1 sm:px-5">
-                      <p className="text-xs sm:text-sm leading-relaxed text-[#9e8e7c]">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                {isOpen && (
+                  <div className="pb-5 pt-1 pr-6">
+                    <p className="text-xs sm:text-sm leading-relaxed text-[#d6cec2]">
+                      {faq.answer}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Bottom Support Link */}
         <div className="mt-10 text-center">
-          <p className="text-xs text-[#8e7a68]">
+          <p className="text-xs text-[#b8ada0]">
             Still have questions? Check the{" "}
-            <Link href="/rules" className="text-[#c89f6d] underline hover:text-[#f0eae1]">
+            <Link href="/rules" className="text-[#e0b885] underline hover:text-white">
               official rules
             </Link>{" "}
             or register early to receive pre-event briefings.

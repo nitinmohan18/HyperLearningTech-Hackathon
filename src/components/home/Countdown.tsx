@@ -29,16 +29,13 @@ export default function Countdown() {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-2">
+    <div className="grid grid-cols-4 divide-x divide-white/[0.08] py-2 text-center">
       {items.map((item) => (
-        <div
-          key={item.label}
-          className="rounded-xl border border-sand-border/15 bg-[#140e0a]/60 py-3 text-center transition-colors hover:border-sand-border/30"
-        >
-          <div className="font-mono text-2xl font-semibold text-[#f0eae1] sm:text-3xl">
+        <div key={item.label} className="px-1 sm:px-2">
+          <div className="font-mono text-2xl sm:text-3xl md:text-4xl font-medium text-white tracking-tight">
             {String(item.value).padStart(2, "0")}
           </div>
-          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8e7a68]">
+          <div className="mt-1 font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#b8ada0]">
             {item.label}
           </div>
         </div>
