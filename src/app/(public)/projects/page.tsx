@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ExternalLink, Github, X, FolderGit2 } from "lucide-react";
 import { projects } from "@/data/mock-data";
 
@@ -28,53 +29,72 @@ export default function ProjectsPage() {
         </div>
 
         {/* Projects Grid */}
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((p) => (
-            <article
-              key={p.title}
-              className="group flex flex-col justify-between rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/50 hover:-translate-y-1"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs text-[#c89f6d]">{p.category}</span>
-                  <FolderGit2 size={16} className="text-[#8e7a68]" />
+        {projects.length === 0 ? (
+          <div className="mt-12 rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-12 text-center backdrop-blur-xl">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d]">
+              <FolderGit2 size={26} />
+            </div>
+            <h2 className="mt-5 font-serif text-2xl font-normal text-[#f0eae1]">
+              Submissions Showcase Upcoming
+            </h2>
+            <p className="mt-2 max-w-md mx-auto text-sm leading-relaxed text-[#9e8e7c]">
+              Verified project repositories, prototypes, and architecture artifacts built during Winter Hackathon ’26 will be showcased here following the final code freeze on 27 December 2026.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Link href="/register" className="btn-primary">
+                Register Your Project Idea
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {projects.map((p) => (
+              <article
+                key={p.title}
+                className="group flex flex-col justify-between rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/40 hover:bg-[#18110b]/50 hover:-translate-y-1"
+              >
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-[#c89f6d]">{p.category}</span>
+                    <FolderGit2 size={16} className="text-[#8e7a68]" />
+                  </div>
+
+                  <h2 className="mt-4 font-serif text-2xl font-normal text-[#f0eae1]">
+                    {p.title}
+                  </h2>
+                  <p className="mt-1 font-mono text-xs text-[#8e7a68]">
+                    By {p.team}
+                  </p>
+
+                  <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c] line-clamp-3">
+                    {p.description}
+                  </p>
                 </div>
 
-                <h2 className="mt-4 font-serif text-2xl font-normal text-[#f0eae1]">
-                  {p.title}
-                </h2>
-                <p className="mt-1 font-mono text-xs text-[#8e7a68]">
-                  By {p.team}
-                </p>
+                <div className="mt-6 border-t border-sand-border/15 pt-5">
+                  <div className="flex flex-wrap gap-2">
+                    {p.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="font-mono text-[11px] text-[#8e7a68]"
+                      >
+                        #{t}
+                      </span>
+                    ))}
+                  </div>
 
-                <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c] line-clamp-3">
-                  {p.description}
-                </p>
-              </div>
-
-              <div className="mt-6 border-t border-sand-border/15 pt-5">
-                <div className="flex flex-wrap gap-2">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="font-mono text-[11px] text-[#8e7a68]"
-                    >
-                      #{t}
-                    </span>
-                  ))}
+                  <button
+                    type="button"
+                    className="btn-secondary mt-5 w-full justify-center text-xs"
+                    onClick={() => setSelected(p)}
+                  >
+                    Inspect Project Details
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  className="btn-secondary mt-5 w-full justify-center text-xs"
-                  onClick={() => setSelected(p)}
-                >
-                  Inspect Project Details
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         {/* Project Modal */}
         {selected && (
@@ -111,7 +131,7 @@ export default function ProjectsPage() {
                   Technologies
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {selected.tags.map((t) => (
+                  {selected.tags.map((t: string) => (
                     <span
                       key={t}
                       className="rounded-lg border border-sand-border/20 bg-[#1c140d] px-2.5 py-1 font-mono text-xs text-[#f0eae1]"

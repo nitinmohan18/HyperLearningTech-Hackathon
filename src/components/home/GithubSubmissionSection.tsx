@@ -100,10 +100,10 @@ export default function GithubSubmissionSection() {
 
         <div className="mt-10 text-center">
           <Link
-            href="/dashboard/repository"
+            href="/rules"
             className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-[#e0b885] hover:text-white transition-colors"
           >
-            Repository Setup Guide <ArrowRight size={14} />
+            Repository Rules & Guidelines <ArrowRight size={14} />
           </Link>
         </div>
       </div>

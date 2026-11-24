@@ -12,9 +12,9 @@ export default function Logo({
   size = "default",
 }: LogoProps) {
   const iconSizes = {
-    sm: "h-7 w-7",
-    default: "h-9 w-9",
-    lg: "h-11 w-11",
+    sm: "h-10 w-10",
+    default: "h-14 w-14",
+    lg: "h-20 w-20",
   };
 
   const textSizes = {
@@ -40,13 +40,13 @@ export default function Logo({
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              {/* Pillar 1: Light warm champagne gradient */}
+              {/* Half-H gradient: light warm champagne */}
               <linearGradient
                 id="hltPillar1"
-                x1="10"
+                x1="8"
                 y1="8"
-                x2="18"
-                y2="32"
+                x2="20"
+                y2="24"
                 gradientUnits="userSpaceOnUse"
               >
                 <stop offset="0%" stopColor="#f7f2eb" />
@@ -54,13 +54,13 @@ export default function Logo({
                 <stop offset="100%" stopColor="#967756" />
               </linearGradient>
 
-              {/* Pillar 2: Rich bronze gradient */}
+              {/* L gradient: rich bronze */}
               <linearGradient
                 id="hltPillar2"
-                x1="22"
-                y1="8"
-                x2="30"
-                y2="32"
+                x1="24"
+                y1="15"
+                x2="34"
+                y2="30"
                 gradientUnits="userSpaceOnUse"
               >
                 <stop offset="0%" stopColor="#dfc4a2" />
@@ -68,13 +68,13 @@ export default function Logo({
                 <stop offset="100%" stopColor="#6e4f32" />
               </linearGradient>
 
-              {/* Diagonal hyper-bridge gradient */}
+              {/* Diagonal slash gradient: bright at the top, fading to the tip */}
               <linearGradient
                 id="hltBridge"
-                x1="16"
-                y1="16"
-                x2="24"
-                y2="24"
+                x1="26"
+                y1="15"
+                x2="12"
+                y2="33"
                 gradientUnits="userSpaceOnUse"
               >
                 <stop offset="0%" stopColor="#ffffff" />
@@ -83,27 +83,29 @@ export default function Logo({
               </linearGradient>
             </defs>
 
-            {/* Left Angled Isometric Pillar (H-left stem) */}
-            <path
-              d="M10 13.5L16.5 9.5V26.5L10 30.5V13.5Z"
-              fill="url(#hltPillar1)"
-            />
+            {/* Optical centering for the whole mark */}
+            <g transform="translate(-1.8 -0.3)">
+              {/* Half H: full left stem, crossbar, short right stem cut on the slash angle */}
+              <path
+                d="M8 8H12V14.5H18.5V8H22V16.2L18.5 21V17.5H12V24H8Z"
+                fill="url(#hltPillar1)"
+              />
 
-            {/* Connecting Angled Hyper-Bridge (H-crossbar / accelerator) */}
-            <path
-              d="M16.5 17.5L23.5 13.5V22.5L16.5 26.5V17.5Z"
-              fill="url(#hltBridge)"
-              opacity="0.95"
-            />
+              {/* L: vertical stem with a rounded-corner foot */}
+              <path
+                d="M24.5 15.6H28V26H34.2C34.8 26 35.6 26.4 35.6 27V28.8C35.6 29.2 35.2 29.6 34.8 29.6H24.5Z"
+                fill="url(#hltPillar2)"
+              />
 
-            {/* Right Angled Isometric Pillar (H-right stem) */}
-            <path
-              d="M23.5 9.5L30 13.5V30.5L23.5 26.5V9.5Z"
-              fill="url(#hltPillar2)"
-            />
+              {/* Diagonal slash: tapered blade from the bottom-left tip up into the L */}
+              <path
+                d="M12.2 32.6L24.8 15.4L27 17.2Z"
+                fill="url(#hltBridge)"
+              />
 
-            {/* Central Specular Prism Flare */}
-            <circle cx="20" cy="20" r="1.75" fill="#ffffff" />
+              {/* Specular flare where the slash meets the L */}
+              <circle cx="25.9" cy="16.5" r="1.3" fill="#ffffff" />
+            </g>
           </svg>
         </div>
       </div>
