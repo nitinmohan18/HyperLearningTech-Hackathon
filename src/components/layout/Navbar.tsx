@@ -71,24 +71,24 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Top Status Bar */}
-      <div className="border-b border-white/[0.1] bg-[#0d0a08]/50 px-4 py-2 text-center font-mono text-[11px] sm:text-xs text-[#d6cec2] backdrop-blur-md">
-        <div className="container-site flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+      {/* Top Announcement Bar (Desktop only for a clean, spacious mobile viewport) */}
+      <div className="hidden sm:block border-b border-white/[0.08] bg-[#0d0a08]/60 px-4 py-1.5 text-center font-mono text-xs text-[#d6cec2] backdrop-blur-md">
+        <div className="container-site flex items-center justify-center gap-3">
           <span className="inline-flex items-center gap-1.5 text-[#e0b885] font-semibold">
             <Sparkles size={13} />
             <span>Winter Hackathon ’26</span>
           </span>
-          <span className="hidden sm:inline text-white/30">·</span>
+          <span className="text-white/30">·</span>
           <span className="text-white">26–27 December 2026 (24-Hour Online)</span>
-          <span className="hidden sm:inline text-white/30">·</span>
+          <span className="text-white/30">·</span>
           <span className="text-[#e0b885]">Registrations close 25 Dec</span>
         </div>
       </div>
 
-      {/* Floating Apple iOS Reflective Translucent Navigation Bar */}
-      <header className="sticky top-3.5 z-50 px-3 sm:px-6 transition-all pointer-events-none">
+      {/* Floating Navigation Bar */}
+      <header className="sticky top-2 sm:top-3.5 z-50 px-3 sm:px-6 transition-all pointer-events-none">
         <nav
-          className="glass apple-glass-nav pointer-events-auto mx-auto max-w-[1240px] px-3.5 sm:px-5 py-2 flex items-center justify-between gap-2 sm:gap-4"
+          className="glass pointer-events-auto mx-auto max-w-[1240px] px-3 sm:px-5 py-2 rounded-full flex items-center justify-between gap-2 sm:gap-4 border border-white/[0.08]"
           aria-label="Main Navigation"
         >
           {/* Logo Branding */}

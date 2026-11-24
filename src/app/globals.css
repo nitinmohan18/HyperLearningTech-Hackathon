@@ -168,19 +168,19 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .section-pad {
-    @apply py-20 sm:py-28 lg:py-32;
+    @apply py-12 sm:py-20 lg:py-28;
   }
 
   .section-title {
-    @apply font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#ffffff];
+    @apply font-serif text-3xl sm:text-5xl lg:text-7xl font-normal leading-[1.12] tracking-tight text-[#ffffff];
   }
 
   .section-copy {
-    @apply mt-6 max-w-2xl text-base leading-relaxed text-[#d6cec2] sm:text-lg;
+    @apply mt-3 max-w-2xl text-sm leading-relaxed text-[#d6cec2] sm:text-base lg:text-lg;
   }
 
   .eyebrow {
-    @apply mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.3em] text-[#c89f6d];
+    @apply mb-2 sm:mb-3 font-mono text-[10px] sm:text-[11px] font-semibold uppercase tracking-[0.25em] text-[#c89f6d];
   }
 
   /* ============================================================
