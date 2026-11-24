@@ -31,7 +31,7 @@ export default function FAQSection() {
         </div>
 
         {/* Category Filter */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+        <div className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -40,7 +40,7 @@ export default function FAQSection() {
                 setSelectedCategory(cat);
                 setOpenIndex(null);
               }}
-              className={`rounded-full px-4 py-1.5 font-mono text-xs transition-colors ${
+              className={`rounded-full px-3 py-1 text-[11px] sm:px-4 sm:py-1.5 sm:text-xs font-mono transition-colors ${
                 selectedCategory === cat
                   ? "bg-white/[0.15] text-white font-medium border border-white/20"
                   : "text-[#b8ada0] hover:text-white"

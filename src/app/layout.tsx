@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import GlassCursorTracker from "@/components/common/GlassCursorTracker";
+import LuxuryBackground from "@/components/common/LuxuryBackground";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <body className="min-h-screen font-sans text-espresso-body antialiased selection:bg-orange selection:text-white">
-        <div className="live-bg" aria-hidden="true"></div>
+        <LuxuryBackground />
         <GlassCursorTracker />
         <div className="relative z-10 flex min-h-screen flex-col">
           <Navbar />

@@ -1,0 +1,418 @@
+@property --sweep {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes sweep {
+  to {
+    --sweep: 360deg;
+  }
+}
+
+.chrono {
+  --gold-hi: #fef5d8;
+  --gold-mid: #e2be7a;
+  --gold: #d4a860;
+  --gold-lo: #825424;
+  --bronze-dark: #3a2211;
+  --bronze-deep: #1c1008;
+
+  container-type: inline-size;
+  position: relative;
+  isolation: isolate;
+  perspective: 1200px;
+  width: clamp(280px, 34vw, 440px);
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin-inline: auto;
+}
+
+/* Ambient warm gold glow behind the clock */
+.chrono__glow {
+  position: absolute;
+  inset: -25% -25% -10%;
+  z-index: -1;
+  filter: blur(32px);
+  background: radial-gradient(
+    closest-side,
+    rgba(214, 168, 96, 0.45),
+    rgba(214, 168, 96, 0.1) 55%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
+/* 3D Tilt container */
+.chrono__tilt {
+  position: relative;
+  aspect-ratio: 1;
+  transform: rotateY(-8deg) rotateX(3deg);
+  transition: transform 0.4s ease-out;
+  z-index: 1;
+}
+
+/* Main circular metallic disc / bezel */
+.chrono__disc {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(0);
+  border-radius: 50%;
+  aspect-ratio: 1;
+  background: conic-gradient(
+    from var(--sweep),
+    #5a351a,
+    #f7e3b5 10%,
+    #7a4d25 22%,
+    #ecd096 36%,
+    #4a2913 50%,
+    #d6ad6a 64%,
+    #6d411e 78%,
+    #f7e3b5 90%,
+    #5a351a
+  );
+  box-shadow:
+    inset 0 0 0 0.4cqw rgba(255, 240, 205, 0.75),
+    inset 0 0 1.2cqw rgba(0, 0, 0, 0.5),
+    /* 3D extrusion depth towards bottom-left */
+    -0.3cqw 0.5cqw 0 #8a5f2c,
+    -0.6cqw 1cqw 0 #6b4423,
+    -0.9cqw 1.5cqw 0 #5a3a1c,
+    -1.2cqw 2cqw 0 #4a2f17,
+    -1.5cqw 2.5cqw 0 #3a2410,
+    -1.8cqw 3cqw 0 #2a1a0c,
+    -2.2cqw 5.5cqw 8cqw rgba(0, 0, 0, 0.8);
+  animation: sweep 16s linear infinite;
+}
+
+/* Stepped metallic inner chamfer ring */
+.chrono__disc::before {
+  content: "";
+  position: absolute;
+  inset: 2.2%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 28% 22%, rgba(255, 225, 170, 0.45), transparent 45%),
+    linear-gradient(160deg, #5a3a1c, #241408 50%, #4a2f17);
+  box-shadow:
+    inset 0 0 0 0.35cqw rgba(247, 227, 181, 0.8),
+    inset 0 0.6cqw 1.8cqw rgba(0, 0, 0, 0.75);
+}
+
+/* Lens flare disabled on disc pseudo, handled by .chrono__flare */
+.chrono__disc::after {
+  display: none;
+}
+
+/* Dial / Glass Face */
+.chrono__face {
+  position: absolute;
+  inset: 7.2%;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3.2cqw;
+  background: radial-gradient(circle at 48% 30%, #1c1109 0%, #0d0805 55%, #040302 100%);
+  box-shadow:
+    0 0 0 0.4cqw var(--gold),
+    0 0 0 0.85cqw #241408,
+    0 0 0 1.2cqw rgba(247, 227, 181, 0.5),
+    inset 0 0 6cqw rgba(0, 0, 0, 0.95);
+}
+
+/* Watch Dial Ticks SVG layer */
+.chrono__dial-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ========================================
+   PHOTOREALISTIC 3D CONVEX GLASS DOME CRYSTAL
+   Multi-layered optical depth:
+   - Upper-left soft curved diffuse reflection (convex dome face)
+   - Sharp crisp specular crescent arc tracing the inner metallic bezel
+   - Subtle diagonal light sweep
+   - Natural glass refraction edge caustics
+   ======================================== */
+.chrono__glass {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 6;
+  /* Natural curved convex dome surface sheen - soft & diffused */
+  background:
+    radial-gradient(
+      ellipse 62% 50% at 28% 20%,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 245, 220, 0.14) 28%,
+      rgba(255, 230, 180, 0.04) 52%,
+      transparent 72%
+    ),
+    /* Soft secondary light pool across upper-left quadrant */
+    radial-gradient(
+      circle at 35% 28%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 235, 195, 0.03) 45%,
+      transparent 70%
+    ),
+    /* Warm caustic backlight bounce on bottom-right glass rim */
+    radial-gradient(
+      ellipse 48% 36% at 84% 84%,
+      rgba(214, 168, 96, 0.14) 0%,
+      rgba(175, 125, 60, 0.04) 50%,
+      transparent 70%
+    );
+}
+
+/* Crisp specular crescent arc reflection along top-left inner rim - subtle & elegant */
+.chrono__glass::before {
+  content: "";
+  position: absolute;
+  inset: 0.9%;
+  border-radius: 50%;
+  border: 0.35cqw solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.65);
+  border-left-color: rgba(255, 245, 215, 0.45);
+  transform: rotate(-16deg);
+  filter: drop-shadow(0 0 0.25cqw rgba(255, 255, 255, 0.6)) drop-shadow(0 0 0.6cqw rgba(255, 230, 160, 0.25));
+}
+
+/* Fine diagonal glossy glass sheen across face */
+.chrono__glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      130deg,
+      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 240, 210, 0.06) 24%,
+      rgba(255, 230, 180, 0.01) 42%,
+      transparent 55%
+    );
+}
+
+/* Star / Diamond Ornaments */
+.orn {
+  position: absolute !important;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+  color: var(--gold-hi);
+}
+
+/* Diamond 4-point star at top 12 o'clock */
+.orn--top {
+  top: 9%;
+}
+
+.star-svg {
+  width: 2.2cqw;
+  height: 3.3cqw;
+  filter: drop-shadow(0 0 0.8cqw rgba(255, 225, 160, 0.9));
+}
+
+.star-svg--small {
+  width: 1.8cqw;
+  height: 2.6cqw;
+}
+
+/* Diamond 4-point star at bottom 6 o'clock rim */
+.orn--rim-bot {
+  bottom: 8%;
+}
+
+/* Diamond with fading hairlines below the labels */
+.orn--bot {
+  bottom: 23%;
+  gap: 1.6cqw;
+}
+
+.orn--bot i {
+  width: 14cqw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+  opacity: 0.85;
+}
+
+.orn--bot i:last-child {
+  transform: scaleX(-1);
+}
+
+/* Title */
+.chrono__title {
+  margin: 0;
+  text-align: center;
+  text-indent: 0.36em;
+  font: 500 2.2cqw/1.55 'Jost', sans-serif;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: #cdb68c;
+  position: relative;
+  z-index: 4;
+}
+
+/* Digits container */
+.chrono__digits {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.2cqw;
+  position: relative;
+  z-index: 4;
+}
+
+/* Unit column */
+.u {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1cqw;
+  min-width: 12cqw;
+}
+
+/* Digits - Light, wide, elegant Cormorant Garamond serif */
+.u b {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 10.5cqw;
+  font-weight: 300;
+  line-height: 0.95;
+  color: #fcf6eb;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 2cqw rgba(214, 168, 96, 0.5);
+}
+
+/* Labels */
+.u small {
+  font: 400 1.8cqw/1 'Jost', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a58f68;
+}
+
+/* Colons */
+.sep {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 10.5cqw;
+  font-weight: 300;
+  line-height: 0.95;
+  color: var(--gold);
+  transform: translateY(-0.4cqw);
+}
+
+/* ========================================
+   PHOTOREALISTIC 3D METALLIC PEDESTAL STAND
+   Matches reference: deep dark bronze cylindrical stage with top chamfer & bright rim
+   ======================================== */
+.chrono__base {
+  position: relative;
+  z-index: 0;
+  width: 90%;
+  height: 6.8cqw;
+  margin: -3.2cqw auto 0;
+}
+
+/* Stepped Pedestal Tiers */
+.chrono__base-tier {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+}
+
+/* Upper Tier Cylinder (direct cradle ring) */
+.chrono__base-tier--upper {
+  top: 0;
+  width: 86%;
+  height: 4.2cqw;
+  background:
+    radial-gradient(ellipse at 50% 20%, #f4dca6 0%, #a87637 40%, #3a1e0b 85%);
+  box-shadow:
+    inset 0 0.35cqw 0.5cqw rgba(255, 245, 215, 0.9),
+    inset 0 -0.5cqw 0.8cqw rgba(0, 0, 0, 0.85),
+    0 0.6cqw 1.8cqw rgba(0, 0, 0, 0.85);
+}
+
+/* Lower Tier Cylinder (heavy ground pedestal stage) */
+.chrono__base-tier--lower {
+  bottom: 0;
+  width: 100%;
+  height: 4.4cqw;
+  background:
+    linear-gradient(180deg, #9b6928 0%, #40230f 35%, #180d05 75%, #080402 100%);
+  box-shadow:
+    inset 0 0.4cqw 0.7cqw rgba(255, 240, 195, 0.9),
+    inset 0 -0.5cqw 1cqw rgba(0, 0, 0, 0.95),
+    0 2cqw 5cqw rgba(0, 0, 0, 0.95);
+}
+
+/* Top beveled face for lower tier stage */
+.chrono__base-tier--lower::before {
+  content: "";
+  position: absolute;
+  inset: 0.35cqw;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 28%, #d8a45b 0%, #6e431b 48%, #1f0e05 85%);
+  box-shadow: inset 0 0.25cqw 0.5cqw rgba(255, 250, 225, 0.7);
+}
+
+/* Ground reflection & ambient occlusion floor shadow */
+.chrono__base-tier--lower::after {
+  content: "";
+  position: absolute;
+  left: -8%;
+  right: -8%;
+  bottom: -2cqw;
+  height: 4cqw;
+  border-radius: 50%;
+  background: radial-gradient(ellipse closest-side, rgba(0, 0, 0, 0.95), transparent 75%);
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrono__disc {
+    animation: none;
+  }
+  .chrono__tilt {
+    transform: rotateY(-8deg) rotateX(3deg) !important;
+  }
+}
+
+.chrono__disc::after { display: none; } /* remove old flare */
+
+/* bright arc on the bezel, upper-right - subtle & natural */
+.chrono__tilt > .rim-shine {
+  position: absolute; inset: 0; z-index: 4; border-radius: 50%; pointer-events: none;
+  background: conic-gradient(from 0deg, transparent 15deg, rgba(255,245,220,.4) 45deg, transparent 75deg, transparent 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent 86%, #000 87%, #000 98%, transparent 100%);
+          mask: radial-gradient(farthest-side, transparent 86%, #000 87%, #000 98%, transparent 100%);
+}
+
+/* hot spot + light streak on the bezel - shorter & restrained */
+.chrono__tilt > .flare { position: absolute; z-index: 5; left: 82%; top: 17%; width: 0; height: 0; pointer-events: none; }
+.flare::before {
+  content: ""; position: absolute; width: 3.2cqw; height: 3.2cqw; margin: -1.6cqw 0 0 -1.6cqw; border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 22%, rgba(255,230,170,.75) 45%, rgba(255,195,110,.2) 65%, transparent 75%);
+  box-shadow: 0 0 2cqw 0.8cqw rgba(255,215,140,.35);
+}
+.flare::after {
+  content: ""; position: absolute; width: 14cqw; height: .35cqw; left: -7cqw; top: -.17cqw; rotate: -28deg;
+  background: linear-gradient(90deg, transparent, rgba(255,240,200,.65) 50%, transparent); filter: blur(.15cqw);
+}
+
