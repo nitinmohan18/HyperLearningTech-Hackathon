@@ -13,6 +13,7 @@ export default function EventHighlights() {
       stat: "24 Hours",
       description: "Non-stop synchronized development sprint. Live commit logging starts sharp at 10:00 PM with an automated repository freeze after 24 hours.",
       schedule: "26 Dec 10:00 PM – 27 Dec 10:00 PM IST",
+      image: "/highlights/24h.jpg",
       icon: <Clock size={18} />,
     },
     {
@@ -22,6 +23,7 @@ export default function EventHighlights() {
       stat: "Worldwide",
       description: "Compete from anywhere globally. Everything is coordinated online through GitHub, Discord live stages, and digital mentor check-in desks.",
       schedule: "GitHub · Discord Stage · Video Demos",
+      image: "/highlights/remote.jpg",
       icon: <Globe size={18} />,
     },
     {
@@ -31,6 +33,7 @@ export default function EventHighlights() {
       stat: "1 to 4 Devs",
       description: "Full flexibility to compete independently or coordinate as a team of up to 4 contributors with complete IP ownership retained.",
       schedule: "₹99 Solo Pass · ₹200 Flat Squad Pass",
+      image: "/highlights/squad.jpg",
       icon: <Users size={18} />,
     },
     {
@@ -40,6 +43,7 @@ export default function EventHighlights() {
       stat: "₹8,789 Pool",
       description: "Guaranteed liquid cash disbursement directly via UPI to 11 verified positions: top 5 general podiums plus 2 special technical categories.",
       schedule: "11 Winners · Immediate UPI Payout",
+      image: "/highlights/prize.jpg",
       icon: <Trophy size={18} />,
     },
   ];

@@ -15,6 +15,7 @@ export interface BentoItem {
   description: string;
   icon: React.ReactNode;
   schedule?: string;
+  image?: string;
 }
 
 export interface StaggeredGridProps {
@@ -83,7 +84,7 @@ export function StaggeredGrid({
   }, [scroller]);
 
   return (
-    <div className={cn("relative overflow-hidden w-full select-none", className)}>
+    <div className={cn("relative w-full select-none bg-transparent border-0 shadow-none", className)}>
       {/* Title Section */}
       <div className="flex flex-col items-center justify-center w-full relative mb-10 sm:mb-14">
         <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#d4af7a] mb-2 font-medium">
@@ -98,11 +99,11 @@ export function StaggeredGrid({
       </div>
 
       {/* =========================================================================
-          DESKTOP VIEW: Bespoke Smoked Crystal Glassmorphism (VisionOS Studio Grade)
+          DESKTOP VIEW: Individual Free-Floating Cards (Zero Outer Container Box)
           ========================================================================= */}
       <div
         ref={containerRef}
-        className="hidden md:flex mx-auto max-w-5xl h-[390px] flex-row items-stretch gap-3.5 p-2"
+        className="hidden md:flex mx-auto max-w-5xl h-[390px] flex-row items-stretch gap-3.5 bg-transparent border-0 shadow-none outline-none"
       >
         {bentoItems.map((item, index) => {
           const isActive = activeBento === index;
@@ -130,7 +131,24 @@ export function StaggeredGrid({
               />
 
               {/* Ultra-fine hairline specular rim highlight */}
-              <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none" />
+              <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none z-10" />
+
+              {/* Realistic 3D Thematic Artwork in Opened Card (like prize cards) */}
+              {item.image && (
+                <div
+                  className={cn(
+                    "absolute inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-700",
+                    isActive ? "opacity-35 scale-105" : "opacity-0 scale-95"
+                  )}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover object-center filter saturate-125 mix-blend-screen"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/30" />
+                </div>
+              )}
 
               {/* Active Expanded State Content */}
               <div

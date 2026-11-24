@@ -195,16 +195,17 @@ export function TestimonialsCard({
                   }}
                 >
                   {/* Real 3D Trophy Background Visual Render */}
-                  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40 mix-blend-screen scale-110">
+                  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-75 mix-blend-screen scale-105 transition-opacity duration-500">
                     <img
                       src={item.image}
                       alt={`${item.place} Trophy`}
-                      className="w-full h-full object-cover object-center filter saturate-125"
+                      className="w-full h-full object-cover object-center filter saturate-150 brightness-110"
                     />
                   </div>
 
-                  {/* Top Specular Sheen Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/70 pointer-events-none z-[1]" />
+                  {/* Specular Sheen & Contrast Vignette to keep text ultra crisp */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none z-[1]" />
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35)_0%,transparent_75%)] pointer-events-none z-[1]" />
 
                   {/* Card Header */}
                   <div className="relative z-10 flex items-center justify-between">
@@ -241,7 +242,7 @@ export function TestimonialsCard({
                   </div>
 
                   {/* Card Footer */}
-                  <div className="relative z-10 pt-2.5 border-t border-white/[0.12] flex items-center justify-between font-mono text-[11px] text-[#ded4c5] backdrop-blur-sm">
+                  <div className="relative z-10 pt-2 flex items-center justify-between font-mono text-[11px] text-[#ded4c5] backdrop-blur-sm">
                     <span className="truncate font-medium">{item.title}</span>
                     <span className="text-[#ffd89b] text-[10px] tracking-wider uppercase shrink-0 font-semibold">
                       Tap to swap →
@@ -258,7 +259,7 @@ export function TestimonialsCard({
             ========================================================================= */}
         <div className="lg:col-span-6 flex flex-col justify-center px-1">
           {/* Eyebrow & Live Step Progress Indicator */}
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+          <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-[#ffd89b] animate-pulse" />
               <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#d4af7a] font-semibold">
@@ -315,7 +316,7 @@ export function TestimonialsCard({
 
           {/* Pagination and Touch Controls */}
           {showNavigation && items.length > 1 && (
-            <div className="pt-3.5 border-t border-white/[0.08] flex items-center justify-between">
+            <div className="pt-2 flex items-center justify-between">
               {/* Progress Pill Track */}
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {items.map((it, dotIdx) => (

@@ -26,22 +26,22 @@ export const overallPrizes: PrizeItem[] = [
 
 export const specialPrizes: SpecialCategory[] = [
   {
-    category: "Best UI/UX",
-    description: "Awarded for exceptional design coherence, user journey, and intuitive frontend craft.",
+    category: "Best UI & Design",
+    description: "Awarded to the top 3 projects with the cleanest user interface, best animations, and smoothest overall experience.",
     prizes: [
-      { place: "1st", amount: "₹499", rawAmount: 499 },
-      { place: "2nd", amount: "₹299", rawAmount: 299 },
-      { place: "3rd", amount: "₹199", rawAmount: 199 },
+      { place: "1st Place", amount: "₹499", rawAmount: 499 },
+      { place: "2nd Place", amount: "₹299", rawAmount: 299 },
+      { place: "3rd Place", amount: "₹199", rawAmount: 199 },
     ],
     total: "₹997",
   },
   {
-    category: "Best Innovation & Uniqueness",
-    description: "Awarded for original problem-solving, novel architecture, and standout utility.",
+    category: "Best Tech Innovation",
+    description: "Awarded to the top 3 projects with the most creative idea, smart architecture, and impressive technical execution.",
     prizes: [
-      { place: "1st", amount: "₹499", rawAmount: 499 },
-      { place: "2nd", amount: "₹299", rawAmount: 299 },
-      { place: "3rd", amount: "₹199", rawAmount: 199 },
+      { place: "1st Place", amount: "₹499", rawAmount: 499 },
+      { place: "2nd Place", amount: "₹299", rawAmount: 299 },
+      { place: "3rd Place", amount: "₹199", rawAmount: 199 },
     ],
     total: "₹997",
   },
