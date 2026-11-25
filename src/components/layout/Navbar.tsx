@@ -18,9 +18,12 @@ const navLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
+const HANDBOOK_BOOK_IDS = new Set(["schedule", "how-it-works", "judging", "rules"]);
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [activeBook, setActiveBook] = useState<string>("schedule");
   const [isDesktopActions, setIsDesktopActions] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -34,17 +37,30 @@ export default function Navbar() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
+  // Track which handbook volume is currently selected
+  useEffect(() => {
+    const onBookSelected = (e: Event) => {
+      const id = (e as CustomEvent<{ id?: string | null }>).detail?.id;
+      if (id && HANDBOOK_BOOK_IDS.has(id)) {
+        setActiveBook(id);
+      }
+    };
+    window.addEventListener("handbook-book-selected", onBookSelected);
+    return () => window.removeEventListener("handbook-book-selected", onBookSelected);
+  }, []);
+
   // Track active section on scroll for the home page
   useEffect(() => {
     if (!isHome) return;
 
-    const sectionIds = navLinks.map((l) => l.href.replace("#", ""));
+    const scrollAnchors = ["overview", "prizes", "handbook", "registration", "faq"];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 140;
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
+      for (let i = scrollAnchors.length - 1; i >= 0; i--) {
+        const id = scrollAnchors[i];
+        const el = document.getElementById(id);
         if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(sectionIds[i]);
+          setActiveSection(id === "handbook" ? activeBook : id);
           return;
         }
       }
@@ -54,14 +70,20 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome]);
+  }, [isHome, activeBook]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (isHome && href.startsWith("#")) {
       e.preventDefault();
       setOpen(false);
       const targetId = href.replace("#", "");
-      const targetEl = document.getElementById(targetId);
+      const targetEl =
+        (HANDBOOK_BOOK_IDS.has(targetId) ? document.getElementById("handbook") : null) ??
+        document.getElementById(targetId);
+      if (HANDBOOK_BOOK_IDS.has(targetId)) {
+        setActiveBook(targetId);
+        window.dispatchEvent(new CustomEvent("open-handbook-book", { detail: { id: targetId } }));
+      }
       if (targetEl) {
         const offset = 90;
         const bodyRect = document.body.getBoundingClientRect().top;
