@@ -274,7 +274,7 @@ export function BooksShowcase({
     try {
       renderer = new THREE.WebGLRenderer({
         canvas: canvasEl,
-        antialias: !lowPowerDevice,
+        antialias: true,
         alpha: true,
         powerPreference: lowPowerDevice ? 'default' : 'high-performance',
       });
@@ -292,14 +292,14 @@ export function BooksShowcase({
 
     const dims = { w: 0, h: 0 };
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.15 : 1.3));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.45 : 1.5));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.03;
+    renderer.toneMappingExposure = isMobileScreen ? 1.16 : 1.03;
     renderer.shadowMap.enabled = !lowPowerDevice;
     renderer.shadowMap.type = THREE.PCFShadowMap;
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
-    const ANISO = lowPowerDevice ? Math.min(2, maxAniso) : Math.min(8, maxAniso);
+    const ANISO = lowPowerDevice ? Math.min(4, maxAniso) : Math.min(8, maxAniso);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
@@ -334,9 +334,9 @@ export function BooksShowcase({
       pmrem.dispose();
     })();
 
-    const hemi = new THREE.HemisphereLight(0xe5cfa9, 0x140d09, 0.52);
+    const hemi = new THREE.HemisphereLight(0xe5cfa9, 0x140d09, isMobileScreen ? 0.48 : 0.52);
     scene.add(hemi);
-    const key = new THREE.DirectionalLight(0xfff7ec, 0.98);
+    const key = new THREE.DirectionalLight(0xfff7ec, isMobileScreen ? 1.28 : 0.98);
     key.position.set(3.5, 5, 6);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -349,10 +349,10 @@ export function BooksShowcase({
     key.shadow.bias = -0.0004;
     key.shadow.normalBias = 0.02;
     scene.add(key);
-    const fillLight = new THREE.DirectionalLight(0xe0b885, 0.36);
+    const fillLight = new THREE.DirectionalLight(0xe0b885, isMobileScreen ? 0.5 : 0.36);
     fillLight.position.set(-4, 1.2, 4.5);
     scene.add(fillLight);
-    const rim = new THREE.DirectionalLight(0xffd89b, 0.62);
+    const rim = new THREE.DirectionalLight(0xffd89b, isMobileScreen ? 0.92 : 0.62);
     rim.position.set(-2, 3.2, -5);
     scene.add(rim);
 
@@ -413,7 +413,7 @@ export function BooksShowcase({
       }
       return new THREE.CanvasTexture(c);
     }
-    const laminateBump = lowPowerDevice ? null : noiseTexture(128, 10, true);
+    const laminateBump = noiseTexture(128, 10, !lowPowerDevice);
     const clothBump = lowPowerDevice
       ? null
       : (function () {
@@ -731,8 +731,8 @@ export function BooksShowcase({
       });
       const mFront = std({
         ...(laminateBump ? { bumpMap: laminateBump, bumpScale: 0.0035 } : {}),
-        roughness: 0.5,
-        envMapIntensity: 0.36,
+        roughness: isMobileScreen ? 0.38 : 0.5,
+        envMapIntensity: isMobileScreen ? 0.68 : 0.36,
       });
       const mBack = std({
         ...(laminateBump ? { bumpMap: laminateBump, bumpScale: 0.0035 } : {}),
@@ -741,12 +741,12 @@ export function BooksShowcase({
       });
       const mSpine = std({
         ...(clothBump ? { bumpMap: clothBump, bumpScale: 0.006 } : {}),
-        roughness: 0.72,
-        envMapIntensity: 0.28,
+        roughness: isMobileScreen ? 0.58 : 0.72,
+        envMapIntensity: isMobileScreen ? 0.44 : 0.28,
       });
 
-      const fw = lowPowerDevice ? 640 : 1024;
-      const fh = lowPowerDevice ? 960 : 1536;
+      const fw = 1024;
+      const fh = 1536;
       const bw = lowPowerDevice ? 512 : 1024;
       const bh = lowPowerDevice ? 768 : 1536;
       const sw = lowPowerDevice ? 144 : 220;
@@ -1003,10 +1003,10 @@ export function BooksShowcase({
       const fit = portrait
         ? fourUp
           ? clamp(a / 0.94, 0.38, 0.77)
-          : clamp(a / 0.96, 0.52, 0.76)
+          : clamp(a / 0.92, 0.54, 0.78)
         : clamp(a / (fourUp ? 1.74 : 1.62), 0.5, 0.98);
       bookRoot.scale.setScalar(fit);
-      bookRoot.position.y = portrait && !fourUp ? 0.36 : -(1 - fit) * 0.22;
+      bookRoot.position.y = portrait && !fourUp ? 0.24 : -(1 - fit) * 0.22;
       SLOTS.portrait = portrait;
 
       if (fourUp) {
@@ -1027,7 +1027,7 @@ export function BooksShowcase({
         SLOTS.hero = portrait
           ? [
               { p: [-1.36, -0.05, -0.58], r: [-0.035, 0.36, 0.085], s: 0.88 },
-              { p: [0, 0.06, 0.62], r: [-0.025, 0, 0], s: 1.18 },
+              { p: [0, 0.06, 0.62], r: [-0.03, -0.14, 0.015], s: 1.18 },
               { p: [1.36, -0.05, -0.58], r: [-0.035, -0.36, -0.085], s: 0.88 },
             ]
           : [
@@ -1300,17 +1300,17 @@ export function BooksShowcase({
       onBookSelectRef.current?.(book.cfg);
       computeSlots();
 
-      // Ensure target book is visible and centered in window if it was offscreen
+      // Ensure target book enters gracefully in center slot if it was offscreen
       if (!currentWindow.includes(book.index)) {
         const centerSlot = SLOTS.hero[1] ?? SLOTS.hero[0];
         book.root.visible = true;
         book.springs.px.set(centerSlot.p[0]);
-        book.springs.py.set(centerSlot.p[1] - 3.6);
+        book.springs.py.set(centerSlot.p[1] - (isMobileScreen ? 0.65 : 1.4));
         book.springs.pz.set(centerSlot.p[2]);
         book.springs.rx.set(centerSlot.r[0]);
         book.springs.ry.set(centerSlot.r[1]);
         book.springs.rz.set(centerSlot.r[2]);
-        book.springs.sc.set(centerSlot.s);
+        book.springs.sc.set(centerSlot.s * 0.85);
         book.slotScale = centerSlot.s;
       }
 
@@ -1342,18 +1342,18 @@ export function BooksShowcase({
       }
 
       const fastMobile = isMobileScreen && hasOverlayRef.current;
-      const spinDelay = hasOverlayRef.current ? (fastMobile ? 80 : 420) : 620;
-      const leavesDelay = hasOverlayRef.current ? (fastMobile ? 260 : 760) : 900;
-      const detailDelay = hasOverlayRef.current ? (fastMobile ? 380 : 1350) : 1250;
+      const spinDelay = hasOverlayRef.current ? (fastMobile ? 190 : 420) : 620;
+      const leavesDelay = hasOverlayRef.current ? (fastMobile ? 480 : 760) : 900;
+      const detailDelay = hasOverlayRef.current ? (fastMobile ? 880 : 1350) : 1250;
 
-      // Signature 360-degree spin & glide into detail position (snappy on mobile overlay)
+      // Signature 360-degree spin & glide into detail position
       setT(() => {
         if (myToken !== transitionToken) return;
         if (state.mode !== 'opening' && state.mode !== 'detail') return;
         book.root.visible = true;
-        book.orbY = RM ? 0 : fastMobile ? 0 : -6.2832;
-        book.orbYv = RM ? 0 : fastMobile ? 0 : 3.2;
-        book.orbPhase = fastMobile ? 'idle' : 'return';
+        book.orbY = RM ? 0 : -6.2832;
+        book.orbYv = RM ? 0 : fastMobile ? 3.0 : 3.2;
+        book.orbPhase = 'return';
         book.orbTarget = 0;
         book.orbXs.set(0);
         applyMode();
@@ -1413,6 +1413,8 @@ export function BooksShowcase({
             bk.root.visible = false;
           }
         });
+        state.mode = 'opening';
+        updateUiMode('opening');
         state.selected = book;
         setSelectedCfg(book.cfg);
         onBookSelectRef.current?.(book.cfg);
@@ -1426,13 +1428,25 @@ export function BooksShowcase({
         book.springs.rx.set(dSlot.r[0]);
         book.springs.ry.set(dSlot.r[1]);
         book.springs.rz.set(dSlot.r[2]);
-        book.springs.sc.set(dSlot.s);
+        book.springs.sc.set(dSlot.s * 0.94);
         book.slotScale = dSlot.s;
+        book.orbY = RM ? 0 : -Math.PI;
+        book.orbYv = RM ? 0 : 3.2;
+        book.orbPhase = RM ? 'idle' : 'return';
+        book.orbTarget = 0;
+        book.orbXs.set(0);
+        applyMode();
+        camTo('detail');
         leaves.activate(book);
-        state.mode = 'detail';
-        updateUiMode('detail');
         rebuildHitMeshes();
         resumeAnimation();
+        setT(() => {
+          if (myToken !== transitionToken) return;
+          if (state.mode === 'opening' && state.selected === book) {
+            state.mode = 'detail';
+            updateUiMode('detail');
+          }
+        }, 420);
         return;
       }
 
@@ -1582,9 +1596,9 @@ export function BooksShowcase({
       });
 
       const fastMobile = isMobileScreen && hasOverlayRef.current;
-      const returnDelay = hasOverlayRef.current ? (fastMobile ? 50 : 140) : 220;
-      const bringBackBase = hasOverlayRef.current ? (fastMobile ? 0.1 : 0.3) : 0.65;
-      const heroDoneDelay = hasOverlayRef.current ? (fastMobile ? 540 : 1150) : 1450;
+      const returnDelay = hasOverlayRef.current ? (fastMobile ? 100 : 140) : 220;
+      const bringBackBase = hasOverlayRef.current ? (fastMobile ? 0.2 : 0.3) : 0.65;
+      const heroDoneDelay = hasOverlayRef.current ? (fastMobile ? 860 : 1150) : 1450;
 
       setT(() => {
         if (myToken !== transitionToken) return;
@@ -1772,6 +1786,28 @@ export function BooksShowcase({
     };
     window.addEventListener('pointercancel', cancelPointer as EventListener);
     canvas.addEventListener('lostpointercapture', cancelPointer as EventListener);
+
+    let wheelAcc = 0;
+    let wheelLastTime = 0;
+    let wheelCooldownUntil = 0;
+    const onWheel = (e: WheelEvent) => {
+      if (state.mode !== 'hero' || N <= VISIBLE) return;
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) * 1.15 || Math.abs(e.deltaX) < 1.5) return;
+      e.preventDefault();
+      const now = performance.now();
+      if (now - wheelLastTime > 180) {
+        wheelAcc = 0;
+      }
+      wheelLastTime = now;
+      if (now < wheelCooldownUntil) return;
+      wheelAcc += e.deltaX;
+      if (Math.abs(wheelAcc) >= 28) {
+        shiftCarousel(wheelAcc > 0 ? 1 : -1);
+        wheelAcc = 0;
+        wheelCooldownUntil = now + 450;
+      }
+    };
+    canvas.addEventListener('wheel', onWheel, { passive: false });
 
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close();
@@ -2048,7 +2084,7 @@ export function BooksShowcase({
       const r = root!.getBoundingClientRect();
       dims.w = Math.max(1, Math.round(r.width));
       dims.h = Math.max(1, Math.round(r.height));
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.15 : 1.3));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.45 : 1.5));
       renderer.setSize(dims.w, dims.h);
       camera.aspect = dims.w / dims.h;
       camera.updateProjectionMatrix();
@@ -2141,6 +2177,7 @@ export function BooksShowcase({
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('lostpointercapture', cancelPointer as EventListener);
+      canvas.removeEventListener('wheel', onWheel);
       closeBtn?.removeEventListener('click', onCloseClick);
 
       scene.traverse((obj) => {
@@ -2207,8 +2244,7 @@ export function BooksShowcase({
       aria-label={`${heroTitle} book showcase`}
       data-state={uiMode}
       className={cn(
-        'book-showcase relative isolate min-h-[540px] sm:min-h-[600px] overflow-hidden font-sans outline-none focus:outline-none focus-visible:outline-none [container-type:inline-size] [-webkit-tap-highlight-color:transparent]',
-        panelVisible && renderDetailOverlay ? 'h-auto md:h-full' : 'h-full',
+        'book-showcase relative isolate h-full min-h-[600px] overflow-hidden font-sans outline-none focus:outline-none focus-visible:outline-none [container-type:inline-size] [-webkit-tap-highlight-color:transparent]',
         'transition-colors duration-500 ease-out',
         uiMode === 'hero'
           ? 'bg-[var(--bs-bg-dark)] text-[var(--bs-fg-dark)]'
@@ -2223,14 +2259,14 @@ export function BooksShowcase({
         className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           background:
-            'radial-gradient(ellipse 72% 52% at 50% 60%, rgba(200, 159, 109, 0.065) 0%, rgba(150, 108, 60, 0.025) 48%, transparent 74%)',
+            'radial-gradient(ellipse 74% 52% at 50% 50%, rgba(224, 184, 133, 0.125) 0%, rgba(150, 108, 60, 0.04) 48%, transparent 74%)',
         }}
       />
 
       {/* hero word */}
       {heroTitle && (
         <div
-          className={`pointer-events-none absolute left-1/2 top-[6%] z-[1] -translate-x-1/2 select-none transition-all duration-500 ease-out ${
+          className={`pointer-events-none absolute left-1/2 top-[11%] md:top-[6%] z-[1] -translate-x-1/2 select-none transition-all duration-500 ease-out ${
             heroWordVisible ? 'translate-y-0 opacity-100' : uiMode === 'hero' ? 'translate-y-[60px] opacity-0' : '-translate-y-11 opacity-0'
           }`}
         >
@@ -2244,7 +2280,7 @@ export function BooksShowcase({
         ref={canvasRef}
         aria-hidden="true"
         className={cn(
-          'absolute inset-0 z-[2] block h-full w-full transition-opacity duration-300 md:duration-700 ease-out',
+          'absolute inset-0 z-[2] block h-full w-full overscroll-x-contain transition-opacity duration-300 md:duration-700 ease-out',
           uiMode === 'detail' && !renderDetailOverlay ? 'touch-none' : 'touch-pan-y',
           renderDetailOverlay && uiMode === 'detail' ? 'pointer-events-none opacity-20' : 'opacity-100',
         )}
@@ -2333,7 +2369,7 @@ export function BooksShowcase({
 
           {/* Mobile centered bottom dock (arrows clear the books cleanly & pair with swipe) */}
           <div
-            className={`md:hidden absolute bottom-5 left-1/2 z-30 -translate-x-1/2 flex w-full max-w-[340px] flex-col items-center gap-2.5 px-4 transition-opacity duration-200 ${
+            className={`md:hidden absolute bottom-[76px] left-1/2 z-30 -translate-x-1/2 flex w-full max-w-[340px] flex-col items-center gap-2.5 px-4 transition-opacity duration-200 ${
               uiMode === 'hero' ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
             }`}
           >
@@ -2444,10 +2480,10 @@ export function BooksShowcase({
           onClick={(e) => {
             if (e.target === e.currentTarget) helpers.close();
           }}
-          className={`z-30 flex items-center justify-center px-3 py-4 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`absolute inset-0 z-30 flex items-center justify-center px-3 py-2 sm:py-4 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] ${
             panelVisible
-              ? 'relative md:absolute md:inset-0 pointer-events-auto visible scale-100 opacity-100 duration-500'
-              : 'pointer-events-none invisible absolute inset-0 scale-[0.97] opacity-0 duration-250'
+              ? 'pointer-events-auto visible scale-100 opacity-100 duration-500'
+              : 'pointer-events-none invisible scale-[0.97] opacity-0 duration-250'
           }`}
         >
           {selectedCfg && renderDetailOverlay(selectedCfg, helpers)}

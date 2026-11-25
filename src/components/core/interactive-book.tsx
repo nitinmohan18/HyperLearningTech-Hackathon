@@ -226,6 +226,7 @@ export default function InteractiveBook({
     return (
       <div className={cn('relative mx-auto flex w-full max-w-[440px] flex-col items-center px-1', className)}>
         <div
+          data-handbook-keep-open="true"
           onTouchStart={onMobileTouchStart}
           onTouchEnd={onMobileTouchEnd}
           className="relative w-full overflow-hidden rounded-xl border border-[#decfae] bg-[#fdfaf3] text-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
@@ -255,7 +256,7 @@ export default function InteractiveBook({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -14 }}
               transition={{ duration: 0.16, ease: 'easeOut' }}
-              className="book-page-mobile min-h-[340px] px-5 py-5 font-sans text-[13.5px] leading-relaxed text-[#2c2117]"
+              className="book-page-mobile h-[435px] overflow-y-auto touch-pan-y px-5 py-4 font-sans text-[13.5px] leading-relaxed text-[#2c2117]"
             >
               {currentMobile.subtitle && (
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a6539]">
@@ -311,6 +312,7 @@ export default function InteractiveBook({
   return (
     <div className={cn('relative flex flex-col items-center justify-center', className)}>
       <div
+        data-handbook-keep-open="true"
         className="relative flex items-center justify-center"
         style={{
           width: width * 2 * scale,
@@ -562,6 +564,7 @@ export default function InteractiveBook({
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            data-handbook-keep-open="true"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}

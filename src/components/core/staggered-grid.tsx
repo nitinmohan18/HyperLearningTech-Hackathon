@@ -235,7 +235,7 @@ export function StaggeredGrid({
       {/* =========================================================================
           MOBILE VIEW: GPU-Smooth Accordion Cards (Zero backdrop-blur stacking lag)
           ========================================================================= */}
-      <div className="flex md:hidden flex-col gap-2.5 max-w-md mx-auto">
+      <div className="flex md:hidden flex-col gap-3 max-w-md mx-auto">
         {bentoItems.map((item, index) => {
           const isOpen = activeBento === index;
 
@@ -255,37 +255,53 @@ export function StaggeredGrid({
               className={cn(
                 "rounded-2xl border transition-[border-color,background-color] duration-200 overflow-hidden cursor-pointer relative touch-manipulation",
                 isOpen
-                  ? "bg-gradient-to-b from-[#261a12] to-[#130d09] border-[#ffd89b]/30 shadow-[0_12px_28px_rgba(0,0,0,0.5)]"
-                  : "bg-[#18110b]/95 border-white/[0.1] active:bg-[#20160e]"
+                  ? "bg-gradient-to-b from-[#2c1f15] via-[#1c130d] to-[#120c08] border-[#e0b885]/40 shadow-[0_14px_32px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,235,205,0.2)]"
+                  : "bg-gradient-to-b from-[#231811] to-[#140e09] border-[#e0b885]/[0.16] shadow-[0_8px_20px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,235,205,0.1)] active:bg-[#271b13]"
               )}
             >
+              {/* Hairline top specular rim */}
+              <div className="absolute top-0 inset-x-5 h-[1px] bg-gradient-to-r from-transparent via-[#f5deb3]/45 to-transparent pointer-events-none z-10" />
+
               {/* Soft artwork layer rendered only when open, without heavy blend/blur */}
               {item.image && isOpen && (
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
                   <img
                     src={item.image}
                     alt=""
                     loading="lazy"
                     className="w-full h-full object-cover object-center"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#130d09] via-[#130d09]/70 to-[#130d09]/40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#120c08] via-[#120c08]/65 to-[#120c08]/35" />
                 </div>
               )}
 
               {/* Accordion Header */}
-              <div className="relative z-10 flex items-center justify-between gap-3 p-4">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="text-[#ffd89b] shrink-0">{item.icon}</div>
-                  <span className="font-serif text-base font-normal text-white truncate">
-                    {item.title}
-                  </span>
+              <div className="relative z-10 flex items-center justify-between gap-2.5 px-3.5 py-2.5">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div
+                    className={cn(
+                      "shrink-0 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:stroke-[1.6] transition-colors",
+                      isOpen ? "text-[#ffd89b]" : "text-[#e0b885]"
+                    )}
+                  >
+                    {item.icon}
+                  </div>
+                  <span className="h-5 w-px bg-white/[0.1] shrink-0" />
+                  <div className="min-w-0">
+                    <div className="font-serif text-[15px] font-medium leading-tight text-[#fcf8f2] truncate">
+                      {item.title}
+                    </div>
+                    <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-[#9f8f7c] truncate">
+                      {item.subtitle}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2.5 shrink-0">
-                  <span className="font-mono text-[11px] font-medium tracking-wide text-[#e0b885]">
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="font-mono text-[11px] font-semibold tracking-tight text-[#ffd89b]">
                     {item.stat}
                   </span>
                   <ChevronDown
-                    size={15}
+                    size={14}
                     className={cn(
                       "text-[#b8ada0] transition-transform duration-300 ease-out",
                       isOpen && "rotate-180 text-[#ffd89b]"
@@ -302,14 +318,14 @@ export function StaggeredGrid({
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="px-3.5 pb-4 pt-2 border-t border-white/[0.08]">
-                    <p className="text-xs text-[#d6cec2] leading-relaxed">
+                  <div className="px-4 pb-4 pt-2.5 border-t border-white/[0.1]">
+                    <p className="text-[12.5px] text-[#e8ded1] leading-relaxed">
                       {item.description}
                     </p>
                     {item.schedule && (
-                      <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2 font-mono text-[10px]">
-                        <span className="text-[#968877] uppercase shrink-0">Specification</span>
-                        <span className="text-[#e8ded1] text-right truncate">{item.schedule}</span>
+                      <div className="mt-3 pt-2.5 border-t border-white/[0.08] flex items-center justify-between gap-2 font-mono text-[10px]">
+                        <span className="text-[#a89987] uppercase tracking-wider shrink-0">Spec</span>
+                        <span className="text-[#ffd89b] font-medium text-right truncate">{item.schedule}</span>
                       </div>
                     )}
                   </div>

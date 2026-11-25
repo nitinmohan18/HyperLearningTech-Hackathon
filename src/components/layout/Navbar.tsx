@@ -162,15 +162,21 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile Menu Actions (Visible below lg — lightweight CSS gold rim instead of WebGL shader on <640px) */}
+          {/* Mobile Menu Actions (Visible below lg) */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link
-              href="/register"
-              className="sm:hidden inline-flex rounded-full bg-gradient-to-b from-[#e6c38d] via-[#b58447] to-[#634321] p-[1.5px] shadow-[0_4px_16px_rgba(0,0,0,0.45)] active:scale-[0.97] transition-transform touch-manipulation"
-            >
-              <span className="inline-flex items-center justify-center rounded-full bg-[#140e09] px-3.5 py-1.5 text-[11px] font-semibold tracking-tight text-white">
-                Register
-              </span>
+            <Link href="/register" className="sm:hidden">
+              <LiquidMetalButton
+                borderWidth={1.5}
+                metalConfig={{
+                  colorBack: "#c99a5e",
+                  colorTint: "#ffffff",
+                  speed: 0.45,
+                  distortion: 0.16,
+                  repetition: 4,
+                }}
+              >
+                <span className="text-[11px]">Register</span>
+              </LiquidMetalButton>
             </Link>
             <button
               type="button"

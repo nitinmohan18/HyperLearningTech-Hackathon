@@ -192,11 +192,11 @@ export function TestimonialsCard({
                     isActive
                       ? isMobile
                         ? {
-                            x: 0,
-                            y: 0,
+                            x: [cardX, direction === 1 ? -72 : 72, 0],
+                            y: [absOffset * 5, -4, 0],
                             z: 0,
-                            scale: 1,
-                            rotateZ: 0,
+                            scale: [0.92, 1.015, 1],
+                            rotateZ: [rotations[index % rotations.length], direction === 1 ? -2.2 : 2.2, 0],
                             opacity: 1,
                             zIndex: 100,
                           }
@@ -227,7 +227,7 @@ export function TestimonialsCard({
                     opacity: 0,
                   }}
                   transition={{
-                    duration: isMobile ? 0.32 : 0.6,
+                    duration: isMobile ? 0.52 : 0.6,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
@@ -320,15 +320,15 @@ export function TestimonialsCard({
             )}
           </div>
 
-          {/* Animated Detail Stage — fixed min-h on mobile prevents layout jumps across ranks */}
-          <div className="py-3 sm:py-5 min-h-[215px] sm:min-h-[140px]">
+          {/* Animated Detail Stage — fixed min-h prevents layout jumps across ranks */}
+          <div className="pt-2 pb-1 sm:py-3.5 min-h-[224px] sm:min-h-[235px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeItem.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
+                transition={{ duration: isMobile ? 0.34 : 0.25 }}
               >
                 {/* Title and Prize Badge */}
                 <div className="flex flex-wrap items-baseline gap-2.5 sm:gap-3">
@@ -346,10 +346,10 @@ export function TestimonialsCard({
                 </p>
 
                 {/* Specific Deliverable Perks */}
-                <div className="mt-5 divide-y divide-white/[0.07] border-y border-white/[0.07]">
+                <div className="mt-3.5 divide-y divide-white/[0.07] border-y border-white/[0.07]">
                   {activeItem.perks.map((perk, i) => (
-                    <div key={i} className="flex items-center gap-3 py-2 text-[12.5px] sm:text-[13px] text-[#e8ded1]">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#e0b885] shrink-0" />
+                    <div key={i} className="flex items-center gap-2.5 py-1.5 text-[11.5px] sm:text-[12.5px] text-[#ded4c5]">
+                      <span className="h-1 w-1 rounded-full bg-[#e0b885] shrink-0" />
                       <span className="leading-snug">{perk}</span>
                     </div>
                   ))}
@@ -360,7 +360,7 @@ export function TestimonialsCard({
 
           {/* Pagination and Touch Controls */}
           {showNavigation && items.length > 1 && (
-            <div className="pt-2 flex items-center justify-between">
+            <div className="pt-0.5 flex items-center justify-between">
               {/* Progress Pill Track */}
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {items.map((it, dotIdx) => (

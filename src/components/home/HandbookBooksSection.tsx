@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, BookOpen, X } from 'lucide-react';
 import BooksShowcase, { type BookCfg, type BooksShowcaseHelpers } from '@/components/core/books-showcase';
 import InteractiveBook from '@/components/core/interactive-book';
@@ -35,6 +35,24 @@ export default function HandbookBooksSection() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [mode, setMode] = useState<'hero' | 'opening' | 'detail' | 'closing'>('hero');
   const [coverThumbs, setCoverThumbs] = useState<Record<string, string>>({});
+  const closeHelpersRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (mode !== 'detail') return;
+    const onDocClick = (e: MouseEvent) => {
+      const target = e.target;
+      if (target instanceof Node && !document.contains(target)) return;
+      if (target instanceof Element && target.closest('[data-handbook-keep-open="true"]')) return;
+      closeHelpersRef.current?.();
+    };
+    const id = setTimeout(() => {
+      document.addEventListener('click', onDocClick);
+    }, 60);
+    return () => {
+      clearTimeout(id);
+      document.removeEventListener('click', onDocClick);
+    };
+  }, [mode]);
 
   // Render miniature cover previews only on desktop hover pointers (saves main-thread canvas work on mobile)
   useEffect(() => {
@@ -91,6 +109,7 @@ export default function HandbookBooksSection() {
   }, []);
 
   const renderDetailOverlay = useCallback((book: BookCfg, helpers: BooksShowcaseHelpers) => {
+    closeHelpersRef.current = helpers.close;
     const deck = handbookBookDecks[book.id] ?? handbookBookDecks.schedule;
 
     return (
@@ -154,6 +173,7 @@ export default function HandbookBooksSection() {
             </p>
             <div className="w-full overflow-x-auto lg:overflow-visible [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-[#e0b885]/35">
               <nav
+                data-handbook-keep-open="true"
                 aria-label="Handbook Volumes"
                 className="flex flex-nowrap items-center gap-x-1 sm:gap-x-3 w-max lg:w-auto"
               >
@@ -164,7 +184,10 @@ export default function HandbookBooksSection() {
                     <button
                       key={tab.id}
                       type="button"
-                      onClick={() => setSelectedId(tab.id)}
+                      onClick={(e) => {
+                        setSelectedId(tab.id);
+                        e.currentTarget.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                      }}
                       className={`group relative flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-t-md border-b-2 px-2 sm:px-2.5 py-2 sm:py-1.5 transition-all duration-200 hover:bg-[#e0b885]/[0.09] touch-manipulation ${
                         active
                           ? 'border-[#ffd89b] bg-[#e0b885]/[0.12] text-[#ffd89b]'
@@ -207,13 +230,7 @@ export default function HandbookBooksSection() {
       </div>
 
       {/* 3D Books Showcase */}
-      <div
-        className={`relative w-full ${
-          mode === 'detail'
-            ? 'min-h-[540px] md:h-[660px] lg:h-[700px]'
-            : 'h-[540px] sm:h-[660px] lg:h-[700px]'
-        }`}
-      >
+      <div className="relative h-[600px] sm:h-[660px] lg:h-[700px] w-full">
         <BooksShowcase
           books={handbookBooks}
           heroTitle="PROTOCOL"
