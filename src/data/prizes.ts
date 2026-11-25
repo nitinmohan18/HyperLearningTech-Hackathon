@@ -26,7 +26,7 @@ export const specialPrizes: SpecialCategory[] = [
   {
     category: "Best UI/UX",
     trackLabel: "Design Excellence",
-    description: "Awarded to the project demonstrating outstanding visual aesthetics, intuitive ergonomics, fluid animations, and responsive mobile polish.",
+    description: "Recognising an exceptionally clear, intuitive and accessible user experience, supported by thoughtful interface design and usability.",
     prizeAmount: "₹499",
     rawAmount: 499,
     total: "₹499",
@@ -34,7 +34,7 @@ export const specialPrizes: SpecialCategory[] = [
   {
     category: "Best Innovation & Uniqueness",
     trackLabel: "Deep-Tech & Creativity",
-    description: "Awarded to the most original engineering solution featuring novel architecture, breakthrough technical execution, and inventive problem-solving.",
+    description: "Recognising an original idea, distinctive approach and creative technical execution that sets the project apart.",
     prizeAmount: "₹499",
     rawAmount: 499,
     total: "₹499",
@@ -42,7 +42,7 @@ export const specialPrizes: SpecialCategory[] = [
   {
     category: "Best Social Impact & Practical Utility",
     trackLabel: "Real-World Utility",
-    description: "Awarded to the solution addressing critical community needs with immediately usable, scalable, and high-impact practical execution.",
+    description: "Recognising a practical solution that addresses a meaningful real-world problem and demonstrates clear potential for positive impact.",
     prizeAmount: "₹499",
     rawAmount: 499,
     total: "₹499",
