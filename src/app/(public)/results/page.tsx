@@ -74,7 +74,7 @@ export default function ResultsPage() {
           <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
             Special Excellence Winners
           </h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
             {specialPrizes.map((a) => (
               <div key={a.category} className="rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 backdrop-blur-xl">
                 <div className="flex items-center gap-3.5">
@@ -85,17 +85,17 @@ export default function ResultsPage() {
                     <h3 className="font-serif text-2xl font-normal text-[#f0eae1]">
                       {a.category}
                     </h3>
-                    <p className="text-xs text-[#9e8e7c]">Excellence Track Honors</p>
+                    <p className="text-xs text-[#9e8e7c]">{a.trackLabel}</p>
                   </div>
                 </div>
 
-                <div className="mt-6 divide-y divide-sand-border/15">
-                  {a.prizes.map((prize) => (
-                    <div key={prize.place} className="flex items-center justify-between py-3 text-sm">
-                      <span className="font-mono text-xs text-[#8e7a68]">{prize.place} Cash Reward</span>
-                      <span className="font-mono font-semibold text-[#c89f6d]">{prize.amount}</span>
-                    </div>
-                  ))}
+                <p className="mt-4 text-xs text-[#ded4c5] leading-relaxed">
+                  {a.description}
+                </p>
+
+                <div className="mt-6 border-t border-sand-border/15 pt-3 flex items-center justify-between text-sm">
+                  <span className="font-mono text-xs text-[#8e7a68]">Special Cash Award</span>
+                  <span className="font-mono font-semibold text-[#c89f6d]">{a.prizeAmount}</span>
                 </div>
               </div>
             ))}

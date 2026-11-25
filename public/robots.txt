@@ -1,0 +1,8 @@
+
+User-agent: *
+Allow: /
+
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://hackathon.hyperlearningtech.in/sitemap.xml
