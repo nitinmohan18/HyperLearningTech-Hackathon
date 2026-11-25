@@ -96,7 +96,7 @@ No real authentication, payment processing, database, GitHub integration or cert
 
 - Solo registration: ₹99
 - Squad registration: ₹200 flat for 2–4 members
-- Total cash prize pool: ₹8,789
+- Total cash prize pool: ₹15,000
 - Results: 27 December 2026, 11:00 PM IST
 - Prize distribution target: By 11:05 PM IST
 

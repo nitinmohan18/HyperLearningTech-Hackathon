@@ -65,13 +65,13 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="text-[#d6cec2] transition-colors hover:text-white">
-                    Participant Login
+                  <Link href="/rules" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Official Rules
                   </Link>
                 </li>
                 <li>
-                  <Link href="/dashboard" className="text-[#d6cec2] transition-colors hover:text-white">
-                    Live Dashboard
+                  <Link href="#schedule" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Event Schedule
                   </Link>
                 </li>
                 <li>

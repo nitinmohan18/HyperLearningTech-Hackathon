@@ -39,3 +39,12 @@ next-env.d.ts
 
 # Deployment platforms
 .vercel
+
+# AI agent directories
+/.agents/
+/.claude/
+/.cursor/
+/.devin/
+
+# Prisma Client is generated in postinstall and during the production build
+/src/generated

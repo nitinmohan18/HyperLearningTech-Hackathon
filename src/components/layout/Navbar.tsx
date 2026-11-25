@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 import Logo from "./Logo";
 import { LiquidMetalButton } from "@/components/core/liquid-metal-button";
-import { MorphText } from "@/components/core/morph-text";
 
 const navLinks = [
   { label: "Overview", href: "#overview" },
@@ -139,18 +138,6 @@ export default function Navbar() {
           {/* Action CTAs (Desktop — only mount WebGL shader on >=640px) */}
           {isDesktopActions && (
             <div className="hidden sm:flex items-center gap-3.5">
-              <Link
-                href="/login"
-                className="group relative inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] w-[86px] h-[34px] px-2 transition-all duration-200 hover:border-[#e0b885]/40 hover:bg-[#e0b885]/10 shadow-[0_2px_10px_rgba(0,0,0,0.3)] shrink-0"
-              >
-                <MorphText
-                  words={["LOGIN", "PORTAL", "SIGN IN"]}
-                  interval={4000}
-                  fontSize="11px"
-                  className="w-full text-center text-[#f5efe5] group-hover:text-white"
-                  textClassName="tracking-[0.2em] font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
-                />
-              </Link>
               <Link href="/register">
                 <LiquidMetalButton
                   borderWidth={2}
@@ -224,13 +211,6 @@ export default function Navbar() {
               })}
 
               <div className="mt-4 flex flex-col gap-2.5 border-t border-white/[0.1] pt-4">
-                <Link
-                  href="/login"
-                  className="btn-secondary h-11 justify-center text-xs"
-                  onClick={() => setOpen(false)}
-                >
-                  Participant Login
-                </Link>
                 <Link
                   href="/register"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f5efe6] to-[#ded2c3] text-xs font-semibold text-[#120d09] shadow-md"

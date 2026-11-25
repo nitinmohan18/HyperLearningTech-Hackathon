@@ -15,7 +15,7 @@ export const event = {
   registrationClose: "25 December 2026 (exact time TBA)",
   duration: "24 Hours",
   prizePool: "₹14,992",
-  positionsCount: "11 cash positions",
+  positionsCount: "8 cash positions",
   soloFee: "₹99",
   squadFee: "₹200",
   squadSize: "2–4 members",
