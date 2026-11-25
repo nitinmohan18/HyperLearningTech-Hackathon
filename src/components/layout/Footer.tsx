@@ -25,6 +25,13 @@ export default function Footer() {
             </div>
             <div className="mt-3.5 space-y-1.5 text-xs font-mono">
               <a
+                href="mailto:admin@hyperlearningtech.in"
+                className="flex items-center gap-2 text-[#d6cec2] hover:text-white transition-colors"
+              >
+                <Mail size={13} className="text-[#e0b885] shrink-0" />
+                <span>admin@hyperlearningtech.in</span>
+              </a>
+              <a
                 href="mailto:hyperlearningtech@gmail.com"
                 className="flex items-center gap-2 text-[#d6cec2] hover:text-white transition-colors"
               >
