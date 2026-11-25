@@ -63,7 +63,7 @@ function RealisticBlinkingEye({ className }: { className?: string }) {
         viewBox="0 0 24 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full overflow-visible drop-shadow-[0_0_6px_rgba(255,216,155,0.6)]"
+        className="w-full h-full overflow-visible sm:drop-shadow-[0_0_6px_rgba(255,216,155,0.6)]"
       >
         <defs>
           {/* Sclera & Iris Gradients */}
@@ -202,7 +202,11 @@ export function TapReveal({
     const ctx = canvas?.getContext("2d");
     if (!root || !canvas || !ctx) return;
 
-    const requestedCell = Math.max(2, Math.round(Number.isFinite(cellSize) ? cellSize : 8));
+    const isMobileViewport = window.innerWidth < 768;
+    const requestedCell = Math.max(
+      isMobileViewport ? 10 : 2,
+      Math.round(Number.isFinite(cellSize) ? cellSize : 8)
+    );
     const dissolveMs = Number.isFinite(duration) ? Math.max(0, duration) : 650;
     let cell = requestedCell;
     let gap = 1;
@@ -274,7 +278,8 @@ export function TapReveal({
       if (nextWidth === width && nextHeight === height) return;
       width = nextWidth;
       height = nextHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const maxDpr = window.innerWidth < 768 ? 1.5 : 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -284,7 +289,7 @@ export function TapReveal({
       cols = Math.ceil(width / cell);
       rows = Math.ceil(height / cell);
       if (state === "sealed") paintAll();
-      else finish();
+      else if (state === "open") finish();
     };
 
     const finish = () => {
@@ -445,7 +450,7 @@ export function TapReveal({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       className={cn(
-        "group/tap-reveal relative isolate overflow-hidden rounded-2xl border border-white/[0.1] bg-[#140e0a] text-white transition-[border-color,background-color] duration-300",
+        "group/tap-reveal relative isolate overflow-hidden rounded-2xl border border-white/[0.1] bg-[#140e0a] text-white transition-[border-color,background-color] duration-300 touch-manipulation",
         "[--tap-reveal-base:#140e0a] [--tap-reveal-1:#1b130e] [--tap-reveal-2:#241a12] [--tap-reveal-3:#2e2117] [--tap-reveal-twinkle:#ffd89b] [--tap-reveal-flash:#ffd89b]",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ffd89b]",
         !isRevealed && "cursor-pointer hover:border-[#ffd89b]/40 hover:bg-[#18110c]",
@@ -460,41 +465,52 @@ export function TapReveal({
           onClick={handleHide}
           title={hideLabel}
           className={cn(
-            "group/hide-btn absolute right-4 top-4 z-[10] flex items-center gap-1.5 rounded-full border border-white/10 bg-black/60 px-2.5 py-1 text-xs font-mono text-[#c7baa8] backdrop-blur-md transition-all duration-200 hover:border-[#ffd89b]/40 hover:bg-black/80 hover:text-white focus-visible:outline-2 focus-visible:outline-[#ffd89b]",
-            isRevealed ? "visible opacity-100 [transition-delay:300ms,300ms,0ms,0ms]" : "pointer-events-none invisible opacity-0",
+            "group/hide-btn absolute right-3 sm:right-4 top-3 sm:top-4 z-[10] flex items-center gap-1.5 rounded-full border border-white/10 bg-black/75 sm:bg-black/60 px-2.5 py-1 text-xs font-mono text-[#c7baa8] sm:backdrop-blur-md transition-all duration-300 hover:border-[#ffd89b]/40 hover:bg-black/80 hover:text-white focus-visible:outline-2 focus-visible:outline-[#ffd89b] active:scale-95 touch-manipulation",
+            isRevealed ? "visible opacity-100 transition-[opacity,transform] duration-300" : "pointer-events-none invisible opacity-0 scale-95",
           )}
         >
           {/* Animated realistic eye blinking icon */}
-          <span className="relative flex items-center justify-center size-3.5">
-            <Eye className="size-3.5 text-[#ffd89b] transition-transform duration-300 group-hover/hide-btn:scale-y-[0.1]" strokeWidth={2} />
+          <span className="relative flex items-center justify-center size-3 sm:size-3.5">
+            <Eye className="size-3 sm:size-3.5 text-[#ffd89b] transition-transform duration-300 group-hover/hide-btn:scale-y-[0.1]" strokeWidth={2} />
           </span>
-          <span className="text-[10.5px] uppercase tracking-wider text-[#a89d90] group-hover/hide-btn:text-white transition-colors">
+          <span className="text-[9.5px] sm:text-[10.5px] uppercase tracking-wider text-[#a89d90] group-hover/hide-btn:text-white transition-colors">
             Hide
           </span>
         </button>
       )}
 
-      {/* Hidden from view until revealed - ultra compact mobile padding */}
-      <div className={cn("relative z-[1] min-w-0 p-3 sm:p-7 pt-7 sm:pt-14", !isRevealed && "invisible", contentClassName)}>
+      {/* Hidden from view until revealed - smooth fade & slide physics */}
+      <div 
+        className={cn(
+          "relative z-[1] min-w-0 p-3.5 sm:p-7 pt-8 sm:pt-14 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+          isRevealed 
+            ? "opacity-100 translate-y-0" 
+            : "invisible opacity-0 translate-y-2 pointer-events-none",
+          contentClassName
+        )}
+      >
         {children}
       </div>
 
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className={cn("absolute inset-0 z-[2] block size-full pointer-events-none", isRevealed && "pointer-events-none")}
+        className={cn(
+          "absolute inset-0 z-[2] block size-full pointer-events-none transition-opacity duration-500",
+          isRevealed && "pointer-events-none opacity-0"
+        )}
       />
 
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute inset-0 z-[3] flex flex-col items-center justify-center p-2 sm:p-6 text-center transition-opacity duration-300",
-          isRevealed && "opacity-0",
+          "pointer-events-none absolute inset-0 z-[3] flex flex-col items-center justify-center p-2.5 sm:p-6 text-center transition-all duration-400 ease-[cubic-bezier(0.25,1,0.5,1)]",
+          isRevealed ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100",
         )}
       >
-        <span className="inline-flex min-h-[28px] sm:min-h-[40px] items-center gap-1.5 sm:gap-3 rounded-full border border-[#ffd89b]/40 bg-black/85 px-2.5 sm:px-5 py-0.5 sm:py-1.5 text-[9.5px] sm:text-xs font-mono font-medium uppercase tracking-[0.08em] sm:tracking-[0.2em] text-[#ffd89b] shadow-[0_6px_20px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.15)] ring-1 ring-white/10 backdrop-blur-xl transition-all duration-300 group-hover/tap-reveal:scale-105 group-hover/tap-reveal:border-[#ffd89b]/70 group-hover/tap-reveal:text-white max-w-[94%] whitespace-nowrap">
+        <span className="inline-flex min-h-[30px] sm:min-h-[40px] items-center gap-2 sm:gap-3 rounded-full border border-[#ffd89b]/40 bg-black/85 px-3 sm:px-5 py-1 sm:py-1.5 text-[10px] sm:text-xs font-mono font-medium uppercase tracking-[0.1em] sm:tracking-[0.2em] text-[#ffd89b] shadow-[0_6px_22px_rgba(0,0,0,0.85),inset_0_1px_0_rgba(255,255,255,0.15)] ring-1 ring-white/10 backdrop-blur-xl transition-all duration-300 group-hover/tap-reveal:scale-105 group-hover/tap-reveal:border-[#ffd89b]/70 group-hover/tap-reveal:text-white active:scale-95 max-w-[94%] whitespace-nowrap">
           {/* Realistic physical blinking eye with pupil glance & double-blink */}
-          <RealisticBlinkingEye className="shrink-0 scale-[0.65] sm:scale-100" />
+          <RealisticBlinkingEye className="shrink-0 scale-[0.72] sm:scale-100" />
           <span className="truncate">{label}</span>
         </span>
       </div>

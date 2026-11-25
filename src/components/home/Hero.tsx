@@ -10,8 +10,8 @@ import LuxuryBackground from "@/components/common/LuxuryBackground";
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative border-b border-sand-border/20">
-      <div className="container-site relative z-10 grid items-center gap-8 py-10 sm:gap-12 sm:py-20 lg:min-h-[640px] lg:grid-cols-[1.25fr_0.75fr] lg:py-24">
+    <section id="hero" className="relative overflow-x-clip border-b border-sand-border/20">
+      <div className="container-site relative z-10 grid items-center gap-7 py-8 sm:gap-12 sm:py-20 lg:min-h-[640px] lg:grid-cols-[1.25fr_0.75fr] lg:py-24">
         <div className="relative z-10 flex flex-col justify-center">
           {/* Main Title Hierarchy */}
           <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-normal leading-[1.04] tracking-tight text-[#ffffff] drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
@@ -50,7 +50,7 @@ export default function Hero() {
           </div>
 
           {/* Action Buttons with Creepy Peek-Eye Effect */}
-          <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="mt-7 sm:mt-9 flex flex-col gap-3.5 sm:gap-4 sm:flex-row sm:items-center">
             <Link href="/register" className="w-full sm:w-auto">
               <CreepyButton
                 className="w-full sm:w-auto min-h-[48px]"

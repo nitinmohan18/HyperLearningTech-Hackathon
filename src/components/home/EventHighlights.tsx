@@ -40,16 +40,16 @@ export default function EventHighlights() {
       id: "prize",
       title: "Direct Cash Prize Pool",
       subtitle: "GUARANTEED AWARDS",
-      stat: "₹8,789 Pool",
-      description: "Guaranteed liquid cash disbursement directly via UPI to 11 verified positions: top 5 general podiums plus 2 special technical categories.",
-      schedule: "11 Winners · Immediate UPI Payout",
+      stat: "₹14,992 Pool",
+      description: "Guaranteed liquid cash disbursement directly via UPI to 8 verified positions: top 5 general podiums plus 3 special technical categories.",
+      schedule: "8 Winners · Immediate UPI Payout",
       image: "/highlights/prize.jpg",
       icon: <Trophy size={18} />,
     },
   ];
 
   return (
-    <section id="overview" className="border-b border-white/[0.08] bg-[#1a120c] py-16 sm:py-24">
+    <section id="overview" className="overflow-x-clip border-b border-white/[0.08] bg-[#1a120c] py-12 sm:py-24">
       <div className="container-site">
         <StaggeredGrid
           centerText="EVENT HIGHLIGHTS"

@@ -32,11 +32,21 @@ export function TextRoll({
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: false, amount: 0.3 });
 
+  const [isMobile, setIsMobile] = useState(false);
   // Mobile / periodic trigger state
   const [isTriggered, setIsTriggered] = useState(false);
 
-  // Initial trigger when scrolled into view
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  // Initial trigger when scrolled into view (desktop/tablet only)
+  useEffect(() => {
+    if (isMobile) return;
     if (isInView) {
       setIsTriggered(true);
       const timer = setTimeout(() => {
@@ -44,11 +54,11 @@ export function TextRoll({
       }, duration * 1000 + 400);
       return () => clearTimeout(timer);
     }
-  }, [isInView, duration]);
+  }, [isInView, duration, isMobile]);
 
-  // Periodic subtle roll trigger (runs periodically while visible in viewport)
+  // Periodic subtle roll trigger (desktop/tablet only; avoids 200+ DOM span loops on mobile)
   useEffect(() => {
-    if (!isInView || !autoRollInterval) return;
+    if (isMobile || !isInView || !autoRollInterval) return;
 
     const interval = setInterval(() => {
       setIsTriggered(true);
@@ -58,7 +68,11 @@ export function TextRoll({
     }, autoRollInterval);
 
     return () => clearInterval(interval);
-  }, [isInView, autoRollInterval, duration]);
+  }, [isInView, autoRollInterval, duration, isMobile]);
+
+  if (isMobile) {
+    return <span className={className}>{children}</span>;
+  }
 
   return (
     <motion.span
@@ -67,10 +81,6 @@ export function TextRoll({
       initial="initial"
       animate={isTriggered ? 'hover' : 'initial'}
       whileHover="hover"
-      onTouchStart={() => {
-        setIsTriggered(true);
-        setTimeout(() => setIsTriggered(false), duration * 1000 + 400);
-      }}
     >
       {letters.map((letter, index) => {
         const isSpace = letter === ' ';

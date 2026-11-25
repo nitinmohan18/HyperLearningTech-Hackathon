@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,62 +38,70 @@ export function StaggeredGrid({
 
   const splitText = (text: string) => {
     return text.split('').map((char, i) => (
-      <span key={i} className="char inline-block" style={{ willChange: 'transform' }}>
+      <span key={i} className="char inline-block">
         {char === ' ' ? '\u00A0' : char}
       </span>
     ));
   };
 
   useEffect(() => {
-    if (textRef.current) {
-      const chars = textRef.current.querySelectorAll('.char');
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: textRef.current,
-          scroller: scroller || undefined,
-          start: 'top bottom-=80',
-          end: 'center center+=50',
-          scrub: 1,
-        },
-      }).from(chars, {
-        ease: 'sine.out',
-        yPercent: 120,
-        autoAlpha: 0,
-        stagger: {
-          each: 0.03,
-          from: 'center',
-        },
-      });
-    }
+    const mm = gsap.matchMedia();
 
-    if (containerRef.current) {
-      const cards = containerRef.current.querySelectorAll('.bento-card');
-      gsap.from(cards, {
-        scrollTrigger: {
-          trigger: containerRef.current,
-          scroller: scroller || undefined,
-          start: 'top bottom-=60',
-          end: 'center center',
-          scrub: 1,
-        },
-        y: 30,
-        autoAlpha: 0.6,
-        stagger: 0.08,
-        ease: 'power2.out',
-      });
-    }
+    // Run scrubbed ScrollTrigger animations on tablet/desktop (>= 768px) only;
+    // keeps mobile scroll 100% native & avoids targeting display:none desktop bento cards.
+    mm.add('(min-width: 768px)', () => {
+      if (textRef.current) {
+        const chars = textRef.current.querySelectorAll('.char');
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: textRef.current,
+            scroller: scroller || undefined,
+            start: 'top bottom-=80',
+            end: 'center center+=50',
+            scrub: 1,
+          },
+        }).from(chars, {
+          ease: 'sine.out',
+          yPercent: 120,
+          autoAlpha: 0,
+          stagger: {
+            each: 0.03,
+            from: 'center',
+          },
+        });
+      }
+
+      if (containerRef.current) {
+        const cards = containerRef.current.querySelectorAll('.bento-card');
+        gsap.from(cards, {
+          scrollTrigger: {
+            trigger: containerRef.current,
+            scroller: scroller || undefined,
+            start: 'top bottom-=60',
+            end: 'center center',
+            scrub: 1,
+          },
+          y: 30,
+          autoAlpha: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+        });
+      }
+    });
+
+    return () => mm.revert();
   }, [scroller]);
 
   return (
     <div className={cn("relative w-full select-none bg-transparent border-0 shadow-none", className)}>
       {/* Title Section */}
-      <div className="flex flex-col items-center justify-center w-full relative mb-10 sm:mb-14">
-        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-[#d4af7a] mb-2 font-medium">
+      <div className="flex flex-col items-center justify-center w-full relative mb-8 sm:mb-14 text-center">
+        <p className="font-mono text-[10.5px] sm:text-[11px] uppercase tracking-[0.26em] sm:tracking-[0.28em] text-[#d4af7a] mb-2 font-medium">
           At A Glance · Key Pillars
         </p>
         <div
           ref={textRef}
-          className="text font-serif uppercase tracking-wider text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1] text-[#ffffff] drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
+          className="text font-serif uppercase tracking-wider text-[clamp(1.65rem,6.8vw,2.5rem)] md:text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.05] text-[#ffffff] drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]"
         >
           {splitText(centerText)}
         </div>
@@ -219,54 +228,88 @@ export function StaggeredGrid({
       </div>
 
       {/* =========================================================================
-          MOBILE VIEW: iOS Frosted Glass Accordion List
+          MOBILE VIEW: GPU-Smooth Accordion Cards (Zero backdrop-blur stacking lag)
           ========================================================================= */}
-      <div className="flex md:hidden flex-col gap-3 max-w-md mx-auto px-2">
+      <div className="flex md:hidden flex-col gap-2.5 max-w-md mx-auto">
         {bentoItems.map((item, index) => {
           const isOpen = activeBento === index;
 
           return (
             <div
               key={item.id}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isOpen}
               onClick={() => setActiveBento(isOpen ? -1 : index)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveBento(isOpen ? -1 : index);
+                }
+              }}
               className={cn(
-                "rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer backdrop-blur-xl relative",
+                "rounded-2xl border transition-[border-color,background-color] duration-200 overflow-hidden cursor-pointer relative touch-manipulation",
                 isOpen
-                  ? "bg-gradient-to-b from-[#2a1e16]/70 to-[#140d09]/85 border-white/[0.22] shadow-[0_16px_40px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.4)]"
-                  : "bg-[#18110b]/60 border-white/[0.1] shadow-[0_8px_20px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                  ? "bg-gradient-to-b from-[#261a12] to-[#130d09] border-[#ffd89b]/30 shadow-[0_12px_28px_rgba(0,0,0,0.5)]"
+                  : "bg-[#18110b]/95 border-white/[0.1] active:bg-[#20160e]"
               )}
             >
-              {/* Internal Sheen Reflection */}
-              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.08] via-transparent to-transparent pointer-events-none" />
+              {/* Soft artwork layer rendered only when open, without heavy blend/blur */}
+              {item.image && isOpen && (
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+                  <img
+                    src={item.image}
+                    alt=""
+                    loading="lazy"
+                    className="w-full h-full object-cover object-center"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#130d09] via-[#130d09]/70 to-[#130d09]/40" />
+                </div>
+              )}
 
-              <div className="relative z-10 flex items-center justify-between p-4">
-                <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs text-[#d4af7a] font-semibold">
-                    0{index + 1}
-                  </span>
-                  <div className="text-[#f5ebd9]">{item.icon}</div>
-                  <span className="font-serif text-base font-normal text-white">
+              {/* Accordion Header */}
+              <div className="relative z-10 flex items-center justify-between gap-3 p-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="text-[#ffd89b] shrink-0">{item.icon}</div>
+                  <span className="font-serif text-base font-normal text-white truncate">
                     {item.title}
                   </span>
                 </div>
-                <span className="font-mono text-[10.5px] uppercase tracking-wider text-[#e8ded1] px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/[0.14] shrink-0 backdrop-blur-sm">
-                  {item.stat}
-                </span>
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <span className="font-mono text-[11px] font-medium tracking-wide text-[#e0b885]">
+                    {item.stat}
+                  </span>
+                  <ChevronDown
+                    size={15}
+                    className={cn(
+                      "text-[#b8ada0] transition-transform duration-300 ease-out",
+                      isOpen && "rotate-180 text-[#ffd89b]"
+                    )}
+                  />
+                </div>
               </div>
 
-              {isOpen && (
-                <div className="relative z-10 px-4 pb-4 pt-1 border-t border-white/[0.08]">
-                  <p className="text-xs text-[#c7baa8] leading-relaxed mt-2">
-                    {item.description}
-                  </p>
-                  {item.schedule && (
-                    <div className="mt-3 pt-2 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10.5px]">
-                      <span className="text-[#968877] uppercase">Specification</span>
-                      <span className="text-[#e8ded1]">{item.schedule}</span>
-                    </div>
-                  )}
+              {/* Smooth GPU Grid-Row Collapse/Expand */}
+              <div
+                className={cn(
+                  "relative z-10 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                  isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                )}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-3.5 pb-4 pt-2 border-t border-white/[0.08]">
+                    <p className="text-xs text-[#d6cec2] leading-relaxed">
+                      {item.description}
+                    </p>
+                    {item.schedule && (
+                      <div className="mt-3 pt-2.5 border-t border-white/[0.06] flex items-center justify-between gap-2 font-mono text-[10px]">
+                        <span className="text-[#968877] uppercase shrink-0">Specification</span>
+                        <span className="text-[#e8ded1] text-right truncate">{item.schedule}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}

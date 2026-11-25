@@ -1,33 +1,13 @@
 import Link from "next/link";
-import { Users, ArrowRight, ShieldCheck, Mail, Globe, Lock } from "lucide-react";
+import { ShieldCheck, Globe, Lock } from "lucide-react";
 import { event } from "@/data/event";
 
 export default function ContactCTASection() {
   return (
     <section id="contact" className="section-pad bg-cream text-center">
       <div className="container-site max-w-4xl">
-        {/* Invitation Heading */}
-        <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] text-white">
-          Bring the idea. <br />
-          <span className="font-serif italic text-[#e0b885]">Build the proof.</span>
-        </h2>
-
-        <p className="mt-6 text-base leading-relaxed text-[#d6cec2] sm:text-lg max-w-2xl mx-auto">
-          Registrations close on 25 December 2026. Join as a solo builder for {event.soloFee} or bring a squad of 2–4 for {event.squadFee} flat. 24 hours of focused engineering, verified repository progress, and ₹8,789 in direct cash awards.
-        </p>
-
-        {/* CTAs */}
-        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
-          <Link href="/register" className="btn-primary h-12 px-8 text-sm font-semibold">
-            Register for Winter Hackathon ’26 →
-          </Link>
-          <Link href="/login" className="btn-secondary h-12 px-7 text-sm">
-            Participant Login
-          </Link>
-        </div>
-
         {/* Official Organizer & Verification Footer Box - Clean open boundary */}
-        <div className="mt-20 border-t border-white/[0.08] pt-12 text-left">
+        <div className="border-t border-white/[0.08] pt-12 text-left">
           <div className="grid gap-8 md:grid-cols-2">
             <div>
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e0b885]">

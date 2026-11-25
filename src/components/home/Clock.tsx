@@ -18,10 +18,12 @@ export default function Clock({
 
     const tilt = root.querySelector<HTMLElement>(".chrono__tilt");
 
-    // Interactive pointer parallax tilt (respects prefers-reduced-motion)
+    // Interactive pointer parallax tilt (mouse only, avoids touch-scroll recalculation)
     let cleanupPointer = () => {};
-    if (tilt && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (tilt && isFinePointer && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       const handlePointerMove = (e: PointerEvent) => {
+        if (e.pointerType !== "mouse") return;
         const r = root.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - 0.5;
         const y = (e.clientY - r.top) / r.height - 0.5;
@@ -30,8 +32,8 @@ export default function Clock({
       const handlePointerLeave = () => {
         tilt.style.transform = "";
       };
-      root.addEventListener("pointermove", handlePointerMove);
-      root.addEventListener("pointerleave", handlePointerLeave);
+      root.addEventListener("pointermove", handlePointerMove, { passive: true });
+      root.addEventListener("pointerleave", handlePointerLeave, { passive: true });
       cleanupPointer = () => {
         root.removeEventListener("pointermove", handlePointerMove);
         root.removeEventListener("pointerleave", handlePointerLeave);

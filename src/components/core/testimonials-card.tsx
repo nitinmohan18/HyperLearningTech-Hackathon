@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, Trophy, Medal, Award, CheckCircle2 } from "lucide-react";
@@ -37,6 +37,16 @@ export function TestimonialsCard({
 }: TestimonialsCardProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  const didDragRef = useRef(0);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const activeItem = items[activeIndex];
 
@@ -62,8 +72,9 @@ export function TestimonialsCard({
     setActiveIndex((prev) => (prev > 0 ? prev - 1 : items.length - 1));
   };
 
-  // Direct card tap swaps to the next card
+  // Direct card tap swaps to the next card (guarded against post-drag click firing)
   const handleCardClick = (clickedIndex: number) => {
+    if (Date.now() - didDragRef.current < 220) return;
     if (clickedIndex === activeIndex) {
       handleNext();
     } else {
@@ -74,10 +85,13 @@ export function TestimonialsCard({
 
   // Drag / swipe detection
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    const swipeThreshold = 50;
-    if (info.offset.x < -swipeThreshold) {
+    if (Math.abs(info.offset.x) > 10) {
+      didDragRef.current = Date.now();
+    }
+    const swipeThreshold = 42;
+    if (info.offset.x < -swipeThreshold || info.velocity.x < -300) {
       handleNext();
-    } else if (info.offset.x > swipeThreshold) {
+    } else if (info.offset.x > swipeThreshold || info.velocity.x > 300) {
       handlePrev();
     }
   };
@@ -127,97 +141,118 @@ export function TestimonialsCard({
   return (
     <div className={cn("w-full py-4 sm:py-8", className)}>
       <div
-        className="relative mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-14 items-center max-w-5xl"
-        style={{ perspective: "1500px" }}
+        className="relative mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 lg:gap-14 items-center max-w-5xl"
+        style={isMobile ? undefined : { perspective: "1500px" }}
       >
         {/* =========================================================================
             TOP / LEFT: 3D Realistic Trophy Card Stack
             ========================================================================= */}
-        <div className="lg:col-span-6 relative w-full max-w-[300px] sm:max-w-[360px] aspect-[1/1.12] mx-auto select-none touch-pan-y">
+        <div className="lg:col-span-6 relative w-full max-w-[290px] sm:max-w-[360px] aspect-[1/1.1] sm:aspect-[1/1.12] mx-auto select-none touch-pan-y">
           <AnimatePresence custom={direction}>
             {items.map((item, index) => {
               const isActive = index === activeIndex;
               const offset = index - activeIndex;
+              const absOffset = Math.abs(offset);
               const theme = getRankTheme(item.place);
+
+              // Skip rendering deep off-stack cards on mobile to avoid stacked GPU overdraw
+              if (isMobile && absOffset > 2) return null;
+
+              const mobileX = offset * 8;
+              const desktopX = offset * 16;
+              const cardX = isMobile ? mobileX : desktopX;
 
               return (
                 <motion.div
                   key={item.id}
                   drag={isActive ? "x" : false}
+                  dragDirectionLock
                   dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.4}
+                  dragElastic={0.35}
                   onDragEnd={handleDragEnd}
                   onClick={() => handleCardClick(index)}
-                  className="absolute inset-0 w-full h-full rounded-[24px] sm:rounded-[28px] border border-white/[0.22] shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1.5px_0_rgba(255,255,255,0.45)] backdrop-blur-2xl flex flex-col justify-between p-5 sm:p-6 cursor-pointer overflow-hidden active:cursor-grabbing"
+                  className="absolute inset-0 w-full h-full rounded-[22px] sm:rounded-[28px] border border-white/[0.22] shadow-[0_14px_32px_rgba(0,0,0,0.65)] sm:shadow-[0_25px_60px_rgba(0,0,0,0.85),inset_0_1.5px_0_rgba(255,255,255,0.45)] md:backdrop-blur-2xl flex flex-col justify-between p-[18px] sm:p-6 cursor-pointer overflow-hidden active:cursor-grabbing touch-manipulation"
                   style={{
                     background: item.gradient,
                   }}
                   initial={{
-                    x: offset * 16,
-                    y: Math.abs(offset) * 7,
-                    z: -120 * Math.abs(offset),
-                    scale: 0.9 - Math.abs(offset) * 0.04,
+                    x: cardX,
+                    y: absOffset * (isMobile ? 5 : 7),
+                    z: isMobile ? 0 : -120 * absOffset,
+                    scale: (isMobile ? 0.92 : 0.9) - absOffset * 0.04,
                     rotateZ: rotations[index % rotations.length],
                     opacity: isActive ? 1 : 0.35,
-                    zIndex: 10 - Math.abs(offset),
+                    zIndex: 10 - absOffset,
                   }}
                   animate={
                     isActive
-                      ? {
-                          x: [offset * 16, direction === 1 ? -170 : 170, 0],
-                          y: [Math.abs(offset) * 7, 0, 0],
-                          z: [-160, 120, 220],
-                          scale: [0.9, 1.02, 1],
-                          rotateZ: [rotations[index % rotations.length], -2.5, 0],
-                          opacity: 1,
-                          zIndex: 100,
-                        }
+                      ? isMobile
+                        ? {
+                            x: 0,
+                            y: 0,
+                            z: 0,
+                            scale: 1,
+                            rotateZ: 0,
+                            opacity: 1,
+                            zIndex: 100,
+                          }
+                        : {
+                            x: [desktopX, direction === 1 ? -170 : 170, 0],
+                            y: [absOffset * 7, 0, 0],
+                            z: [-160, 120, 220],
+                            scale: [0.9, 1.02, 1],
+                            rotateZ: [rotations[index % rotations.length], -2.5, 0],
+                            opacity: 1,
+                            zIndex: 100,
+                          }
                       : {
-                          x: offset * 16,
-                          y: Math.abs(offset) * 7,
-                          z: -120 * Math.abs(offset),
+                          x: cardX,
+                          y: absOffset * (isMobile ? 5 : 7),
+                          z: isMobile ? 0 : -120 * absOffset,
                           rotateZ: rotations[index % rotations.length],
-                          scale: 0.9 - Math.abs(offset) * 0.04,
+                          scale: (isMobile ? 0.92 : 0.9) - absOffset * 0.04,
                           opacity: 0.45,
-                          zIndex: 10 - Math.abs(offset),
+                          zIndex: 10 - absOffset,
                         }
                   }
                   exit={{
-                    x: direction === 1 ? -230 : 230,
-                    z: -240,
-                    scale: 0.8,
-                    rotateZ: direction === 1 ? -7 : 7,
+                    x: direction === 1 ? (isMobile ? -120 : -230) : isMobile ? 120 : 230,
+                    z: isMobile ? 0 : -240,
+                    scale: 0.85,
+                    rotateZ: direction === 1 ? -6 : 6,
                     opacity: 0,
                   }}
                   transition={{
-                    duration: 0.6,
+                    duration: isMobile ? 0.32 : 0.6,
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  {/* Real 3D Trophy Background Visual Render */}
-                  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-75 mix-blend-screen scale-105 transition-opacity duration-500">
-                    <img
-                      src={item.image}
-                      alt={`${item.place} Trophy`}
-                      className="w-full h-full object-cover object-center filter saturate-150 brightness-110"
-                    />
-                  </div>
+                  {/* Real 3D Trophy Background Visual Render (only heavy blend/filter on active card for mobile smoothness) */}
+                  {(!isMobile || isActive) && (
+                    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-75 sm:mix-blend-screen scale-105 transition-opacity duration-500">
+                      <img
+                        src={item.image}
+                        alt={`${item.place} Trophy`}
+                        className="w-full h-full object-cover object-center sm:filter sm:saturate-150 sm:brightness-110"
+                      />
+                    </div>
+                  )}
 
                   {/* Specular Sheen & Contrast Vignette to keep text ultra crisp */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none z-[1]" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35)_0%,transparent_75%)] pointer-events-none z-[1]" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-black/80 pointer-events-none z-[1]" />
+                  <div className="hidden sm:block absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35)_0%,transparent_75%)] pointer-events-none z-[1]" />
 
                   {/* Card Header */}
                   <div className="relative z-10 flex items-center justify-between">
                     <span
                       className={cn(
-                        "font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] px-3 py-1 rounded-full border shadow-sm backdrop-blur-md",
+                        "font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] sm:tracking-[0.24em] px-3 py-1 rounded-full border shadow-sm sm:backdrop-blur-md",
                         theme.tagBg
                       )}
                     >
                       {item.place} PLACE
                     </span>
-                    <div className="flex h-9 sm:h-10 w-9 sm:w-10 items-center justify-center rounded-full bg-white/[0.08] border border-white/[0.25] shadow-inner backdrop-blur-md">
+                    <div className="flex h-8 sm:h-10 w-8 sm:w-10 items-center justify-center rounded-full bg-white/[0.08] border border-white/[0.25] shadow-inner sm:backdrop-blur-md">
                       {theme.icon}
                     </div>
                   </div>
@@ -234,7 +269,7 @@ export function TestimonialsCard({
                     </div>
                     <div className="mt-1 flex items-center justify-center gap-1.5">
                       <span className="h-1 w-1 rounded-full bg-[#ffd89b]" />
-                      <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.24em] text-[#e0b885] font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                      <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.24em] text-[#e0b885] font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                         GUARANTEED CASH AWARD
                       </span>
                       <span className="h-1 w-1 rounded-full bg-[#ffd89b]" />
@@ -242,7 +277,7 @@ export function TestimonialsCard({
                   </div>
 
                   {/* Card Footer */}
-                  <div className="relative z-10 pt-2 flex items-center justify-between font-mono text-[11px] text-[#ded4c5] backdrop-blur-sm">
+                  <div className="relative z-10 pt-2 flex items-center justify-between font-mono text-[11px] text-[#ded4c5] sm:backdrop-blur-sm">
                     <span className="truncate font-medium">{item.title}</span>
                     <span className="text-[#ffd89b] text-[10px] tracking-wider uppercase shrink-0 font-semibold">
                       Tap to swap →
@@ -261,7 +296,7 @@ export function TestimonialsCard({
           {/* Eyebrow & Live Step Progress Indicator */}
           <div className="flex items-center justify-between pb-2">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#ffd89b] animate-pulse" />
+              <span className="h-2 w-2 rounded-full bg-[#ffd89b] sm:animate-pulse" />
               <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#d4af7a] font-semibold">
                 {rankTheme.crown}
               </span>
@@ -276,8 +311,8 @@ export function TestimonialsCard({
             )}
           </div>
 
-          {/* Animated Detail Stage */}
-          <div className="py-4 sm:py-5 min-h-[140px]">
+          {/* Animated Detail Stage — fixed min-h on mobile prevents layout jumps across ranks */}
+          <div className="py-3 sm:py-5 min-h-[215px] sm:min-h-[140px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeItem.id}
@@ -327,10 +362,10 @@ export function TestimonialsCard({
                       setActiveIndex(dotIdx);
                     }}
                     className={cn(
-                      "h-2 rounded-full transition-all duration-300",
+                      "h-2 rounded-full transition-all duration-300 touch-manipulation",
                       dotIdx === activeIndex
                         ? "w-7 sm:w-8 bg-gradient-to-r from-[#ffd89b] to-[#e0b885]"
-                        : "w-2 bg-white/[0.18] hover:bg-white/[0.35]"
+                        : "w-2.5 sm:w-2 bg-white/[0.18] hover:bg-white/[0.35]"
                     )}
                     aria-label={`Jump to rank ${it.place}`}
                   />
@@ -341,14 +376,14 @@ export function TestimonialsCard({
               <div className="flex items-center gap-2">
                 <button
                   onClick={handlePrev}
-                  className="flex items-center justify-center w-10 sm:w-11 h-10 sm:h-11 rounded-full border border-white/[0.12] bg-[#1a120c]/80 text-[#e8ded1] transition-all hover:border-[#ffd89b]/50 hover:bg-[#25180e] hover:text-white active:scale-95 shadow-md"
+                  className="flex items-center justify-center w-10 sm:w-11 h-10 sm:h-11 rounded-full border border-white/[0.12] bg-[#1a120c]/80 text-[#e8ded1] transition-all hover:border-[#ffd89b]/50 hover:bg-[#25180e] hover:text-white active:scale-95 shadow-md touch-manipulation"
                   aria-label="Previous Prize Standing"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={handleNext}
-                  className="flex items-center justify-center w-10 sm:w-11 h-10 sm:h-11 rounded-full border border-white/[0.12] bg-[#1a120c]/80 text-[#e8ded1] transition-all hover:border-[#ffd89b]/50 hover:bg-[#25180e] hover:text-white active:scale-95 shadow-md"
+                  className="flex items-center justify-center w-10 sm:w-11 h-10 sm:h-11 rounded-full border border-white/[0.12] bg-[#1a120c]/80 text-[#e8ded1] transition-all hover:border-[#ffd89b]/50 hover:bg-[#25180e] hover:text-white active:scale-95 shadow-md touch-manipulation"
                   aria-label="Next Prize Standing"
                 >
                   <ArrowRight className="w-4 h-4" />

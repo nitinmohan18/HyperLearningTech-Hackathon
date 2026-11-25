@@ -18,12 +18,12 @@ export default function PrizesSection() {
     {
       id: "1st",
       place: "1st",
-      amount: "₹2,999",
+      amount: "₹5,999",
       title: "Overall Champion",
       description: "Awarded to the most outstanding engineering solution with superior architecture, provable commit progression, and high product utility.",
       image: "/highlights/prize.jpg",
       perks: [
-        "Direct ₹2,999 instant UPI cash transfer",
+        "Direct ₹5,999 instant UPI cash transfer",
         "Winner Certificate with tamper-proof verification hash",
         "Featured spotlight on HyperLearningTech network",
       ],
@@ -34,12 +34,12 @@ export default function PrizesSection() {
     {
       id: "2nd",
       place: "2nd",
-      amount: "₹1,999",
+      amount: "₹3,499",
       title: "Runner Up",
       description: "Awarded to the second-highest scoring project demonstrating excellent execution, clean code discipline, and seamless UX.",
       image: "/prizes/2nd.jpg",
       perks: [
-        "Direct ₹1,999 instant UPI cash transfer",
+        "Direct ₹3,499 instant UPI cash transfer",
         "Runner-Up Certificate with digital credential ID",
         "Community showcase inclusion",
       ],
@@ -50,12 +50,12 @@ export default function PrizesSection() {
     {
       id: "3rd",
       place: "3rd",
-      amount: "₹999",
+      amount: "₹2,499",
       title: "2nd Runner Up",
       description: "Recognizing outstanding technical depth and functional delivery built entirely within the 24-hour sprint window.",
       image: "/prizes/3rd.jpg",
       perks: [
-        "Direct ₹999 instant UPI cash transfer",
+        "Direct ₹2,499 instant UPI cash transfer",
         "Podium Finalist digital certificate",
         "GitHub repository showcase",
       ],
@@ -66,12 +66,12 @@ export default function PrizesSection() {
     {
       id: "4th",
       place: "4th",
-      amount: "₹499",
+      amount: "₹999",
       title: "4th Place Finalist",
       description: "Awarded for exceptional implementation and strong submission quality among all top general contenders.",
       image: "/prizes/4th.jpg",
       perks: [
-        "Direct ₹499 instant UPI cash transfer",
+        "Direct ₹999 instant UPI cash transfer",
         "Honorary Finalist credentials",
         "Official leaderboard listing",
       ],
@@ -82,12 +82,12 @@ export default function PrizesSection() {
     {
       id: "5th",
       place: "5th",
-      amount: "₹299",
+      amount: "₹499",
       title: "5th Place Finalist",
       description: "Awarded for completing a functional, inspectable project achieving Top 5 overall ranking across jury rubrics.",
       image: "/prizes/5th.jpg",
       perks: [
-        "Direct ₹299 instant UPI cash transfer",
+        "Direct ₹499 instant UPI cash transfer",
         "Top 5 Merit Certificate",
         "Official leaderboard listing",
       ],
@@ -98,7 +98,7 @@ export default function PrizesSection() {
   ];
 
   return (
-    <section id="prizes" className="section-pad border-b border-white/[0.08] bg-cream">
+    <section id="prizes" className="section-pad overflow-x-clip border-b border-white/[0.08] bg-cream">
       <div className="container-site">
         {/* Section Header: Clean, Balanced Editorial Typography with Crisp Border */}
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-center pb-8 border-b border-white/[0.08]">
@@ -107,7 +107,7 @@ export default function PrizesSection() {
               Prizes & <span className="font-serif italic text-[#ffd89b]">Recognition</span>
             </h2>
             <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#c7baa8]">
-              A total cash prize pool of <strong className="text-white font-medium">₹8,789</strong> across 11 winner positions, evaluated transparently via GitHub repositories.
+              A total guaranteed cash prize pool of <strong className="text-white font-medium">₹14,992</strong> across 8 winner positions, evaluated transparently via GitHub repositories.
             </p>
           </div>
 
@@ -117,10 +117,10 @@ export default function PrizesSection() {
               TOTAL CASH POOL
             </span>
             <span className="font-serif text-4xl sm:text-5xl font-semibold text-[#ffd89b] tracking-tight leading-none mt-1.5">
-              ₹8,789
+              ₹14,992
             </span>
             <span className="font-mono text-[11px] text-[#e0b885]/70 tracking-wide mt-1.5 hidden sm:inline-block">
-              11 Winner Disbursements
+              8 Winner Disbursements
             </span>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default function PrizesSection() {
                 Overall Top 5 Standings
               </h3>
             </div>
-            <span className="font-mono text-xs text-[#ffd89b] tracking-wide">₹6,795 allocated</span>
+            <span className="font-mono text-xs text-[#ffd89b] tracking-wide">₹13,495 allocated</span>
           </div>
 
           {/* TestimonialsCard 3D Interactive Stack Template */}
@@ -147,7 +147,7 @@ export default function PrizesSection() {
 
         {/* 2. Category Excellence Awards */}
         <div className="mt-14 sm:mt-16">
-          {/* Category Excellence Header - Responsive wrap */}
+          {/* Category Excellence Header */}
           <div className="mb-5 sm:mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
               <Sparkles size={15} className="text-[#ffd89b] shrink-0" />
@@ -156,13 +156,13 @@ export default function PrizesSection() {
               </h3>
             </div>
             <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs text-[#a89d90] pl-6 sm:pl-0">
-              <span className="text-[#ffd89b] font-medium">6 Podium Positions</span>
+              <span className="text-[#ffd89b] font-medium">3 Specialized Tracks</span>
               <span className="text-white/20">·</span>
-              <span>₹1,994 Pool</span>
+              <span>₹1,497 Total Pool</span>
             </div>
           </div>
 
-          <div className="grid gap-2.5 sm:gap-6 md:grid-cols-2">
+          <div className="grid gap-3 sm:gap-6 md:grid-cols-3">
             {specialPrizes.map((category, idx) => (
               <TapReveal
                 key={category.category}
@@ -171,55 +171,36 @@ export default function PrizesSection() {
                 duration={500}
                 cellSize={6}
                 shimmer={false}
-                className="rounded-lg sm:rounded-2xl border border-white/[0.1] bg-[#140e0a]/90 backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-[#ffd89b]/40 min-h-[72px] sm:min-h-[200px]"
+                className="rounded-xl sm:rounded-2xl border border-white/[0.1] bg-[#140e0a]/95 sm:bg-[#140e0a]/90 sm:backdrop-blur-xl shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-[#ffd89b]/40 min-h-[82px] sm:min-h-[190px] transition-[border-color,background-color] duration-300"
               >
                 <div className="flex flex-col justify-between h-full">
                   <div>
-                    <div className="flex items-start justify-between gap-2.5">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-[#e0b885] font-semibold">
-                            {idx === 0 ? "Design Track" : "Innovation Track"}
-                          </span>
-                          <span className="text-white/20 font-mono text-xs">/</span>
-                          <span className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-[#a89d90]">
-                            Top 3
-                          </span>
-                        </div>
-                        <h4 className="mt-0.5 sm:mt-1 font-serif text-base sm:text-2xl font-normal text-white">
-                          {category.category}
-                        </h4>
-                      </div>
-                      <div className="text-right shrink-0">
-                        <span className="font-serif text-lg sm:text-3xl font-semibold text-[#ffd89b] tracking-tight">
-                          {category.total}
-                        </span>
-                        <p className="font-mono text-[8.5px] sm:text-[10px] uppercase tracking-wider text-[#a89d90] mt-0.5">
-                          Total Prize
-                        </p>
-                      </div>
+                    {/* Track Eyebrow */}
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[9.5px] uppercase tracking-[0.2em] text-[#e0b885] font-semibold">
+                        {category.trackLabel}
+                      </span>
                     </div>
-                    <p className="mt-2 sm:mt-3.5 text-[11px] sm:text-sm text-[#ded4c5] leading-relaxed">
+
+                    {/* Category Title */}
+                    <h4 className="mt-1 font-serif text-lg sm:text-2xl font-normal text-white leading-tight">
+                      {category.category}
+                    </h4>
+
+                    {/* Description */}
+                    <p className="mt-2 text-[11px] sm:text-xs text-[#c7baa8] leading-relaxed">
                       {category.description}
                     </p>
                   </div>
 
-                  <div className="mt-3 sm:mt-6 border-t border-white/[0.08] pt-2.5 sm:pt-4">
-                    <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
-                      {category.prizes.map((p) => (
-                        <div
-                          key={p.place}
-                          className="rounded-md sm:rounded-lg border border-white/[0.08] bg-black/40 p-1.5 sm:p-2.5 text-center shadow-inner transition-colors hover:border-[#ffd89b]/30"
-                        >
-                          <p className="font-mono text-[8.5px] sm:text-[10px] uppercase tracking-wider text-[#b8ada0]">
-                            {p.place}
-                          </p>
-                          <p className="mt-0.5 font-mono text-xs sm:text-base font-bold text-[#ffd89b]">
-                            {p.amount}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                  {/* Clean Bottom Bar with Prize Award */}
+                  <div className="mt-3.5 sm:mt-6 border-t border-white/[0.08] pt-2.5 sm:pt-3 flex items-center justify-between">
+                    <span className="font-mono text-[10px] sm:text-[10.5px] uppercase tracking-wider text-[#a89d90]">
+                      Award Prize
+                    </span>
+                    <span className="font-serif text-xl sm:text-3xl font-semibold text-[#ffd89b] tracking-tight">
+                      {category.prizeAmount}
+                    </span>
                   </div>
                 </div>
               </TapReveal>

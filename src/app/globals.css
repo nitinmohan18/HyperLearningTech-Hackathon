@@ -20,7 +20,7 @@
 
 @media (max-width: 768px) {
   :root {
-    --glass-blur: 12px;
+    --glass-blur: 8px;
     --glass-radius: 14px;
   }
 }
@@ -70,6 +70,7 @@ body::before {
   overflow: hidden;
   pointer-events: none;
   background-color: #0d0a08;
+  contain: layout paint;
 }
 
 /* Gradient fade at the bottom of Hero so it transitions seamlessly into the dark content sections */
@@ -115,6 +116,22 @@ body::before {
     #0d0a08 360deg
   );
   animation: liveBgSpin 38s linear infinite;
+}
+
+/* On mobile, keep the rotating bronze sheen active with a smaller 150vmax GPU layer */
+@media (max-width: 767px) {
+  body::before {
+    display: none;
+  }
+  .live-bg {
+    height: 760px;
+  }
+  .live-bg::before {
+    width: 150vmax;
+    height: 150vmax;
+    will-change: transform;
+    animation: liveBgSpin 48s linear infinite;
+  }
 }
 
 @keyframes liveBgSpin {

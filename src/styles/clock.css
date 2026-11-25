@@ -385,6 +385,20 @@
   z-index: -1;
 }
 
+@media (max-width: 767px) {
+  .chrono {
+    width: clamp(248px, 72vw, 315px);
+  }
+  .chrono__glow {
+    inset: -16% -16% -6%;
+    filter: blur(22px);
+  }
+  .chrono__disc {
+    /* Keep the metallic bezel shine active on mobile at a gentler 24s cadence */
+    animation: sweep 24s linear infinite;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chrono__disc {
     animation: none;

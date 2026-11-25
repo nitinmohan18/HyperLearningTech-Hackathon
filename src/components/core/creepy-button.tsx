@@ -83,9 +83,10 @@ export const CreepyButton = ({
   };
 
   return (
-    <button
+    <motion.button
+      whileTap={{ scale: 0.98 }}
       className={cn(
-        "relative rounded-xl bg-[#0e0906] cursor-pointer outline-none select-none group tap-highlight-transparent overflow-visible border border-white/[0.08] shadow-[0_6px_20px_rgba(0,0,0,0.6)]",
+        "relative rounded-xl bg-[#0e0906] cursor-pointer outline-none select-none group tap-highlight-transparent touch-manipulation overflow-visible border border-white/[0.08] shadow-[0_6px_20px_rgba(0,0,0,0.6)]",
         className
       )}
       onClick={onClick}
@@ -93,43 +94,50 @@ export const CreepyButton = ({
         updateEyes(e);
         setIsHovered(true);
       }}
-      onTouchMove={updateEyes}
       onMouseLeave={resetEyes}
       onFocus={() => setIsHovered(true)}
       onBlur={() => setIsHovered(false)}
-      {...props}
+      {...(props as React.ComponentPropsWithoutRef<typeof motion.button>)}
     >
       {/* Eyes Container placed in the bottom right corner underneath the tilting flap */}
       <span
         ref={eyesRef}
         className="absolute flex items-center gap-[0.35em] right-[1.1em] bottom-[0.7em] h-[0.75em] z-0 pointer-events-none"
       >
-        {/* Left Eye */}
+        {/* Left Eye (only animates when uncovered/hovered) */}
         <motion.span
           className="relative w-[0.75em] h-[0.75em] bg-white rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]"
-          animate={{ scaleY: [1, 1, 0.1, 1] }}
-          transition={{
-            duration: 3.5,
-            times: [0, 0.9, 0.95, 1],
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={isHovered ? { scaleY: [1, 1, 0.1, 1] } : { scaleY: 1 }}
+          transition={
+            isHovered
+              ? {
+                  duration: 3.5,
+                  times: [0, 0.9, 0.95, 1],
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }
+              : { duration: 0.15 }
+          }
         >
           <span
             className="absolute top-1/2 left-1/2 w-[0.38em] h-[0.38em] bg-[#160d06] rounded-full transition-transform duration-75 ease-out shadow-[0_0_1px_rgba(0,0,0,0.8)]"
             style={pupilStyle}
           />
         </motion.span>
-        {/* Right Eye */}
+        {/* Right Eye (only animates when uncovered/hovered) */}
         <motion.span
           className="relative w-[0.75em] h-[0.75em] bg-white rounded-full overflow-hidden shadow-[inset_0_1px_2px_rgba(0,0,0,0.4)]"
-          animate={{ scaleY: [1, 1, 0.1, 1] }}
-          transition={{
-            duration: 3.5,
-            times: [0, 0.9, 0.95, 1],
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+          animate={isHovered ? { scaleY: [1, 1, 0.1, 1] } : { scaleY: 1 }}
+          transition={
+            isHovered
+              ? {
+                  duration: 3.5,
+                  times: [0, 0.9, 0.95, 1],
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }
+              : { duration: 0.15 }
+          }
         >
           <span
             className="absolute top-1/2 left-1/2 w-[0.38em] h-[0.38em] bg-[#160d06] rounded-full transition-transform duration-75 ease-out shadow-[0_0_1px_rgba(0,0,0,0.8)]"
@@ -162,7 +170,7 @@ export const CreepyButton = ({
       <span className="invisible flex items-center justify-center px-6 py-3 min-w-[9.5em] text-sm font-semibold pointer-events-none">
         {children}
       </span>
-    </button>
+    </motion.button>
   );
 };
 

@@ -41,13 +41,13 @@ export default function PrizesPage() {
             Prize Pool & Awards
           </p>
           <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
-            ₹8,789 in <br />
+            ₹14,992 in <br />
             <span className="font-serif italic font-normal text-[#c89f6d]">
               direct cash prizes.
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-            A total announced cash prize pool of ₹8,789 distributed across 11 winner positions (Overall Top 5 and two specialized categories), guaranteed by verifiable repository evaluations.
+            A total guaranteed cash prize pool of ₹14,992 distributed across 8 winner positions (Overall Top 5 plus 3 specialized excellence categories), backed by transparent GitHub repository verification.
           </p>
         </div>
 
@@ -83,16 +83,16 @@ export default function PrizesPage() {
           </div>
         </div>
 
-        {/* Special Awards - Flattened without nested boxes */}
+        {/* Special Awards - 3 Tracks */}
         <div className="mt-14">
           <div className="flex items-center justify-between border-b border-sand-border/20 pb-3">
             <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
               Special Excellence Categories
             </h2>
-            <span className="font-mono text-xs text-[#8e7a68]">Top 3 In Each Track</span>
+            <span className="font-mono text-xs text-[#8e7a68]">3 Specialized Tracks · ₹499 each</span>
           </div>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
             {specialPrizes.map((a) => (
               <div
                 key={a.category}
@@ -104,25 +104,24 @@ export default function PrizesPage() {
                       <Sparkles size={18} />
                     </div>
                     <div>
-                      <h3 className="font-serif text-2xl font-normal text-[#f0eae1]">
+                      <h3 className="font-serif text-xl font-normal text-[#f0eae1]">
                         {a.category}
                       </h3>
-                      <p className="text-xs text-[#9e8e7c]">Recognising top-tier technical craft & execution</p>
+                      <p className="text-xs text-[#9e8e7c] mt-0.5">{a.trackLabel}</p>
                     </div>
                   </div>
 
-                  {/* Clean flattened prize tiers */}
-                  <div className="mt-6 divide-y divide-sand-border/15">
-                    {a.prizes.map((prize) => (
-                      <div key={prize.place} className="flex items-center justify-between py-3 text-sm">
-                        <span className="font-mono text-xs text-[#8e7a68]">
-                          {prize.place} Place Winner
-                        </span>
-                        <span className="font-mono font-semibold text-[#c89f6d]">
-                          {prize.amount}
-                        </span>
-                      </div>
-                    ))}
+                  <p className="mt-4 text-xs text-[#ded4c5] leading-relaxed">
+                    {a.description}
+                  </p>
+
+                  <div className="mt-6 border-t border-sand-border/15 pt-3 flex items-center justify-between text-sm">
+                    <span className="font-mono text-xs text-[#8e7a68]">
+                      Dedicated Winner
+                    </span>
+                    <span className="font-mono font-semibold text-[#c89f6d]">
+                      {a.prizeAmount}
+                    </span>
                   </div>
                 </div>
               </div>

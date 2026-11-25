@@ -22,8 +22,18 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
+  const [isDesktopActions, setIsDesktopActions] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
+
+  // Avoid mounting heavy WebGL LiquidMetalShader & MorphText SVG filters on mobile (< 640px)
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 640px)");
+    const sync = () => setIsDesktopActions(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   // Track active section on scroll for the home page
   useEffect(() => {
@@ -126,44 +136,54 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Action CTAs (Desktop) */}
-          <div className="hidden sm:flex items-center gap-3.5">
-            <Link
-              href="/login"
-              className="group relative inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] w-[86px] h-[34px] px-2 transition-all duration-200 hover:border-[#e0b885]/40 hover:bg-[#e0b885]/10 shadow-[0_2px_10px_rgba(0,0,0,0.3)] shrink-0"
-            >
-              <MorphText
-                words={["LOGIN", "PORTAL", "SIGN IN"]}
-                interval={4000}
-                fontSize="11px"
-                className="w-full text-center text-[#f5efe5] group-hover:text-white"
-                textClassName="tracking-[0.2em] font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
-              />
-            </Link>
-            <Link href="/register">
-              <LiquidMetalButton
-                borderWidth={2}
-                metalConfig={{
-                  colorBack: "#c99a5e",
-                  colorTint: "#ffffff",
-                  speed: 0.6,
-                  distortion: 0.2,
-                  repetition: 4,
-                }}
+          {/* Action CTAs (Desktop — only mount WebGL shader on >=640px) */}
+          {isDesktopActions && (
+            <div className="hidden sm:flex items-center gap-3.5">
+              <Link
+                href="/login"
+                className="group relative inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] w-[86px] h-[34px] px-2 transition-all duration-200 hover:border-[#e0b885]/40 hover:bg-[#e0b885]/10 shadow-[0_2px_10px_rgba(0,0,0,0.3)] shrink-0"
               >
-                <span>Register Now</span>
-                <ArrowRight size={13} />
-              </LiquidMetalButton>
-            </Link>
-          </div>
+                <MorphText
+                  words={["LOGIN", "PORTAL", "SIGN IN"]}
+                  interval={4000}
+                  fontSize="11px"
+                  className="w-full text-center text-[#f5efe5] group-hover:text-white"
+                  textClassName="tracking-[0.2em] font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]"
+                />
+              </Link>
+              <Link href="/register">
+                <LiquidMetalButton
+                  borderWidth={2}
+                  metalConfig={{
+                    colorBack: "#c99a5e",
+                    colorTint: "#ffffff",
+                    speed: 0.6,
+                    distortion: 0.2,
+                    repetition: 4,
+                  }}
+                >
+                  <span>Register Now</span>
+                  <ArrowRight size={13} />
+                </LiquidMetalButton>
+              </Link>
+            </div>
+          )}
 
           {/* Mobile Menu Actions (Visible below lg) */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link
-              href="/register"
-              className="inline-flex h-8 items-center justify-center rounded-full bg-white px-3 text-[11px] font-semibold text-[#120d09] sm:hidden"
-            >
-              Register
+            <Link href="/register" className="sm:hidden">
+              <LiquidMetalButton
+                borderWidth={1.5}
+                metalConfig={{
+                  colorBack: "#c99a5e",
+                  colorTint: "#ffffff",
+                  speed: 0.45,
+                  distortion: 0.16,
+                  repetition: 4,
+                }}
+              >
+                <span className="text-[11px]">Register</span>
+              </LiquidMetalButton>
             </Link>
             <button
               type="button"
