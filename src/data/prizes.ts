@@ -16,10 +16,10 @@ export interface SpecialCategory {
 
 export const overallPrizes: PrizeItem[] = [
   { place: "1st", amount: "₹5,999", rawAmount: 5999, label: "Overall Champion" },
-  { place: "2nd", amount: "₹3,499", rawAmount: 3499, label: "Runner Up" },
-  { place: "3rd", amount: "₹2,499", rawAmount: 2499, label: "2nd Runner Up" },
-  { place: "4th", amount: "₹999", rawAmount: 999, label: "4th Place Finalist" },
-  { place: "5th", amount: "₹499", rawAmount: 499, label: "5th Place Finalist" },
+  { place: "2nd", amount: "₹3,499", rawAmount: 3499, label: "Overall Runner-Up" },
+  { place: "3rd", amount: "₹2,199", rawAmount: 2199, label: "Second Runner-Up" },
+  { place: "4th", amount: "₹1,199", rawAmount: 1199, label: "Fourth Place" },
+  { place: "5th", amount: "₹599", rawAmount: 599, label: "Fifth Place" },
 ];
 
 export const specialPrizes: SpecialCategory[] = [
@@ -51,13 +51,14 @@ export const specialPrizes: SpecialCategory[] = [
 
 export const prizePoolMeta = {
   totalCash: "₹14,992",
+  maxPlannedBudget: "₹15,000",
   positions: "8 Cash Award Positions",
   overallTotal: "₹13,495",
   specialTotal: "₹1,497",
   policyNote:
     "Each project can receive only one cash award. If an Overall Top 5 project also qualifies for a special category award, the special award passes to the next eligible project outside the Overall Top 5.",
   hiddenSurprisesNote:
-    "A small number of additional surprise recognitions may be given to promising projects outside cash awards (e.g. mentorship, learning perks, certificates). These are not implied cash prizes.",
+    "Additional surprise rewards may conditionally be offered if the event achieves more than 75% ROI. These rewards are not guaranteed. Do not assign any invented cash amount to surprise rewards.",
   certificatesNote:
     "Every eligible participant receives a verified individual participation certificate. Top 25 projects receive official ranking certificates, issued individually to all squad members.",
 };

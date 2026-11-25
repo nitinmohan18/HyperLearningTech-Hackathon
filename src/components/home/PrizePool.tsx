@@ -76,16 +76,16 @@ export default function PrizePool() {
                     {award.category}
                   </h3>
                   <p className="mt-0.5 text-xs text-[#9e8e7c]">
-                    Top 3 category awards for outstanding craft
+                    {award.description}
                   </p>
                 </div>
               </div>
               <div className="mt-4 sm:mt-0 sm:text-right">
                 <p className="font-mono text-sm font-semibold text-[#c89f6d]">
-                  {award.prizes.join(" / ")}
+                  {award.prizeAmount}
                 </p>
                 <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-[#8e7a68]">
-                  1st / 2nd / 3rd
+                  {award.trackLabel}
                 </p>
               </div>
             </div>

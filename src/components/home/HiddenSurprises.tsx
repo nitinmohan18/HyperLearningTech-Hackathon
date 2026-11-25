@@ -15,7 +15,7 @@ export default function HiddenSurprises() {
         Promising work deserves <span className="font-serif italic text-[#c89f6d]">recognition.</span>
       </h3>
       <p className="mt-4 text-sm leading-relaxed text-[#9e8e7c]">
-        A selection of promising projects outside the announced cash-prize positions may receive additional surprise recognition. Exact categories, recipients, and formats are intentionally undisclosed to keep the focus purely on builder creativity and passion.
+        Additional surprise rewards may conditionally be offered if the event achieves more than 75% ROI. These rewards are not guaranteed. Exact categories, recipients, and formats are intentionally undisclosed to keep the focus purely on builder creativity and passion.
       </p>
     </div>
   );

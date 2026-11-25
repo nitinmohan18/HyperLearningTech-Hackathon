@@ -93,6 +93,6 @@ export const faqs: FAQItem[] = [
     category: "Prizes",
     question: "What are the Hidden Surprises?",
     answer:
-      "A small number of additional surprise recognitions may be granted to standout projects that do not reach the cash Top 5 (e.g. mentorship sessions, learning perks, certificates, or gifts). These are not implied cash prizes.",
+      "Additional surprise rewards may conditionally be offered if the event achieves more than 75% ROI. These rewards are not guaranteed (e.g. mentorship sessions, learning perks, certificates, or community recognitions). Do not assign any invented cash amount to surprise rewards.",
   },
 ];

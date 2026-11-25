@@ -35,7 +35,7 @@ export default function PrizesSection() {
       id: "2nd",
       place: "2nd",
       amount: "₹3,499",
-      title: "Runner Up",
+      title: "Overall Runner-Up",
       description: "Awarded to the second-highest scoring project demonstrating excellent execution, clean code discipline, and seamless UX.",
       image: "/prizes/2nd.jpg",
       perks: [
@@ -50,12 +50,12 @@ export default function PrizesSection() {
     {
       id: "3rd",
       place: "3rd",
-      amount: "₹2,499",
-      title: "2nd Runner Up",
+      amount: "₹2,199",
+      title: "Second Runner-Up",
       description: "Recognizing outstanding technical depth and functional delivery built entirely within the 24-hour sprint window.",
       image: "/prizes/3rd.jpg",
       perks: [
-        "Direct ₹2,499 instant UPI cash transfer",
+        "Direct ₹2,199 instant UPI cash transfer",
         "Podium Finalist digital certificate",
         "GitHub repository showcase",
       ],
@@ -66,12 +66,12 @@ export default function PrizesSection() {
     {
       id: "4th",
       place: "4th",
-      amount: "₹999",
-      title: "4th Place Finalist",
+      amount: "₹1,199",
+      title: "Fourth Place",
       description: "Awarded for exceptional implementation and strong submission quality among all top general contenders.",
       image: "/prizes/4th.jpg",
       perks: [
-        "Direct ₹999 instant UPI cash transfer",
+        "Direct ₹1,199 instant UPI cash transfer",
         "Honorary Finalist credentials",
         "Official leaderboard listing",
       ],
@@ -82,12 +82,12 @@ export default function PrizesSection() {
     {
       id: "5th",
       place: "5th",
-      amount: "₹499",
-      title: "5th Place Finalist",
+      amount: "₹599",
+      title: "Fifth Place",
       description: "Awarded for completing a functional, inspectable project achieving Top 5 overall ranking across jury rubrics.",
       image: "/prizes/5th.jpg",
       perks: [
-        "Direct ₹499 instant UPI cash transfer",
+        "Direct ₹599 instant UPI cash transfer",
         "Top 5 Merit Certificate",
         "Official leaderboard listing",
       ],
