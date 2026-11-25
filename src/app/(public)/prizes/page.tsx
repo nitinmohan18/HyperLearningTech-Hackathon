@@ -17,7 +17,7 @@ export default function PrizesPage() {
     {
       title: "Hidden surprise recognition",
       icon: Gift,
-      copy: "Selected promising projects outside cash-prize positions may receive additional surprise recognition and community awards.",
+      copy: "Additional surprise rewards may conditionally be offered if the event achieves more than 75% ROI. These rewards are not guaranteed.",
     },
   ];
 
