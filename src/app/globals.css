@@ -443,3 +443,71 @@ h1, h2, h3, h4, h5, h6 {
 .animate-eye-look {
   animation: eyeLook 4.2s ease-in-out infinite;
 }
+
+@keyframes bsHandTap {
+  0%, 100% {
+    transform: translate(0px, 0px) rotate(0deg) scale(1);
+  }
+  40% {
+    transform: translate(-1px, -2.5px) rotate(-6deg) scale(1.04);
+  }
+  65% {
+    transform: translate(1px, 2px) rotate(4deg) scale(0.92);
+  }
+}
+
+@keyframes bsTapRing {
+  0%, 55% {
+    transform: scale(0.45);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(0.95);
+    opacity: 0.65;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+}
+
+.animate-bs-hand-tap {
+  animation: bsHandTap 1.6s cubic-bezier(0.32, 0.72, 0, 1) infinite;
+}
+
+.animate-bs-tap-ring {
+  animation: bsTapRing 1.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Warm parchment scrollbar for desktop flipbook pages (avoids dark global track on cream paper) */
+.book-page-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(138, 101, 57, 0.28) transparent;
+}
+.book-page-scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.book-page-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.book-page-scroll::-webkit-scrollbar-thumb {
+  background: rgba(138, 101, 57, 0.28);
+  border-radius: 9999px;
+}
+
+/* Clean, readable mobile book typography without altering compact desktop page fit */
+@media (max-width: 719px) {
+  .book-page-mobile::-webkit-scrollbar {
+    display: none;
+  }
+  .book-page-mobile {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .book-page-mobile p:not(.font-mono):not(.font-serif),
+  .book-page-mobile li {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+  }
+}

@@ -137,6 +137,20 @@ export function BooksShowcase({
   const [uiMode, setUiMode] = useState<'hero' | 'opening' | 'detail' | 'closing'>('hero');
   const [selectedCfg, setSelectedCfg] = useState<BookCfg | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [bpKey, setBpKey] = useState(0);
+
+  // Rebuild hero layout smoothly only if crossing the 768px mobile/desktop threshold
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const onChange = () => {
+      setIsMobileView(mq.matches);
+      setBpKey((k) => k + 1);
+    };
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
 
   const updateUiMode = (mode: 'hero' | 'opening' | 'detail' | 'closing') => {
     setUiMode(mode);
@@ -183,8 +197,11 @@ export function BooksShowcase({
 
     // Small utilities
     const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileScreen = window.matchMedia('(max-width: 767px)').matches;
+    setIsMobileView(isMobileScreen);
     const lowPowerDevice =
       RM ||
+      isMobileScreen ||
       window.matchMedia('(max-width: 900px)').matches ||
       (navigator.hardwareConcurrency ?? 8) <= 4;
     const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
@@ -255,7 +272,12 @@ export function BooksShowcase({
     // Renderer, scene, camera, lights
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas: canvasEl, antialias: !lowPowerDevice, alpha: true });
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvasEl,
+        antialias: !lowPowerDevice,
+        alpha: true,
+        powerPreference: lowPowerDevice ? 'default' : 'high-performance',
+      });
     } catch (err) {
       console.warn('BooksShowcase: WebGL renderer creation failed', err);
       const fail = document.createElement('div');
@@ -270,13 +292,14 @@ export function BooksShowcase({
 
     const dims = { w: 0, h: 0 };
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1 : 1.25));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.15 : 1.3));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.96;
+    renderer.toneMappingExposure = 1.03;
     renderer.shadowMap.enabled = !lowPowerDevice;
     renderer.shadowMap.type = THREE.PCFShadowMap;
-    const ANISO = renderer.capabilities.getMaxAnisotropy();
+    const maxAniso = renderer.capabilities.getMaxAnisotropy();
+    const ANISO = lowPowerDevice ? Math.min(2, maxAniso) : Math.min(8, maxAniso);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
@@ -295,14 +318,14 @@ export function BooksShowcase({
       const c = mkCanvas(512, 256),
         x = c.getContext('2d')!;
       const g = x.createLinearGradient(0, 0, 0, 256);
-      g.addColorStop(0, '#6a5842');
-      g.addColorStop(0.55, '#2b2017');
-      g.addColorStop(1, '#0d0907');
+      g.addColorStop(0, '#735f46');
+      g.addColorStop(0.55, '#2f2319');
+      g.addColorStop(1, '#0e0a07');
       x.fillStyle = g;
       x.fillRect(0, 0, 512, 256);
-      envBlob(x, 140, 66, 95, '255,244,225', 0.95);
-      envBlob(x, 405, 84, 55, '255,214,168', 0.65);
-      envBlob(x, 256, 150, 120, '224,184,133', 0.35);
+      envBlob(x, 140, 66, 98, '255,244,225', 0.95);
+      envBlob(x, 405, 84, 60, '255,214,168', 0.68);
+      envBlob(x, 256, 150, 120, '224,184,133', 0.36);
       const tx = new THREE.CanvasTexture(c);
       tx.mapping = THREE.EquirectangularReflectionMapping;
       const pmrem = new THREE.PMREMGenerator(renderer);
@@ -311,9 +334,9 @@ export function BooksShowcase({
       pmrem.dispose();
     })();
 
-    const hemi = new THREE.HemisphereLight(0xd9c3a3, 0x120d09, 0.42);
+    const hemi = new THREE.HemisphereLight(0xe5cfa9, 0x140d09, 0.52);
     scene.add(hemi);
-    const key = new THREE.DirectionalLight(0xfff6ea, 0.88);
+    const key = new THREE.DirectionalLight(0xfff7ec, 0.98);
     key.position.set(3.5, 5, 6);
     key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048);
@@ -326,11 +349,11 @@ export function BooksShowcase({
     key.shadow.bias = -0.0004;
     key.shadow.normalBias = 0.02;
     scene.add(key);
-    const fillLight = new THREE.DirectionalLight(0xe0b885, 0.28);
-    fillLight.position.set(-4, 1, 4);
+    const fillLight = new THREE.DirectionalLight(0xe0b885, 0.36);
+    fillLight.position.set(-4, 1.2, 4.5);
     scene.add(fillLight);
-    const rim = new THREE.DirectionalLight(0xffd89b, 0.34);
-    rim.position.set(-2, 3, -5);
+    const rim = new THREE.DirectionalLight(0xffd89b, 0.62);
+    rim.position.set(-2, 3.2, -5);
     scene.add(rim);
 
     const bookRoot = new THREE.Group();
@@ -390,23 +413,25 @@ export function BooksShowcase({
       }
       return new THREE.CanvasTexture(c);
     }
-    const laminateBump = noiseTexture(128, 10, true);
-    const clothBump = (function () {
-      const s = 128,
-        c = mkCanvas(s, s),
-        x = c.getContext('2d')!;
-      x.fillStyle = '#808080';
-      x.fillRect(0, 0, s, s);
-      for (let i = 0; i < s; i += 2) {
-        x.fillStyle = i % 4 === 0 ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.22)';
-        x.fillRect(i, 0, 1, s);
-        x.fillRect(0, i, s, 1);
-      }
-      return new THREE.CanvasTexture(c);
-    })();
+    const laminateBump = lowPowerDevice ? null : noiseTexture(128, 10, true);
+    const clothBump = lowPowerDevice
+      ? null
+      : (function () {
+          const s = 128,
+            c = mkCanvas(s, s),
+            x = c.getContext('2d')!;
+          x.fillStyle = '#808080';
+          x.fillRect(0, 0, s, s);
+          for (let i = 0; i < s; i += 2) {
+            x.fillStyle = i % 4 === 0 ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.22)';
+            x.fillRect(i, 0, 1, s);
+            x.fillRect(0, i, s, 1);
+          }
+          return new THREE.CanvasTexture(c);
+        })();
 
     function striationTexture(vertical: boolean) {
-      const s = 512,
+      const s = lowPowerDevice ? 256 : 512,
         c = mkCanvas(s, s),
         x = c.getContext('2d')!;
       x.fillStyle = '#ece4d2';
@@ -421,7 +446,8 @@ export function BooksShowcase({
         else x.fillRect(0, p, s, w);
         p += w + 0.6 + Math.random() * 1.6;
       }
-      for (let i = 0; i < 2600; i++) {
+      const dots = lowPowerDevice ? 450 : 2600;
+      for (let i = 0; i < dots; i++) {
         x.fillStyle = 'rgba(120,108,84,' + (Math.random() * 0.1).toFixed(3) + ')';
         x.fillRect(Math.random() * s, Math.random() * s, 1.2, 1.2);
       }
@@ -431,12 +457,13 @@ export function BooksShowcase({
     const striH = striationTexture(false);
 
     const endpaperTex = (function () {
-      const s = 512,
+      const s = lowPowerDevice ? 256 : 512,
         c = mkCanvas(s, s),
         x = c.getContext('2d')!;
       x.fillStyle = '#f3edde';
       x.fillRect(0, 0, s, s);
-      for (let i = 0; i < 1400; i++) {
+      const dots = lowPowerDevice ? 300 : 1400;
+      for (let i = 0; i < dots; i++) {
         x.fillStyle = 'rgba(120,105,70,' + (0.04 + Math.random() * 0.08).toFixed(3) + ')';
         x.fillRect(Math.random() * s, Math.random() * s, 1.4, 1.4);
       }
@@ -600,9 +627,9 @@ export function BooksShowcase({
       return tex(c);
     }
 
-    // Book construction — show up to 4 books simultaneously on the shelf
+    // Book construction — 3-book centered coverflow on mobile, 4-book fan on tablet/desktop
     const N = books.length;
-    const VISIBLE = Math.min(4, N);
+    const VISIBLE = isMobileScreen ? Math.min(3, N) : Math.min(4, N);
 
     const W = 1.42,
       H = 2.14,
@@ -632,8 +659,18 @@ export function BooksShowcase({
     }
 
     const paperFlat = std({ color: 0xf2ecdd, roughness: 0.95, envMapIntensity: 0.2 });
-    const striMatV = std({ map: striV, bumpMap: striV, bumpScale: 0.0025, roughness: 0.95, envMapIntensity: 0.2 });
-    const striMatH = std({ map: striH, bumpMap: striH, bumpScale: 0.0025, roughness: 0.95, envMapIntensity: 0.2 });
+    const striMatV = std({
+      map: striV,
+      ...(lowPowerDevice ? {} : { bumpMap: striV, bumpScale: 0.0025 }),
+      roughness: 0.95,
+      envMapIntensity: 0.2,
+    });
+    const striMatH = std({
+      map: striH,
+      ...(lowPowerDevice ? {} : { bumpMap: striH, bumpScale: 0.0025 }),
+      roughness: 0.95,
+      envMapIntensity: 0.2,
+    });
     const endpaperMat = std({ map: endpaperTex, roughness: 0.9, envMapIntensity: 0.25 });
     const pageMats = [0xf4eee0, 0xf1ebdb, 0xf6f0e3].map((c) =>
       std({ color: c, roughness: 0.92, envMapIntensity: 0.22, side: THREE.DoubleSide }),
@@ -676,36 +713,65 @@ export function BooksShowcase({
       root.add(float);
       bookRoot.add(root);
 
-      const indexPageMat = std({
-        map: makeIndexPageTex(cfg.chapters),
-        roughness: 0.92,
-        envMapIntensity: 0.2,
-        side: THREE.DoubleSide,
-      });
+      const indexPageMat = hasOverlayRef.current
+        ? endpaperMat
+        : std({
+            map: makeIndexPageTex(cfg.chapters),
+            roughness: 0.92,
+            envMapIntensity: 0.2,
+            side: THREE.DoubleSide,
+          });
 
       const edgeColor = cfg.edge ?? '#eee4cf';
-      const mEdge = std({ color: edgeColor, bumpMap: laminateBump, bumpScale: 0.0035, roughness: 0.68, envMapIntensity: 0.3 });
-      const mFront = std({ bumpMap: laminateBump, bumpScale: 0.0035, roughness: 0.52, envMapIntensity: 0.32 });
-      const mBack = std({ bumpMap: laminateBump, bumpScale: 0.0035, roughness: 0.56, envMapIntensity: 0.28 });
-      const mSpine = std({ bumpMap: clothBump, bumpScale: 0.006, roughness: 0.76, envMapIntensity: 0.24 });
+      const mEdge = std({
+        color: edgeColor,
+        ...(laminateBump ? { bumpMap: laminateBump, bumpScale: 0.0035 } : {}),
+        roughness: 0.66,
+        envMapIntensity: 0.32,
+      });
+      const mFront = std({
+        ...(laminateBump ? { bumpMap: laminateBump, bumpScale: 0.0035 } : {}),
+        roughness: 0.5,
+        envMapIntensity: 0.36,
+      });
+      const mBack = std({
+        ...(laminateBump ? { bumpMap: laminateBump, bumpScale: 0.0035 } : {}),
+        roughness: 0.54,
+        envMapIntensity: 0.3,
+      });
+      const mSpine = std({
+        ...(clothBump ? { bumpMap: clothBump, bumpScale: 0.006 } : {}),
+        roughness: 0.72,
+        envMapIntensity: 0.28,
+      });
+
+      const fw = lowPowerDevice ? 640 : 1024;
+      const fh = lowPowerDevice ? 960 : 1536;
+      const bw = lowPowerDevice ? 512 : 1024;
+      const bh = lowPowerDevice ? 768 : 1536;
+      const sw = lowPowerDevice ? 144 : 220;
+      const sh = lowPowerDevice ? 960 : 1536;
 
       loadOrPaint(mFront, cfg.images?.front ?? cfg.coverURL ?? null, () => {
-        const c = mkCanvas(1024, 1536);
+        const c = mkCanvas(fw, fh);
         const ctx = c.getContext('2d')!;
+        ctx.scale(fw / 1024, fh / 1536);
         if (cfg.front) cfg.front(ctx, 1024, 1536);
         else paintDefaultFront(ctx, 1024, 1536, { title: cfg.title, author: cfg.author, bg: cfg.spineBg ?? cfg.backBg ?? '#22252b' });
         return c;
       });
       loadOrPaint(mBack, cfg.images?.back ?? null, () => {
-        const c = mkCanvas(1024, 1536);
+        const c = mkCanvas(bw, bh);
         const ctx = c.getContext('2d')!;
+        ctx.scale(bw / 1024, bh / 1536);
         if (cfg.back) cfg.back(ctx, 1024, 1536);
         else paintBack(ctx, 1024, 1536, { backBg: cfg.backBg ?? '#22252b', backInk: cfg.backInk ?? '255,255,255' });
         return c;
       });
       loadOrPaint(mSpine, cfg.images?.spine ?? null, () => {
-        const c = mkCanvas(220, 1536);
+        const c = mkCanvas(sw, sh);
         const ctx = c.getContext('2d')!;
+        ctx.scale(sw / 220, sh / 1536);
         if (cfg.spine) cfg.spine(ctx, 220, 1536);
         else
           paintSpine(ctx, 220, 1536, {
@@ -889,6 +955,7 @@ export function BooksShowcase({
       },
     };
     (function buildLeaves() {
+      if (lowPowerDevice && hasOverlayRef.current) return;
       const shape = new THREE.Shape();
       shape.moveTo(0, -0.5);
       shape.bezierCurveTo(0.3, -0.28, 0.3, 0.22, 0, 0.55);
@@ -934,32 +1001,34 @@ export function BooksShowcase({
       const portrait = a < 0.85;
       const fourUp = VISIBLE === 4;
       const fit = portrait
-        ? clamp(a / (fourUp ? 0.94 : 1.08), 0.38, fourUp ? 0.76 : 0.74)
-        : clamp(a / (fourUp ? 1.76 : 1.62), 0.5, 0.98);
+        ? fourUp
+          ? clamp(a / 0.94, 0.38, 0.77)
+          : clamp(a / 0.96, 0.52, 0.76)
+        : clamp(a / (fourUp ? 1.74 : 1.62), 0.5, 0.98);
       bookRoot.scale.setScalar(fit);
-      bookRoot.position.y = -(1 - fit) * 0.22;
+      bookRoot.position.y = portrait && !fourUp ? 0.36 : -(1 - fit) * 0.22;
       SLOTS.portrait = portrait;
 
       if (fourUp) {
         SLOTS.hero = portrait
           ? [
-              { p: [-1.12, 0.62, 0.08], r: [-0.04, 0.22, 0.05], s: 0.9 },
-              { p: [1.12, 0.62, 0.08], r: [-0.04, -0.22, -0.05], s: 0.9 },
-              { p: [-1.12, -1.32, 0.2], r: [-0.04, 0.22, 0.05], s: 0.9 },
-              { p: [1.12, -1.32, 0.2], r: [-0.04, -0.22, -0.05], s: 0.9 },
+              { p: [-1.13, 0.62, 0.08], r: [-0.04, 0.22, 0.05], s: 0.93 },
+              { p: [1.13, 0.62, 0.08], r: [-0.04, -0.22, -0.05], s: 0.93 },
+              { p: [-1.13, -1.32, 0.2], r: [-0.04, 0.22, 0.05], s: 0.93 },
+              { p: [1.13, -1.32, 0.2], r: [-0.04, -0.22, -0.05], s: 0.93 },
             ]
           : [
-              { p: [-2.68, -0.42, -0.18], r: [-0.04, 0.34, 0.13], s: 1.04 },
-              { p: [-0.88, -0.2, 0.34], r: [-0.045, 0.11, 0.04], s: 1.12 },
-              { p: [0.88, -0.2, 0.34], r: [-0.045, -0.11, -0.04], s: 1.12 },
-              { p: [2.68, -0.42, -0.18], r: [-0.04, -0.34, -0.13], s: 1.04 },
+              { p: [-2.75, -0.4, -0.18], r: [-0.04, 0.34, 0.13], s: 1.09 },
+              { p: [-0.91, -0.18, 0.34], r: [-0.045, 0.11, 0.04], s: 1.16 },
+              { p: [0.91, -0.18, 0.34], r: [-0.045, -0.11, -0.04], s: 1.16 },
+              { p: [2.75, -0.4, -0.18], r: [-0.04, -0.34, -0.13], s: 1.09 },
             ];
       } else {
         SLOTS.hero = portrait
           ? [
-              { p: [-1.36, -0.58, -0.12], r: [-0.045, 0.4, 0.185], s: 1.25 },
-              { p: [0.2, -0.22, 0.6], r: [-0.05, -0.1, -0.035], s: 1.35 },
-              { p: [1.62, -0.62, -0.34], r: [-0.045, -0.42, -0.17], s: 1.25 },
+              { p: [-1.36, -0.05, -0.58], r: [-0.035, 0.36, 0.085], s: 0.88 },
+              { p: [0, 0.06, 0.62], r: [-0.025, 0, 0], s: 1.18 },
+              { p: [1.36, -0.05, -0.58], r: [-0.035, -0.36, -0.085], s: 0.88 },
             ]
           : [
               { p: [-2.05, -0.58, -0.12], r: [-0.045, 0.4, 0.185], s: 1.22 },
@@ -1054,22 +1123,24 @@ export function BooksShowcase({
       const y0 = slot.p[1],
         here = b.springs.py.v,
         apex = y0 + LIFT;
+      const fastMobile = isMobileScreen && hasOverlayRef.current;
       b.root.visible = true;
       pinInPlace(b);
       playY(b, [
         { d: delay, from: here, to: here, ease: EASE.hold },
-        { d: 0.24, from: here, to: apex, ease: EASE.outQuad },
-        { d: 0.72, from: apex, to: y0 - CLEAR, ease: EASE.inOutSine, end: () => { b.root.visible = false; } },
+        { d: fastMobile ? 0.14 : 0.24, from: here, to: apex, ease: EASE.outQuad },
+        { d: fastMobile ? 0.34 : 0.72, from: apex, to: y0 - CLEAR, ease: EASE.inOutSine, end: () => { b.root.visible = false; } },
       ]);
     }
     function bringBack(b: Book, i: number, delay: number) {
       const slot = SLOTS.hero[i] ?? SLOTS.hero[1];
       const here = b.springs.py.v;
+      const fastMobile = isMobileScreen && hasOverlayRef.current;
       b.root.visible = true;
       pinInPlace(b);
       playY(b, [
         { d: delay, from: here, to: here, ease: EASE.hold },
-        { d: 0.85, from: here, to: slot.p[1], ease: EASE.outQuint },
+        { d: fastMobile ? 0.52 : 0.85, from: here, to: slot.p[1], ease: EASE.outQuint },
       ]);
     }
 
@@ -1078,9 +1149,10 @@ export function BooksShowcase({
       for (let i = 0; i < count; i++) arr.push((start + i) % total);
       return arr;
     }
-    let carouselStart = 0;
-    let currentWindow: number[] = windowIndices(0, N, VISIBLE);
+    let carouselStart = isMobileScreen && N > VISIBLE ? N - 1 : 0;
+    let currentWindow: number[] = windowIndices(carouselStart, N, VISIBLE);
     let carouselBusy = false;
+    setCarouselIdx(carouselStart);
 
     function rebuildHitMeshes() {
       hitMeshes.length = 0;
@@ -1105,8 +1177,10 @@ export function BooksShowcase({
     function shiftCarousel(dir: 1 | -1) {
       if (carouselBusy || state.mode !== 'hero' || N <= VISIBLE) return;
       carouselBusy = true;
+      resumeAnimation();
       const outgoing = currentWindow;
       carouselStart = (((carouselStart + dir) % N) + N) % N;
+      setCarouselIdx(carouselStart);
       const incoming = windowIndices(carouselStart, N, VISIBLE);
 
       const toHide = outgoing.filter((bi) => !incoming.includes(bi));
@@ -1118,7 +1192,14 @@ export function BooksShowcase({
         b.exit = null;
         if (slot) b.springs.px.t = slot.p[0] - dir * 7.2;
       });
-      setT(() => toHide.forEach((bi) => { bookInstances[bi].root.visible = false; }), 520);
+      setT(() => {
+        toHide.forEach((bi) => {
+          if (!currentWindow.includes(bi) && state.selected?.index !== bi) {
+            bookInstances[bi].exit = null;
+            bookInstances[bi].root.visible = false;
+          }
+        });
+      }, 520);
 
       incoming.forEach((bi, i) => {
         const slot = SLOTS.hero[i];
@@ -1174,7 +1255,7 @@ export function BooksShowcase({
         }
       } else {
         camX.t = 0;
-        camZ.t = fourUp ? (SLOTS.portrait ? 11.2 : 10.6) : 9.6;
+        camZ.t = fourUp ? (SLOTS.portrait ? 11.1 : 10.4) : SLOTS.portrait ? 10.2 : 9.6;
         lookX.t = 0;
         lookY.t = 0;
       }
@@ -1206,8 +1287,12 @@ export function BooksShowcase({
       state.mode = 'opening';
       updateUiMode('opening');
       state.selected = book;
+      resumeAnimation();
       state.pillLock = null;
       state.kbIndex = -1;
+      ptr.id = null;
+      ptr.down = false;
+      dragBook = null;
       hidePill();
       book.exit = null;
       root!.classList.add('bs-transit');
@@ -1238,6 +1323,7 @@ export function BooksShowcase({
 
       if (!currentWindow.includes(book.index) && N > VISIBLE) {
         carouselStart = (book.index - 1 + N) % N;
+        setCarouselIdx(carouselStart);
         currentWindow = windowIndices(carouselStart, N, VISIBLE);
         currentWindow.forEach((bi, i) => {
           const sibling = bookInstances[bi];
@@ -1255,18 +1341,19 @@ export function BooksShowcase({
         });
       }
 
-      const spinDelay = hasOverlayRef.current ? 420 : 620;
-      const leavesDelay = hasOverlayRef.current ? 760 : 900;
-      const detailDelay = hasOverlayRef.current ? 1350 : 1250;
+      const fastMobile = isMobileScreen && hasOverlayRef.current;
+      const spinDelay = hasOverlayRef.current ? (fastMobile ? 80 : 420) : 620;
+      const leavesDelay = hasOverlayRef.current ? (fastMobile ? 260 : 760) : 900;
+      const detailDelay = hasOverlayRef.current ? (fastMobile ? 380 : 1350) : 1250;
 
-      // Signature 360-degree spin & glide into detail position
+      // Signature 360-degree spin & glide into detail position (snappy on mobile overlay)
       setT(() => {
         if (myToken !== transitionToken) return;
         if (state.mode !== 'opening' && state.mode !== 'detail') return;
         book.root.visible = true;
-        book.orbY = RM ? 0 : -6.2832;
-        book.orbYv = RM ? 0 : 3.2;
-        book.orbPhase = 'return';
+        book.orbY = RM ? 0 : fastMobile ? 0 : -6.2832;
+        book.orbYv = RM ? 0 : fastMobile ? 0 : 3.2;
+        book.orbPhase = fastMobile ? 'idle' : 'return';
         book.orbTarget = 0;
         book.orbXs.set(0);
         applyMode();
@@ -1315,6 +1402,17 @@ export function BooksShowcase({
           prev.orbTarget = 0;
           prev.orbXs.set(0);
         }
+        if (!currentWindow.includes(book.index) && N > VISIBLE) {
+          carouselStart = (book.index - 1 + N) % N;
+          setCarouselIdx(carouselStart);
+          currentWindow = windowIndices(carouselStart, N, VISIBLE);
+        }
+        bookInstances.forEach((bk) => {
+          if (bk !== book) {
+            bk.exit = null;
+            bk.root.visible = false;
+          }
+        });
         state.selected = book;
         setSelectedCfg(book.cfg);
         onBookSelectRef.current?.(book.cfg);
@@ -1334,6 +1432,7 @@ export function BooksShowcase({
         state.mode = 'detail';
         updateUiMode('detail');
         rebuildHitMeshes();
+        resumeAnimation();
         return;
       }
 
@@ -1341,6 +1440,7 @@ export function BooksShowcase({
       state.mode = 'opening';
       updateUiMode('opening');
       state.selected = book;
+      resumeAnimation();
       setSelectedCfg(book.cfg);
       onBookSelectRef.current?.(book.cfg);
       orbit.drag = false;
@@ -1443,8 +1543,22 @@ export function BooksShowcase({
         b.orbPhase = 'return';
         b.orbXs.t = 0;
       }
+      resumeAnimation();
 
-      // Ensure sibling books start straight-facing below the shelf before bringBack floats them in
+      // Guarantee any book outside currentWindow is hidden and reset
+      bookInstances.forEach((bk) => {
+        if (!currentWindow.includes(bk.index)) {
+          bk.exit = null;
+          bk.root.visible = false;
+          bk.orbY = 0;
+          bk.orbYv = 0;
+          bk.orbPhase = 'idle';
+          bk.orbTarget = 0;
+          bk.orbXs.set(0);
+        }
+      });
+
+      // Ensure sibling books in currentWindow start straight-facing below the shelf before bringBack floats them in
       currentWindow.forEach((bi, i) => {
         const bk = bookInstances[bi];
         if (bk !== b) {
@@ -1467,9 +1581,10 @@ export function BooksShowcase({
         }
       });
 
-      const returnDelay = hasOverlayRef.current ? 140 : 220;
-      const bringBackBase = hasOverlayRef.current ? 0.3 : 0.65;
-      const heroDoneDelay = hasOverlayRef.current ? 1150 : 1450;
+      const fastMobile = isMobileScreen && hasOverlayRef.current;
+      const returnDelay = hasOverlayRef.current ? (fastMobile ? 50 : 140) : 220;
+      const bringBackBase = hasOverlayRef.current ? (fastMobile ? 0.1 : 0.3) : 0.65;
+      const heroDoneDelay = hasOverlayRef.current ? (fastMobile ? 540 : 1150) : 1450;
 
       setT(() => {
         if (myToken !== transitionToken) return;
@@ -1530,8 +1645,6 @@ export function BooksShowcase({
     const tmpV = new THREE.Vector3();
 
     const canvas = canvasEl;
-    const onContextMenu = (e: Event) => e.preventDefault();
-    canvas.addEventListener('contextmenu', onContextMenu);
 
     const onPointerLeave = () => {
       rayBook = null;
@@ -1559,9 +1672,11 @@ export function BooksShowcase({
       ptr.type = e.pointerType || 'mouse';
       ptr.seen = true;
       if (state.mode === 'detail') leaves.push(dxN, dyN);
-      if (ptr.down && dragBook) {
+      if (ptr.down && dragBook && !isTouch()) {
         ptr.moved += Math.abs(dxN * dims.w) + Math.abs(dyN * dims.h);
         dragBook.springs.drag.t = clamp(((ptr.downX - cx) / dims.w) * 3.4, 0, 1.0);
+      } else if (ptr.down && isTouch()) {
+        ptr.moved += Math.abs(dxN * dims.w) + Math.abs(dyN * dims.h);
       }
       if (ptr.down && orbit.drag) {
         orbit.dxAcc += dxN;
@@ -1572,9 +1687,8 @@ export function BooksShowcase({
     canvas.addEventListener('pointermove', onPointerMove);
 
     const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (ptr.id !== null) return;
-      root.focus({ preventScroll: true });
-      ptr.id = e.pointerId;
       const { x: cx, y: cy } = localXY(e);
       ptr.cx = cx;
       ptr.cy = cy;
@@ -1585,15 +1699,21 @@ export function BooksShowcase({
       ptr.type = e.pointerType || 'mouse';
       ptr.seen = true;
       castRay();
-      if (state.mode === 'hero' && rayBook) {
+      const touchEvt = isTouch();
+      if ((state.mode === 'hero' || state.mode === 'closing') && (rayBook || touchEvt)) {
+        ptr.id = e.pointerId;
         ptr.down = true;
         dragBook = rayBook;
         ptr.downX = cx;
         ptr.downY = cy;
         ptr.moved = 0;
         ptr.t0 = performance.now();
-        canvas.setPointerCapture(e.pointerId);
-      } else if (state.mode === 'detail' && rayBook === state.selected) {
+        // Never capture touch pointers in hero/closing so native vertical page scroll works smoothly
+        if (!touchEvt && rayBook) {
+          canvas.setPointerCapture(e.pointerId);
+        }
+      } else if (state.mode === 'detail' && !hasOverlayRef.current && rayBook === state.selected) {
+        ptr.id = e.pointerId;
         ptr.down = true;
         orbit.drag = true;
         orbit.dxAcc = 0;
@@ -1610,18 +1730,32 @@ export function BooksShowcase({
 
     const onPointerUp = (e: PointerEvent) => {
       if (ptr.id !== null && e.pointerId !== ptr.id) return;
+      const touchEvt = e.pointerType === 'touch' || e.pointerType === 'pen' || isTouch();
+      const { x: cx, y: cy } = localXY(e);
+      const dx = cx - ptr.downX;
+      const dy = cy - ptr.downY;
+      const dtMs = performance.now() - ptr.t0;
       ptr.id = null;
       orbit.drag = false;
-      if (dragBook) {
-        const slop = isTouch() ? 26 : 14;
-        const limit = isTouch() ? 650 : 450;
+
+      if (touchEvt && ptr.down) {
+        if (dragBook) dragBook.springs.drag.t = 0;
+        if (state.mode === 'hero' && N > VISIBLE && Math.abs(dx) > 38 && Math.abs(dx) > Math.abs(dy) * 1.25 && dtMs < 750) {
+          shiftCarousel(dx < 0 ? 1 : -1);
+        } else if (dragBook && Math.hypot(dx, dy) < 22 && dtMs < 550 && (state.mode === 'hero' || state.mode === 'closing')) {
+          open(dragBook);
+        }
+        dragBook = null;
+      } else if (dragBook) {
+        const slop = 14;
+        const limit = 450;
         const wasDrag = ptr.moved > slop;
         dragBook.springs.drag.t = 0;
-        if (!wasDrag && (state.mode === 'hero' || state.mode === 'closing') && performance.now() - ptr.t0 < limit) open(dragBook);
+        if (!wasDrag && (state.mode === 'hero' || state.mode === 'closing') && dtMs < limit) open(dragBook);
         dragBook = null;
       }
       ptr.down = false;
-      if (isTouch()) rayBook = null;
+      if (touchEvt) rayBook = null;
     };
     window.addEventListener('pointerup', onPointerUp);
 
@@ -1817,17 +1951,35 @@ export function BooksShowcase({
     let rafId = 0;
     let isInViewport = true;
     let lastFrameTime = 0;
-    const frameInterval = RM ? 1000 / 30 : 0;
-    function animate(timestamp = performance.now()) {
+    let overlayFrameSettled = false;
+    function animate(timestamp?: number) {
       if (cancelled || !isInViewport || document.hidden) {
         rafId = 0;
         return;
       }
       rafId = requestAnimationFrame(animate);
-      if (frameInterval > 0 && timestamp - lastFrameTime < frameInterval) return;
-      lastFrameTime = timestamp;
-      timer.update(timestamp);
-      const dt = Math.min(timer.getDelta(), 0.05);
+      const now = timestamp ?? performance.now();
+      const frameInterval = RM || lowPowerDevice ? 1000 / 30 : 0;
+      if (frameInterval > 0 && now - lastFrameTime < frameInterval) return;
+      lastFrameTime = now;
+
+      const settledInOverlay =
+        state.mode === 'detail' &&
+        hasOverlayRef.current &&
+        (!state.selected ||
+          (state.selected.orbPhase === 'idle' &&
+            Math.abs(state.selected.springs.px.v - state.selected.springs.px.t) < 0.01 &&
+            Math.abs(state.selected.springs.py.v - state.selected.springs.py.t) < 0.01)) &&
+        Math.abs(camZ.v - camZ.t) < 0.02;
+
+      if (settledInOverlay && overlayFrameSettled) {
+        timer.update(now);
+        return;
+      }
+      overlayFrameSettled = settledInOverlay;
+
+      timer.update(now);
+      const dt = clamp(timer.getDelta(), 0.001, 0.05);
       const t = timer.getElapsed();
 
       if (ptr.seen && (ptr.type === 'mouse' || ptr.down)) castRay();
@@ -1847,8 +1999,12 @@ export function BooksShowcase({
       }
       canvas.style.cursor = cur;
 
-      bookInstances.forEach((b) => screenPos(b));
-      bookInstances.forEach((b) => tickBook(b, dt, t));
+      for (let i = 0; i < bookInstances.length; i++) {
+        const b = bookInstances[i];
+        if (!b.root.visible) continue;
+        screenPos(b);
+        tickBook(b, dt, t);
+      }
       leaves.update(dt, t);
 
       parX.t = RM ? 0 : ptr.ndcX * 0.02;
@@ -1881,20 +2037,25 @@ export function BooksShowcase({
     }
 
     function resumeAnimation() {
-      if (!rafId && !cancelled && isInViewport && !document.hidden) animate();
+      overlayFrameSettled = false;
+      if (!rafId && !cancelled && isInViewport && !document.hidden) {
+        rafId = requestAnimationFrame(animate);
+      }
     }
 
     function relayout() {
+      overlayFrameSettled = false;
       const r = root!.getBoundingClientRect();
       dims.w = Math.max(1, Math.round(r.width));
       dims.h = Math.max(1, Math.round(r.height));
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1 : 1.25));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, lowPowerDevice ? 1.15 : 1.3));
       renderer.setSize(dims.w, dims.h);
       camera.aspect = dims.w / dims.h;
       camera.updateProjectionMatrix();
       computeSlots();
       applyMode();
       camTo(state.mode === 'detail' || state.mode === 'opening' ? 'detail' : 'hero');
+      resumeAnimation();
     }
 
     relayout();
@@ -1903,14 +2064,14 @@ export function BooksShowcase({
       const slot = SLOTS.hero[i];
       const s = b.springs;
       s.px.set(slot.p[0]);
-      s.py.set(slot.p[1] - 3.9);
+      s.py.set(slot.p[1] - (isMobileScreen ? 0.28 : 1.2));
       s.pz.set(slot.p[2]);
       s.rx.set(slot.r[0]);
       s.ry.set(slot.r[1]);
-      s.rz.set(slot.r[2] + 0.35 * (i === 1 ? -1 : Math.sign(slot.p[0])));
-      s.sc.set(slot.s);
+      s.rz.set(slot.r[2] + (VISIBLE === 3 ? 0.08 * (i === 1 ? 0 : Math.sign(slot.p[0])) : 0.25 * (i === 1 ? -1 : Math.sign(slot.p[0]))));
+      s.sc.set(slot.s * (isMobileScreen ? 0.94 : 1));
       b.slotScale = slot.s;
-      setT(() => setTargets(b, slot), 240 + i * 150);
+      setT(() => setTargets(b, slot), (isMobileScreen ? 40 : 200) + i * (isMobileScreen ? 60 : 120));
     });
     bookInstances.forEach((b, idx) => {
       if (!currentWindow.includes(idx)) b.root.visible = false;
@@ -1976,7 +2137,6 @@ export function BooksShowcase({
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', cancelPointer as EventListener);
       root.removeEventListener('keydown', onKeydown);
-      canvas.removeEventListener('contextmenu', onContextMenu);
       canvas.removeEventListener('pointerleave', onPointerLeave);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerdown', onPointerDown);
@@ -2000,7 +2160,7 @@ export function BooksShowcase({
       scene.environment = null;
       renderer.dispose();
     };
-  }, [books, showDetailPanel, leafColorsKey]);
+  }, [books, showDetailPanel, leafColorsKey, bpKey]);
 
   const themeVars = {
     '--bs-navy': themeColors?.navy ?? '#141a32',
@@ -2016,7 +2176,9 @@ export function BooksShowcase({
 
   const panelVisible = uiMode === 'detail';
   const heroWordVisible = mounted && uiMode === 'hero';
-  const canCarousel = showCarousel && books.length > 4;
+  const canCarousel = showCarousel && books.length > (isMobileView ? 3 : 4);
+  const mobileActiveIdx = books.length > 0 ? (carouselIdx + 1) % books.length : 0;
+  const mobileActiveBook = books[mobileActiveIdx] ?? books[0];
 
   const delayMap: Record<number, string> = {
     50: 'delay-[50ms]',
@@ -2045,8 +2207,8 @@ export function BooksShowcase({
       aria-label={`${heroTitle} book showcase`}
       data-state={uiMode}
       className={cn(
-        'book-showcase relative isolate h-full min-h-[620px] overflow-hidden font-sans outline-none [container-type:size] [-webkit-tap-highlight-color:transparent]',
-        'focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--bs-peri)]',
+        'book-showcase relative isolate min-h-[540px] sm:min-h-[600px] overflow-hidden font-sans outline-none focus:outline-none focus-visible:outline-none [container-type:inline-size] [-webkit-tap-highlight-color:transparent]',
+        panelVisible && renderDetailOverlay ? 'h-auto md:h-full' : 'h-full',
         'transition-colors duration-500 ease-out',
         uiMode === 'hero'
           ? 'bg-[var(--bs-bg-dark)] text-[var(--bs-fg-dark)]'
@@ -2055,14 +2217,24 @@ export function BooksShowcase({
       )}
       style={themeVars}
     >
+      {/* Subtle warm studio aura behind the books */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1]"
+        style={{
+          background:
+            'radial-gradient(ellipse 72% 52% at 50% 60%, rgba(200, 159, 109, 0.065) 0%, rgba(150, 108, 60, 0.025) 48%, transparent 74%)',
+        }}
+      />
+
       {/* hero word */}
       {heroTitle && (
         <div
-          className={`pointer-events-none absolute left-1/2 top-[15%] z-[1] -translate-x-1/2 select-none transition-all duration-500 ease-out ${
+          className={`pointer-events-none absolute left-1/2 top-[6%] z-[1] -translate-x-1/2 select-none transition-all duration-500 ease-out ${
             heroWordVisible ? 'translate-y-0 opacity-100' : uiMode === 'hero' ? 'translate-y-[60px] opacity-0' : '-translate-y-11 opacity-0'
           }`}
         >
-          <span className="block whitespace-nowrap text-current text-[clamp(3.75rem,18cqw,16rem)] font-serif font-normal leading-[0.88] tracking-[-0.02em] opacity-[0.14]">
+          <span className="block whitespace-nowrap bg-gradient-to-b from-[#f3dec0]/[0.16] via-[#e0b885]/[0.07] to-transparent bg-clip-text text-transparent text-[clamp(3.25rem,14.5cqw,12.5rem)] font-serif font-normal uppercase leading-[0.9] tracking-[0.12em]">
             {heroTitle}
           </span>
         </div>
@@ -2072,7 +2244,8 @@ export function BooksShowcase({
         ref={canvasRef}
         aria-hidden="true"
         className={cn(
-          'absolute inset-0 z-[2] block h-full w-full touch-none transition-opacity duration-700 ease-out',
+          'absolute inset-0 z-[2] block h-full w-full transition-opacity duration-300 md:duration-700 ease-out',
+          uiMode === 'detail' && !renderDetailOverlay ? 'touch-none' : 'touch-pan-y',
           renderDetailOverlay && uiMode === 'detail' ? 'pointer-events-none opacity-20' : 'opacity-100',
         )}
       />
@@ -2104,11 +2277,12 @@ export function BooksShowcase({
 
       {canCarousel && (
         <>
+          {/* Desktop side carousel arrows */}
           <button
             type="button"
             aria-label="Previous books"
             onClick={() => shiftCarouselRef.current(-1)}
-            className={`absolute left-3 top-1/2 z-30 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#18100a]/85 text-[#e0b885] backdrop-blur-md shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#e0b885]/60 hover:bg-[#24180f] hover:text-[#ffd89b] md:left-6 md:h-12 md:w-12 ${
+            className={`hidden md:inline-flex absolute top-[53%] z-30 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full border border-white/[0.16] bg-[#160f0a]/85 text-[#d6cec2] backdrop-blur-md shadow-md transition-all duration-200 hover:scale-[1.03] hover:border-[#e0b885]/60 hover:bg-[#21160e] hover:text-[#e0b885] left-6 lg:left-[5%] xl:left-[7%] ${
               uiMode === 'hero' ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
             }`}
           >
@@ -2118,12 +2292,100 @@ export function BooksShowcase({
             type="button"
             aria-label="Next books"
             onClick={() => shiftCarouselRef.current(1)}
-            className={`absolute right-3 top-1/2 z-30 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#18100a]/85 text-[#e0b885] backdrop-blur-md shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#e0b885]/60 hover:bg-[#24180f] hover:text-[#ffd89b] md:right-6 md:h-12 md:w-12 ${
+            className={`hidden md:inline-flex absolute top-[53%] z-30 -translate-y-1/2 h-12 w-12 items-center justify-center rounded-full border border-white/[0.16] bg-[#160f0a]/85 text-[#d6cec2] backdrop-blur-md shadow-md transition-all duration-200 hover:scale-[1.03] hover:border-[#e0b885]/60 hover:bg-[#21160e] hover:text-[#e0b885] right-6 lg:right-[5%] xl:right-[7%] ${
               uiMode === 'hero' ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
             }`}
           >
             <ChevronRight />
           </button>
+
+          {/* Desktop 5-volume shelf indicator */}
+          <div
+            className={`hidden md:flex pointer-events-none absolute bottom-11 left-1/2 z-20 -translate-x-1/2 items-center gap-3.5 font-mono text-[10px] uppercase tracking-[0.22em] transition-opacity duration-300 ${
+              uiMode === 'hero' ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              {books.map((b, idx) => {
+                const visibleInWindow = Array.from({ length: 4 }, (_, k) => (carouselIdx + k) % books.length).includes(idx);
+                return (
+                  <span
+                    key={b.id}
+                    className={`relative pb-1 font-serif italic text-[11px] tracking-[0.06em] transition-all duration-300 ${
+                      visibleInWindow ? 'text-[#e0b885]' : 'text-white/25'
+                    }`}
+                  >
+                    {['I', 'II', 'III', 'IV', 'V'][idx] ?? idx + 1}
+                    <span
+                      className={`absolute inset-x-0 bottom-0 h-[1.5px] rounded-full transition-all duration-300 ${
+                        visibleInWindow ? 'bg-[#e0b885]/85' : 'bg-white/15'
+                      }`}
+                    />
+                  </span>
+                );
+              })}
+            </div>
+            <span className="h-2.5 w-px bg-white/15" />
+            <span className="text-[#b8ada0] text-[9.5px] tracking-[0.22em]">
+              4 of {books.length} Volumes
+            </span>
+          </div>
+
+          {/* Mobile centered bottom dock (arrows clear the books cleanly & pair with swipe) */}
+          <div
+            className={`md:hidden absolute bottom-5 left-1/2 z-30 -translate-x-1/2 flex w-full max-w-[340px] flex-col items-center gap-2.5 px-4 transition-opacity duration-200 ${
+              uiMode === 'hero' ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+            }`}
+          >
+            <div className="flex w-full items-center justify-between gap-3">
+              <button
+                type="button"
+                aria-label="Previous volume"
+                onClick={() => shiftCarouselRef.current(-1)}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.16] bg-[#160f0a]/90 text-[#e8ded1] shadow-md active:scale-95 transition-transform touch-manipulation"
+              >
+                <ChevronLeft />
+              </button>
+
+              <div className="flex items-center gap-3">
+                {books.map((b, idx) => {
+                  const isFocused = idx === mobileActiveIdx;
+                  return (
+                    <span
+                      key={b.id}
+                      className={`relative pb-1 font-serif italic text-[12px] tracking-[0.06em] transition-colors duration-200 ${
+                        isFocused ? 'text-[#ffd89b] font-semibold' : 'text-white/30'
+                      }`}
+                    >
+                      {['I', 'II', 'III', 'IV', 'V'][idx] ?? idx + 1}
+                      <span
+                        className={`absolute inset-x-0 bottom-0 h-[1.5px] rounded-full transition-all duration-200 ${
+                          isFocused ? 'bg-[#e0b885]' : 'bg-white/15'
+                        }`}
+                      />
+                    </span>
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                aria-label="Next volume"
+                onClick={() => shiftCarouselRef.current(1)}
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.16] bg-[#160f0a]/90 text-[#e8ded1] shadow-md active:scale-95 transition-transform touch-manipulation"
+              >
+                <ChevronRight />
+              </button>
+            </div>
+
+            {mobileActiveBook && (
+              <div className="flex items-center gap-2 font-mono text-[10.5px] tracking-wide text-[#cfc5b7]">
+                <span className="text-[#e0b885] font-medium truncate max-w-[165px]">{mobileActiveBook.title}</span>
+                <span className="text-white/25">·</span>
+                <span>Tap cover to open</span>
+              </div>
+            )}
+          </div>
         </>
       )}
 
@@ -2133,8 +2395,8 @@ export function BooksShowcase({
         tabIndex={-1}
         aria-hidden="true"
         className={
-          'absolute left-0 top-0 z-30 -translate-x-1/2 -translate-y-1/2 rotate-[-1.6deg] px-[38px] pb-[18px] pt-4 ' +
-          'text-[15px] font-bold uppercase tracking-[0.1em] text-[var(--bs-navy)] pointer-events-none ' +
+          'absolute left-0 top-0 z-30 -translate-x-1/2 -translate-y-1/2 rotate-[-1.6deg] inline-flex items-center gap-2.5 px-[26px] pb-[16px] pt-3.5 ' +
+          'text-[14px] font-bold uppercase tracking-[0.12em] text-[var(--bs-navy)] pointer-events-none ' +
           'transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[left,top,opacity,transform] ' +
           '[clip-path:polygon(0%_0.9%,8.3%_0.8%,16.7%_6.3%,25%_3.8%,33.3%_5.5%,41.7%_2.7%,50%_5.2%,58.3%_0.4%,66.7%_5.9%,75%_6.5%,83.3%_1%,91.7%_6.4%,100%_0.7%,97.7%_20%,97%_40%,99.6%_60%,98.7%_80%,100%_96.5%,91.7%_99.8%,83.3%_95.6%,75%_94.9%,66.7%_96.6%,58.3%_93.5%,50%_97.9%,41.7%_99.5%,33.3%_93.2%,25%_93.6%,16.7%_93.2%,8.3%_93.1%,0%_93.5%,0.2%_80%,1.1%_60%,3.9%_40%,3.8%_20%)] ' +
           '[background:repeating-linear-gradient(92deg,rgba(90,74,40,0.03)_0px_2px,transparent_2px_6px),radial-gradient(125%_150%_at_28%_0%,#fffdf7_0%,#f8f2e3_58%,#ede4cf_100%)] ' +
@@ -2142,7 +2404,25 @@ export function BooksShowcase({
           OPEN_BTN_OFF.join(' ')
         }
       >
-        Open
+        <span className="relative inline-flex h-5 w-5 items-center justify-center">
+          <span className="animate-bs-tap-ring absolute -top-0.5 left-1/2 h-3 w-3 -translate-x-1/2 rounded-full border border-[#8f6835]/70" />
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="animate-bs-hand-tap h-[17px] w-[17px] text-[#1f1712]"
+            aria-hidden="true"
+          >
+            <path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" />
+            <path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v6" />
+            <path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" />
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
+          </svg>
+        </span>
+        <span>Open</span>
       </button>
 
       {!renderDetailOverlay && (
@@ -2161,10 +2441,13 @@ export function BooksShowcase({
       {showDetailPanel && renderDetailOverlay && (
         <div
           aria-live="polite"
-          className={`absolute inset-0 z-30 flex items-center justify-center px-3 py-4 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          onClick={(e) => {
+            if (e.target === e.currentTarget) helpers.close();
+          }}
+          className={`z-30 flex items-center justify-center px-3 py-4 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] ${
             panelVisible
-              ? 'pointer-events-auto visible scale-100 opacity-100 duration-500'
-              : 'pointer-events-none invisible scale-[0.97] opacity-0 duration-250'
+              ? 'relative md:absolute md:inset-0 pointer-events-auto visible scale-100 opacity-100 duration-500'
+              : 'pointer-events-none invisible absolute inset-0 scale-[0.97] opacity-0 duration-250'
           }`}
         >
           {selectedCfg && renderDetailOverlay(selectedCfg, helpers)}

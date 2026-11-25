@@ -3,7 +3,7 @@ import Logo from "./Logo";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/[0.08] bg-[#0c0806]/95 backdrop-blur-2xl">
+    <footer className="relative border-t border-white/[0.08] bg-[#0c0806]/95 md:backdrop-blur-2xl">
       <div className="container-site py-12 sm:py-16">
         <div className="grid gap-10 md:grid-cols-12 md:gap-8 items-start">
           {/* Brand Column: Clean, minimal editorial typography without clutter */}

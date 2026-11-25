@@ -10,20 +10,17 @@ import { LiquidMetalButton } from "@/components/core/liquid-metal-button";
 const navLinks = [
   { label: "Overview", href: "#overview" },
   { label: "Prizes", href: "#prizes" },
-  { label: "Schedule", href: "#schedule" },
+  { label: "Event Guide", href: "#handbook" },
   { label: "Registration", href: "#registration" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Judging", href: "#judging" },
-  { label: "Rules", href: "#rules" },
   { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
-const HANDBOOK_BOOK_IDS = new Set(["schedule", "how-it-works", "judging", "rules"]);
+const HANDBOOK_BOOK_IDS = new Set(["schedule", "how-it-works", "judging", "rules", "github-submission"]);
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
-  const [activeBook, setActiveBook] = useState<string>("schedule");
   const [isDesktopActions, setIsDesktopActions] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -37,30 +34,18 @@ export default function Navbar() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  // Track which handbook volume is currently selected
-  useEffect(() => {
-    const onBookSelected = (e: Event) => {
-      const id = (e as CustomEvent<{ id?: string | null }>).detail?.id;
-      if (id && HANDBOOK_BOOK_IDS.has(id)) {
-        setActiveBook(id);
-      }
-    };
-    window.addEventListener("handbook-book-selected", onBookSelected);
-    return () => window.removeEventListener("handbook-book-selected", onBookSelected);
-  }, []);
-
   // Track active section on scroll for the home page
   useEffect(() => {
     if (!isHome) return;
 
-    const scrollAnchors = ["overview", "prizes", "handbook", "registration", "faq"];
+    const scrollAnchors = ["overview", "prizes", "handbook", "registration", "faq", "contact"];
     const handleScroll = () => {
       const scrollPos = window.scrollY + 140;
       for (let i = scrollAnchors.length - 1; i >= 0; i--) {
         const id = scrollAnchors[i];
         const el = document.getElementById(id);
         if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(id === "handbook" ? activeBook : id);
+          setActiveSection(id);
           return;
         }
       }
@@ -70,7 +55,7 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHome, activeBook]);
+  }, [isHome]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (isHome && href.startsWith("#")) {
@@ -81,7 +66,6 @@ export default function Navbar() {
         (HANDBOOK_BOOK_IDS.has(targetId) ? document.getElementById("handbook") : null) ??
         document.getElementById(targetId);
       if (HANDBOOK_BOOK_IDS.has(targetId)) {
-        setActiveBook(targetId);
         window.dispatchEvent(new CustomEvent("open-handbook-book", { detail: { id: targetId } }));
       }
       if (targetEl) {
@@ -121,7 +105,7 @@ export default function Navbar() {
       {/* Floating Navigation Bar */}
       <header className="sticky top-2 sm:top-3.5 z-50 px-3 sm:px-6 transition-all pointer-events-none">
         <nav
-          className="glass pointer-events-auto mx-auto max-w-[1240px] px-2.5 sm:px-5 py-1.5 sm:py-2 rounded-full flex items-center justify-between gap-1.5 sm:gap-4 border border-white/[0.08] overflow-hidden"
+          className="glass relative pointer-events-auto mx-auto max-w-[1240px] px-2.5 sm:px-5 py-1.5 sm:py-2 rounded-full flex items-center justify-between gap-1.5 sm:gap-4 border border-white/[0.08] overflow-hidden"
           aria-label="Main Navigation"
         >
           {/* Logo Branding */}
@@ -134,7 +118,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden lg:flex items-center gap-1 rounded-full bg-white/[0.04] border border-white/[0.08] px-1.5 py-1">
+          <div className="hidden lg:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 items-center gap-1 rounded-full bg-white/[0.04] border border-white/[0.08] px-1.5 py-1">
             {navLinks.map(({ label, href }) => {
               const targetId = href.replace("#", "");
               const isActive = isHome && activeSection === targetId;
@@ -178,21 +162,15 @@ export default function Navbar() {
             </div>
           )}
 
-          {/* Mobile Menu Actions (Visible below lg) */}
+          {/* Mobile Menu Actions (Visible below lg — lightweight CSS gold rim instead of WebGL shader on <640px) */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link href="/register" className="sm:hidden">
-              <LiquidMetalButton
-                borderWidth={1.5}
-                metalConfig={{
-                  colorBack: "#c99a5e",
-                  colorTint: "#ffffff",
-                  speed: 0.45,
-                  distortion: 0.16,
-                  repetition: 4,
-                }}
-              >
-                <span className="text-[11px]">Register</span>
-              </LiquidMetalButton>
+            <Link
+              href="/register"
+              className="sm:hidden inline-flex rounded-full bg-gradient-to-b from-[#e6c38d] via-[#b58447] to-[#634321] p-[1.5px] shadow-[0_4px_16px_rgba(0,0,0,0.45)] active:scale-[0.97] transition-transform touch-manipulation"
+            >
+              <span className="inline-flex items-center justify-center rounded-full bg-[#140e09] px-3.5 py-1.5 text-[11px] font-semibold tracking-tight text-white">
+                Register
+              </span>
             </Link>
             <button
               type="button"

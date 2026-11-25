@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, Trophy, Medal, Award, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Trophy, Medal, Award } from "lucide-react";
 
 export interface PrizeStackItem {
   id: string | number;
@@ -107,30 +107,34 @@ export function TestimonialsCard({
     switch (place) {
       case "1st":
         return {
-          icon: <Trophy size={20} className="text-[#ffd89b]" />,
+          icon: <Trophy size={17} className="text-[#ffd89b]" />,
           crown: "GOLD MEDALIST",
-          tagBg: "bg-[#4a3219]/80 border-[#ffd89b]/50 text-[#ffd89b]",
+          tagBg: "bg-[#160e08]/75 border-[#ffd89b]/45 text-[#ffe6be] shadow-[inset_0_1px_0_rgba(255,235,205,0.2)]",
+          iconBg: "bg-[#160e08]/75 border-[#ffd89b]/40 shadow-[0_4px_14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,235,205,0.22)]",
           statGlow: "text-[#ffffff] drop-shadow-[0_2px_18px_rgba(255,216,155,0.45)]",
         };
       case "2nd":
         return {
-          icon: <Medal size={20} className="text-[#e8decb]" />,
+          icon: <Medal size={17} className="text-[#e8decb]" />,
           crown: "SILVER MEDALIST",
-          tagBg: "bg-[#382b20]/80 border-white/20 text-[#e8decb]",
+          tagBg: "bg-[#160e08]/75 border-[#e8decb]/35 text-[#f2eadc] shadow-[inset_0_1px_0_rgba(255,255,255,0.16)]",
+          iconBg: "bg-[#160e08]/75 border-[#e8decb]/30 shadow-[0_4px_14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.18)]",
           statGlow: "text-[#ffffff] drop-shadow-[0_2px_14px_rgba(232,222,203,0.35)]",
         };
       case "3rd":
         return {
-          icon: <Medal size={20} className="text-[#d4af7a]" />,
+          icon: <Medal size={17} className="text-[#e0b885]" />,
           crown: "BRONZE MEDALIST",
-          tagBg: "bg-[#2d1e15]/80 border-[#d4af7a]/40 text-[#d4af7a]",
+          tagBg: "bg-[#160e08]/75 border-[#d4af7a]/40 text-[#e8c696] shadow-[inset_0_1px_0_rgba(255,235,205,0.16)]",
+          iconBg: "bg-[#160e08]/75 border-[#d4af7a]/35 shadow-[0_4px_14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,235,205,0.18)]",
           statGlow: "text-[#ffffff] drop-shadow-[0_2px_12px_rgba(212,175,122,0.3)]",
         };
       default:
         return {
-          icon: <Award size={18} className="text-[#b5a794]" />,
+          icon: <Award size={17} className="text-[#c7baa8]" />,
           crown: "FINALIST MERIT",
-          tagBg: "bg-white/[0.08] border-white/10 text-[#d6cec2]",
+          tagBg: "bg-[#160e08]/75 border-white/[0.16] text-[#d6cec2] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]",
+          iconBg: "bg-[#160e08]/75 border-white/[0.16] shadow-[0_4px_14px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.14)]",
           statGlow: "text-[#ffffff] drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]",
         };
     }
@@ -246,13 +250,18 @@ export function TestimonialsCard({
                   <div className="relative z-10 flex items-center justify-between">
                     <span
                       className={cn(
-                        "font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.22em] sm:tracking-[0.24em] px-3 py-1 rounded-full border shadow-sm sm:backdrop-blur-md",
+                        "font-mono text-[10px] sm:text-[10.5px] font-semibold uppercase tracking-[0.22em] sm:tracking-[0.24em] px-3 py-1 rounded-full border sm:backdrop-blur-md",
                         theme.tagBg
                       )}
                     >
                       {item.place} PLACE
                     </span>
-                    <div className="flex h-8 sm:h-10 w-8 sm:w-10 items-center justify-center rounded-full bg-white/[0.08] border border-white/[0.25] shadow-inner sm:backdrop-blur-md">
+                    <div
+                      className={cn(
+                        "flex h-8 sm:h-9 w-8 sm:w-9 items-center justify-center rounded-full border sm:backdrop-blur-md",
+                        theme.iconBg
+                      )}
+                    >
                       {theme.icon}
                     </div>
                   </div>
@@ -295,8 +304,8 @@ export function TestimonialsCard({
         <div className="lg:col-span-6 flex flex-col justify-center px-1">
           {/* Eyebrow & Live Step Progress Indicator */}
           <div className="flex items-center justify-between pb-2">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#ffd89b] sm:animate-pulse" />
+            <div className="flex items-center gap-2.5">
+              <span className="h-1.5 w-1.5 rotate-45 bg-[#ffd89b] shrink-0" />
               <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-[#d4af7a] font-semibold">
                 {rankTheme.crown}
               </span>
@@ -337,10 +346,10 @@ export function TestimonialsCard({
                 </p>
 
                 {/* Specific Deliverable Perks */}
-                <div className="mt-4 space-y-2 border-l-2 border-[#d4af7a]/30 pl-3.5 py-0.5">
+                <div className="mt-5 divide-y divide-white/[0.07] border-y border-white/[0.07]">
                   {activeItem.perks.map((perk, i) => (
-                    <div key={i} className="flex items-start gap-2 text-xs font-mono text-[#ded4c5]">
-                      <CheckCircle2 size={13} className="text-[#ffd89b] shrink-0 mt-0.5" />
+                    <div key={i} className="flex items-center gap-3 py-2 text-[12.5px] sm:text-[13px] text-[#e8ded1]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#e0b885] shrink-0" />
                       <span className="leading-snug">{perk}</span>
                     </div>
                   ))}

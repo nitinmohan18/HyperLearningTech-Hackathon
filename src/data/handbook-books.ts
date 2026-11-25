@@ -22,19 +22,19 @@ function paintLuxuryFrame(
   }
 
   // Soft radial top-center glow
-  const glow = x.createRadialGradient(w * 0.5, h * 0.34, 20, w * 0.5, h * 0.34, w * 0.65);
-  glow.addColorStop(0, 'rgba(224, 184, 133, 0.14)');
+  const glow = x.createRadialGradient(w * 0.5, h * 0.34, 20, w * 0.5, h * 0.34, w * 0.66);
+  glow.addColorStop(0, 'rgba(224, 184, 133, 0.16)');
   glow.addColorStop(1, 'rgba(224, 184, 133, 0)');
   x.fillStyle = glow;
   x.fillRect(0, 0, w, h);
 
   // Outer & inner foil borders
   x.strokeStyle = accent;
-  x.globalAlpha = 0.45;
+  x.globalAlpha = 0.58;
   x.lineWidth = 3;
   x.strokeRect(52, 52, w - 104, h - 104);
 
-  x.globalAlpha = 0.22;
+  x.globalAlpha = 0.26;
   x.lineWidth = 1.5;
   x.strokeRect(72, 72, w - 144, h - 144);
   x.globalAlpha = 1;
@@ -170,9 +170,9 @@ export const handbookBooks: BookCfg[] = [
       '27 Dec 11:00 PM · Results',
     ],
     front: (x, w, h) => {
-      const bg = '#18100a';
-      const accent = '#e0b885';
-      paintLuxuryFrame(x, w, h, bg, accent, '#271a10');
+      const bg = '#1c120b';
+      const accent = '#e6c18b';
+      paintLuxuryFrame(x, w, h, bg, accent, '#2c1d12');
       paintCoverHeader(x, w, 'VOLUME I', 'Milestones & Timings', accent);
 
       // Clock / Orbital ring emblem
@@ -249,9 +249,9 @@ export const handbookBooks: BookCfg[] = [
       'Sprint Boundary Policy',
     ],
     front: (x, w, h) => {
-      const bg = '#26140c';
-      const accent = '#f0c48b';
-      paintLuxuryFrame(x, w, h, bg, accent, '#3a1f13');
+      const bg = '#29150d';
+      const accent = '#f0c68f';
+      paintLuxuryFrame(x, w, h, bg, accent, '#3d2014');
       paintCoverHeader(x, w, 'VOLUME II', 'Participation Flow', accent);
 
       // 5-node stepped progression diagram
@@ -336,9 +336,9 @@ export const handbookBooks: BookCfg[] = [
       'Final Demo · 5 pts',
     ],
     front: (x, w, h) => {
-      const bg = '#121826';
-      const accent = '#e0b885';
-      paintLuxuryFrame(x, w, h, bg, accent, '#1b2438');
+      const bg = '#141b2b';
+      const accent = '#e6c18b';
+      paintLuxuryFrame(x, w, h, bg, accent, '#1e283f');
       paintCoverHeader(x, w, 'VOLUME III', 'Transparent Evaluation', accent);
 
       // Precision Rubric Bars Graphic
@@ -415,9 +415,9 @@ export const handbookBooks: BookCfg[] = [
       'Submission Checklist',
     ],
     front: (x, w, h) => {
-      const bg = '#131d17';
-      const accent = '#dfba88';
-      paintLuxuryFrame(x, w, h, bg, accent, '#1c2b22');
+      const bg = '#15211a';
+      const accent = '#e3be8a';
+      paintLuxuryFrame(x, w, h, bg, accent, '#1f3126');
       paintCoverHeader(x, w, 'VOLUME IV', 'Fair Competition Standards', accent);
 
       // Shield crest emblem
@@ -499,9 +499,9 @@ export const handbookBooks: BookCfg[] = [
       'Collaborator Requirement',
     ],
     front: (x, w, h) => {
-      const bg = '#15181f';
-      const accent = '#e0b885';
-      paintLuxuryFrame(x, w, h, bg, accent, '#1f232e');
+      const bg = '#171b24';
+      const accent = '#e6c18b';
+      paintLuxuryFrame(x, w, h, bg, accent, '#222836');
       paintCoverHeader(x, w, 'VOLUME V', 'Repository Integrity', accent);
 
       // Git branch & commit graph motif

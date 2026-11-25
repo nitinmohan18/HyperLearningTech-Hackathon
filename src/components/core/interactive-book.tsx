@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight, RefreshCcw, X } from 'lucide-react';
@@ -51,6 +51,14 @@ export default function InteractiveBook({
   const [viewportWidth, setViewportWidth] = useState<number>(1280);
   // Mobile single-page index: 0 = Contents, 1..2N = Pages, 2N+1 = Back Cover
   const [mobilePageIdx, setMobilePageIdx] = useState(1);
+  const mobileSwipeRef = useRef<{ x: number; y: number } | null>(null);
+  const mobileScrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (mobileScrollRef.current) {
+      mobileScrollRef.current.scrollTop = 0;
+    }
+  }, [mobilePageIdx]);
 
   useEffect(() => {
     const updateSize = () => setViewportWidth(window.innerWidth);
@@ -198,27 +206,56 @@ export default function InteractiveBook({
   if (isMobile) {
     const safeIdx = Math.max(0, Math.min(mobilePages.length - 1, mobilePageIdx));
     const currentMobile = mobilePages[safeIdx];
+    const progressPct = Math.round(((safeIdx + 1) / Math.max(1, mobilePages.length)) * 100);
+
+    const onMobileTouchStart = (e: React.TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      mobileSwipeRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    };
+    const onMobileTouchEnd = (e: React.TouchEvent) => {
+      if (!mobileSwipeRef.current || e.changedTouches.length !== 1) return;
+      const dx = e.changedTouches[0].clientX - mobileSwipeRef.current.x;
+      const dy = e.changedTouches[0].clientY - mobileSwipeRef.current.y;
+      mobileSwipeRef.current = null;
+      if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.35) {
+        if (dx < 0) setMobilePageIdx((i) => Math.min(mobilePages.length - 1, i + 1));
+        else setMobilePageIdx((i) => Math.max(0, i - 1));
+      }
+    };
 
     return (
-      <div className={cn('relative mx-auto flex w-full max-w-[440px] flex-col items-center px-3', className)}>
-        <div className="relative w-full overflow-hidden rounded-xl border border-[#e3d7c3] bg-[#fdfbf7] text-neutral-800 shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
-          <div className="flex items-center justify-between border-b border-neutral-200/80 bg-[#f6f0e4]/70 px-4 py-2.5">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#7c5c38]">
+      <div className={cn('relative mx-auto flex w-full max-w-[440px] flex-col items-center px-1', className)}>
+        <div
+          onTouchStart={onMobileTouchStart}
+          onTouchEnd={onMobileTouchEnd}
+          className="relative w-full overflow-hidden rounded-xl border border-[#decfae] bg-[#fdfaf3] text-neutral-800 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+        >
+          {/* Thin top progress rule */}
+          <div className="h-[2px] w-full bg-[#ebe1cf]">
+            <div
+              className="h-full bg-[#b48448] transition-[width] duration-300 ease-out"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+
+          <div className="flex items-center justify-between border-b border-[#e8decb] bg-[#f7f1e4] px-4 py-2">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7c5c38] truncate pr-2">
               {bookTitle}
             </span>
-            <span className="font-mono text-[10px] text-neutral-500">
-              {currentMobile.label} ({safeIdx + 1}/{mobilePages.length})
+            <span className="font-mono text-[10px] text-[#6f5d49] shrink-0">
+              {currentMobile.label} · {safeIdx + 1}/{mobilePages.length}
             </span>
           </div>
 
           <AnimatePresence mode="wait">
             <motion.div
+              ref={mobileScrollRef}
               key={safeIdx}
-              initial={{ opacity: 0, x: 16 }}
+              initial={{ opacity: 0, x: 14 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -16 }}
-              transition={{ duration: 0.18 }}
-              className="h-[460px] overflow-y-auto p-5 font-serif text-neutral-800"
+              exit={{ opacity: 0, x: -14 }}
+              transition={{ duration: 0.16, ease: 'easeOut' }}
+              className="book-page-mobile min-h-[340px] px-5 py-5 font-sans text-[13.5px] leading-relaxed text-[#2c2117]"
             >
               {currentMobile.subtitle && (
                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#8a6539]">
@@ -226,27 +263,29 @@ export default function InteractiveBook({
                 </p>
               )}
               {currentMobile.title && (
-                <h3 className="mt-1 mb-3 font-serif text-xl font-semibold text-neutral-900">
+                <h3 className="mt-1 mb-3.5 font-serif text-[23px] font-semibold leading-snug text-[#1e150e]">
                   {currentMobile.title}
                 </h3>
               )}
-              {currentMobile.node}
+              <div className="space-y-3">{currentMobile.node}</div>
             </motion.div>
           </AnimatePresence>
 
-          <div className="flex items-center justify-between border-t border-neutral-200/80 bg-[#f6f0e4]/70 px-3 py-2.5">
+          <div className="flex items-center justify-between border-t border-[#e8decb] bg-[#f7f1e4] px-3 py-2">
             <button
               type="button"
               onClick={() => setMobilePageIdx((i) => Math.max(0, i - 1))}
               disabled={safeIdx === 0}
-              className="inline-flex items-center gap-1 rounded-full border border-neutral-300 bg-white px-3 py-1.5 font-mono text-[11px] font-medium text-neutral-800 disabled:opacity-35"
+              className="inline-flex items-center gap-1 rounded-full border border-[#d6c6ad] bg-white px-3 py-1.5 font-mono text-[11px] font-medium text-[#241911] disabled:opacity-35 touch-manipulation active:scale-95 transition-transform"
             >
-              <ChevronLeft size={14} /> Prev
+              <ChevronLeft size={13} /> Prev
             </button>
             <button
               type="button"
               onClick={() => setMobilePageIdx(0)}
-              className="font-mono text-[10px] uppercase tracking-wider text-[#7c5c38] underline-offset-2 hover:underline"
+              className={`font-mono text-[10px] uppercase tracking-wider underline-offset-2 touch-manipulation px-2 py-1 ${
+                safeIdx === 0 ? 'font-semibold text-[#1e150e] underline' : 'text-[#7c5c38] hover:underline'
+              }`}
             >
               Contents
             </button>
@@ -254,9 +293,9 @@ export default function InteractiveBook({
               type="button"
               onClick={() => setMobilePageIdx((i) => Math.min(mobilePages.length - 1, i + 1))}
               disabled={safeIdx === mobilePages.length - 1}
-              className="inline-flex items-center gap-1 rounded-full bg-[#1d140e] px-3 py-1.5 font-mono text-[11px] font-medium text-[#f5efe5] disabled:opacity-35"
+              className="inline-flex items-center gap-1 rounded-full bg-[#1d140e] px-3 py-1.5 font-mono text-[11px] font-medium text-[#f5efe5] disabled:opacity-35 touch-manipulation active:scale-95 transition-transform"
             >
-              Next <ChevronRight size={14} />
+              Next <ChevronRight size={13} />
             </button>
           </div>
         </div>
@@ -429,7 +468,7 @@ export default function InteractiveBook({
                           </h3>
                         )}
 
-                        <div className="flex-1 overflow-y-auto pr-1 text-[13px] leading-relaxed text-[#3b2e23]">
+                        <div className="book-page-scroll flex-1 overflow-y-auto pr-1 text-[13px] leading-relaxed text-[#3b2e23]">
                           {page.content}
                         </div>
 
@@ -468,7 +507,7 @@ export default function InteractiveBook({
                           </h3>
                         )}
 
-                        <div className="flex-1 overflow-y-auto pr-1 text-[13px] leading-relaxed text-[#3b2e23]">
+                        <div className="book-page-scroll flex-1 overflow-y-auto pr-1 text-[13px] leading-relaxed text-[#3b2e23]">
                           {page.backContent ? (
                             page.backContent
                           ) : (

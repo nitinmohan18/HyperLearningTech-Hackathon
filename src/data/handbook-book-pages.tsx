@@ -553,30 +553,37 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
       {
         pageNumber: 1,
         subtitle: 'Participation Flow',
-        title: '5-Step Journey',
+        title: 'How the Sprint Runs',
         content: (
-          <div className="space-y-2">
-            {[
-              { n: '01', k: 'REGISTER', h: 'Register & Pitch', s: 'Solo (₹99) or Squad (₹200) before 25 Dec.' },
-              { n: '02', k: 'PREPARE', h: 'Setup on 25 Dec', s: 'Plan stack, tooling & private Git repo.' },
-              { n: '03', k: 'START', h: 'Kickoff 10 PM, 26 Dec', s: 'Baseline snapshot taken; 24h clock starts.' },
-              { n: '04', k: 'BUILD', h: 'Ship & Checkpoint', s: 'Commit steadily & log hourly updates.' },
-              { n: '05', k: 'SUBMIT', h: 'Freeze 10 PM, 27 Dec', s: 'Public reveal 8 PM; freeze & URL 10 PM.' },
-            ].map((item) => (
-              <div
-                key={item.n}
-                className="flex items-start gap-3 rounded-lg border border-[#e4d7c1] bg-[#faf5ea]/80 px-3 py-2"
-              >
-                <span className="mt-0.5 font-mono text-xs font-bold text-[#8a5d26]">{item.n}</span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-[9.5px] uppercase tracking-widest text-[#7c6a56]">{item.k}</span>
-                    <span className="font-serif text-[14px] font-semibold text-[#1e150e]">{item.h}</span>
-                  </div>
-                  <p className="text-[11px] text-[#534232]">{item.s}</p>
-                </div>
+          <div className="space-y-3">
+            <div className="rounded-lg border border-[#cfa468]/60 bg-[#f6ebd8]/80 p-3">
+              <p className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#8a5d26]">
+                24-Hour Build Window
+              </p>
+              <p className="mt-1 font-serif text-[15px] font-semibold text-[#1e150e]">
+                26 Dec, 10:00 PM → 27 Dec, 10:00 PM IST
+              </p>
+              <p className="mt-1 text-[11.5px] leading-relaxed text-[#4f3e2e]">
+                Preparation on 25 Dec is for setup and planning only. Evaluation strictly scores code engineered inside the 24-hour window.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3">
+                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Solo Entry</p>
+                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">₹99</p>
+                <p className="mt-0.5 text-[11px] text-[#534232]">1 builder · full rubric parity</p>
               </div>
-            ))}
+              <div className="rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3">
+                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Squad Entry</p>
+                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">₹200</p>
+                <p className="mt-0.5 text-[11px] text-[#534232]">2–4 members · flat fee</p>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-[#e4d7c1] bg-white/80 p-3 text-[11.5px] leading-relaxed text-[#463628]">
+              <strong className="text-[#1e150e]">Verifiable Progress:</strong> Commit steadily to your private GitHub repo, log hourly checkpoints, reveal public at 8 PM on 27 Dec, and freeze at 10 PM.
+            </div>
           </div>
         ),
         backSubtitle: 'Step 01 · REGISTER',
@@ -743,12 +750,12 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
       {
         pageNumber: 1,
         subtitle: 'Evaluation Total · 100 Points',
-        title: 'Points Distribution',
+        title: 'Scoring Philosophy',
         content: (
           <div className="space-y-3">
             <div className="rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3">
               <div className="mb-2 flex items-center justify-between font-mono text-[10px] text-[#6d5943]">
-                <span>Points Distribution</span>
+                <span>100-Point Allocation</span>
                 <span className="font-semibold text-[#8a5d26]">100% Normalized</span>
               </div>
               <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-[#e6dac4]">
@@ -760,17 +767,18 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
                 <div style={{ width: '5%' }} className="bg-[#432d13]" title="Docs (5 pts)" />
                 <div style={{ width: '5%' }} className="bg-[#2a1c0b]" title="Demo (5 pts)" />
               </div>
+              <p className="mt-2 font-mono text-[10px] text-[#6d5943]">
+                MVP 25 · Effort 25 · Tech 15 · Squad 15 · Deploy 10 · Docs 5 · Demo 5
+              </p>
             </div>
 
-            <div className="divide-y divide-[#ece0cc] rounded-lg border border-[#e4d7c1] bg-white/75 px-3">
-              {judgingCriteria.map((c) => (
-                <div key={c.id} className="flex items-center justify-between py-2 text-[12px]">
-                  <span className="font-serif font-medium text-[#1e150e]">{c.name}</span>
-                  <span className="font-mono text-[11px] font-semibold text-[#8a5d26] shrink-0">
-                    {c.points} pts
-                  </span>
-                </div>
-              ))}
+            <div className="space-y-2 rounded-lg border border-[#e4d7c1] bg-white/80 p-3 text-[11.5px] leading-relaxed text-[#463628]">
+              <p className="font-mono text-[9.5px] font-semibold uppercase tracking-wider text-[#8a6539]">
+                How Judges Score
+              </p>
+              <p>• <strong>50% Core Weight:</strong> Working MVP (25 pts) + Verified 24h Effort (25 pts).</p>
+              <p>• <strong>Fair Solo &amp; Squad Scaling:</strong> Solo builders are evaluated on individual ownership without team-size penalties.</p>
+              <p>• <strong>Evidence-First:</strong> Judges test live URLs and inspect git diffs, commit cadence, and hourly logs.</p>
             </div>
           </div>
         ),
