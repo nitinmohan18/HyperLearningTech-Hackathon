@@ -37,9 +37,14 @@ export function StaggeredGrid({
   const [activeBento, setActiveBento] = useState<number>(1);
 
   const splitText = (text: string) => {
-    return text.split('').map((char, i) => (
-      <span key={i} className="char inline-block">
-        {char === ' ' ? '\u00A0' : char}
+    return text.split(' ').map((word, wIdx, words) => (
+      <span key={wIdx} className="inline-block whitespace-nowrap">
+        {word.split('').map((char, cIdx) => (
+          <span key={cIdx} className="char inline-block">
+            {char}
+          </span>
+        ))}
+        {wIdx < words.length - 1 && <span className="inline-block">&nbsp;</span>}
       </span>
     ));
   };

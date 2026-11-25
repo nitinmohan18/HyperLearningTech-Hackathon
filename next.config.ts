@@ -34,10 +34,10 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
-      "style-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "img-src 'self' data: blob: https:",
-      "font-src 'self' data:",
-      "connect-src 'self' https://*.backblazeb2.com https://challenges.cloudflare.com",
+      "font-src 'self' data: https://fonts.gstatic.com",
+      `connect-src 'self' ${process.env.NODE_ENV === "development" ? "ws: wss: " : ""}https://*.backblazeb2.com https://challenges.cloudflare.com`,
       "frame-src 'self' https://challenges.cloudflare.com",
       "object-src 'none'",
       "base-uri 'self'",

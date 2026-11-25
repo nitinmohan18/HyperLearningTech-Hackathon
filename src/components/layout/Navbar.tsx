@@ -121,13 +121,13 @@ export default function Navbar() {
       {/* Floating Navigation Bar */}
       <header className="sticky top-2 sm:top-3.5 z-50 px-3 sm:px-6 transition-all pointer-events-none">
         <nav
-          className="glass pointer-events-auto mx-auto max-w-[1240px] px-3 sm:px-5 py-2 rounded-full flex items-center justify-between gap-2 sm:gap-4 border border-white/[0.08]"
+          className="glass pointer-events-auto mx-auto max-w-[1240px] px-2.5 sm:px-5 py-1.5 sm:py-2 rounded-full flex items-center justify-between gap-1.5 sm:gap-4 border border-white/[0.08] overflow-hidden"
           aria-label="Main Navigation"
         >
           {/* Logo Branding */}
           <Link
             href="/"
-            className="shrink-0 transition-opacity hover:opacity-95"
+            className="min-w-0 shrink transition-opacity hover:opacity-95"
             onClick={() => setOpen(false)}
           >
             <Logo size="default" showSubtitle={true} />

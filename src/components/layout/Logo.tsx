@@ -12,19 +12,19 @@ export default function Logo({
   size = "default",
 }: LogoProps) {
   const iconSizes = {
-    sm: "h-10 w-10",
-    default: "h-14 w-14",
-    lg: "h-20 w-20",
+    sm: "h-9 w-9 sm:h-10 sm:w-10",
+    default: "h-9 w-9 sm:h-14 sm:w-14",
+    lg: "h-14 w-14 sm:h-20 sm:w-20",
   };
 
   const textSizes = {
     sm: "text-base",
-    default: "text-lg sm:text-xl",
+    default: "text-[14px] sm:text-xl",
     lg: "text-2xl sm:text-3xl",
   };
 
   return (
-    <div className={`group flex items-center gap-3 transition-opacity ${className}`}>
+    <div className={`group flex items-center gap-2 sm:gap-3 min-w-0 transition-opacity ${className}`}>
       {/* Brand Icon Emblem */}
       <div className="relative shrink-0">
         {/* Ambient bloom effect on hover */}
