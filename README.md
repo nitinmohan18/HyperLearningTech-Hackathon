@@ -1,6 +1,6 @@
 # HyperLearningTech – Winter Hackathon '26
 
-A responsive, frontend-only website for the **1st Edition of the HyperLearningTech Winter Hackathon**.
+A full-stack web application and registration platform for the **1st Edition of the HyperLearningTech Winter Hackathon**.
 
 **Tagline:** BUILD. PROVE. EARN.  
 **Event:** 26–27 December 2026  
@@ -86,11 +86,11 @@ src/
 public/         Static assets
 ```
 
-## Demo boundaries
+## Platform architecture
 
-This project is a frontend-only implementation. The leaderboard, results, registrations, repository status, checkpoints, submissions and admin screens use clearly labelled mock data.
-
-No real authentication, payment processing, database, GitHub integration or certificate verification is implemented.
+- **Registration & Verification:** Client-side IndexedDB draft persistence, atomic Neon PostgreSQL registration persistence, and Backblaze B2 proposal storage.
+- **Security & Administration:** Signed HMAC session tokens, CSRF protection, strict IP rate limiting, and admin review workflows for payment verification and status management.
+- **Participant Transparency:** Automatic email delivery queue (EmailOutbox) with Resend, immutable team name records, and duplicate participant protection across email, phone, and GitHub handles.
 
 ## Event summary
 

@@ -141,7 +141,7 @@ export default function Footer() {
                 </li>
                 <li>
                   <a
-                    href="mailto:support@hyperlearningtech.in"
+                    href="mailto:admin@hyperlearningtech.in"
                     className="text-[#d6cec2] transition-colors hover:text-white"
                   >
                     Direct Support
