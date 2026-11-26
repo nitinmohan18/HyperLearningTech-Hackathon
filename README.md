@@ -97,8 +97,8 @@ public/         Static assets
 - Solo registration: ₹99
 - Squad registration: ₹200 flat for 2–4 members
 - Total guaranteed cash prize pool: ₹14,992 (Maximum planned competition reward budget: ₹15,000)
-- Results: 27 December 2026, 11:00 PM IST
-- Prize distribution target: By 11:05 PM IST
+- Results: 27 December 2026, 12:00 AM IST
+- Prize distribution target: By 12:30 PM IST
 
 ## Building for production
 
