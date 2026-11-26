@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Award, Sparkles, Trophy, Medal, ArrowRight, ShieldCheck } from "lucide-react";
+import { Award, Trophy, Medal, ArrowRight, ShieldCheck } from "lucide-react";
 import { overallPrizes, specialPrizes } from "@/data/prizes";
 import { leaderboard } from "@/data/mock-data";
 
@@ -79,7 +79,7 @@ export default function ResultsPage() {
               <div key={a.category} className="rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 backdrop-blur-xl">
                 <div className="flex items-center gap-3.5">
                   <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm">
-                    <Sparkles size={18} />
+                    <Award size={18} />
                   </div>
                   <div>
                     <h3 className="font-serif text-2xl font-normal text-[#f0eae1]">
@@ -114,15 +114,12 @@ export default function ResultsPage() {
                 Top 25 Official Rankings & Certificates
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
-                Every project qualifying in the Top 25 receives an authenticated ranking certificate. Every squad member receives an individual credential with unique verification ID.
+                Every project qualifying in the Top 25 receives an official ranking certificate issued individually to all squad members.
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-4">
               <Link href="/leaderboard" className="btn-primary">
                 View Full Leaderboard <ArrowRight size={16} />
-              </Link>
-              <Link href="/certificates" className="btn-secondary">
-                Verify Credentials
               </Link>
             </div>
           </div>

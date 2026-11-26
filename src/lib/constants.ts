@@ -3,11 +3,11 @@ export const EVENT_DETAILS = {
   dates: "26–27 December 2026",
   duration: "24 Hours",
   registrationDeadline: "25 December 2026",
-  soloFeePaise: 9900, // ₹99
+  soloFeePaise: 20000, // Unified flat ₹200 Squad fee
   squadFeePaise: 20000, // ₹200
-  soloFeeFormatted: "₹99",
+  soloFeeFormatted: "₹200",
   squadFeeFormatted: "₹200",
-  minSquadSize: 2,
+  minSquadSize: 1,
   maxSquadSize: 4,
 } as const;
 

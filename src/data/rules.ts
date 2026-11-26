@@ -30,7 +30,7 @@ export const rulesData: RuleAccordionItem[] = [
       {
         title: "Participation Structure",
         description:
-          "Participation is open to Solo developers and Squads of 2–4 members. An individual may belong to only one registered entry. Each entry submits exactly one project.",
+          "Participation is conducted exclusively in Squad format (1–4 members) at a flat ₹200 fee per entry, whether competing alone or as a team. An individual may belong to only one registered entry, and each entry submits one project.",
         tag: "Eligibility",
       },
       {

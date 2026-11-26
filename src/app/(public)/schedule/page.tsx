@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { event } from "@/data/event";
 import {
   ArrowRight,
   Calendar,
@@ -6,7 +7,7 @@ import {
   GitCommit,
   Eye,
   CheckSquare,
-  Sparkles,
+  Scale,
   Trophy,
   CreditCard,
 } from "lucide-react";
@@ -65,7 +66,7 @@ export default function SchedulePage() {
     {
       time: "27 Dec 2026 · 10:00–11:00 PM IST",
       phase: "Evaluation",
-      icon: Sparkles,
+      icon: Scale,
       title: "Judging & Verification Review",
       copy: "Judges review functionality, technical execution, UI/UX, and commit histories to determine category winners and final Top 25 rankings.",
     },
@@ -154,9 +155,14 @@ export default function SchedulePage() {
               <Link href="/rules" className="btn-secondary">
                 View Rules
               </Link>
-              <Link href="/register" className="btn-primary">
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+              >
                 Register for Hackathon <ArrowRight size={16} />
-              </Link>
+              </a>
             </div>
           </div>
         </div>

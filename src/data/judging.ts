@@ -53,8 +53,8 @@ export const judgingCriteria: JudgingCriterion[] = [
     points: 15,
     evaluates: "Evidence of each participant's contribution and fair distribution of work across squad members.",
     details: [
-      "For squads: verifiable division of responsibilities and balanced code/asset contributions from each member.",
-      "For solo entries: full evaluation of individual ownership and engineering scope without blanket team multipliers.",
+      "For multi-member squads: verifiable division of responsibilities and balanced code/asset contributions from each member.",
+      "For 1-member squad entries: full evaluation of individual ownership and engineering scope without team-size penalties.",
       "Transparent disclosure of who built which component in the final contribution statement.",
     ],
   },

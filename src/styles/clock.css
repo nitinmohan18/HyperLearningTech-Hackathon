@@ -116,7 +116,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3.2cqw;
   background: radial-gradient(circle at 48% 30%, #1c1109 0%, #0d0805 55%, #040302 100%);
   box-shadow:
     0 0 0 0.4cqw var(--gold),
@@ -218,7 +217,7 @@
 
 /* Diamond 4-point star at top 12 o'clock */
 .orn--top {
-  top: 9%;
+  top: 8.5%;
 }
 
 .star-svg {
@@ -234,12 +233,12 @@
 
 /* Diamond 4-point star at bottom 6 o'clock rim */
 .orn--rim-bot {
-  bottom: 8%;
+  bottom: 8.5%;
 }
 
 /* Diamond with fading hairlines below the labels */
 .orn--bot {
-  bottom: 23%;
+  bottom: 22.5%;
   gap: 1.6cqw;
 }
 
@@ -254,25 +253,29 @@
   transform: scaleX(-1);
 }
 
-/* Title */
+/* Title - positioned cleanly above the centered digits */
 .chrono__title {
+  position: absolute;
+  top: 26.5%;
+  left: 0;
+  right: 0;
   margin: 0;
   text-align: center;
   text-indent: 0.36em;
-  font: 500 2.2cqw/1.55 'Jost', sans-serif;
+  font: 500 2.1cqw/1.5 'Jost', sans-serif;
   letter-spacing: 0.36em;
   text-transform: uppercase;
-  color: #cdb68c;
-  position: relative;
+  color: #d6bf96;
   z-index: 4;
 }
 
-/* Digits container */
+/* Digits container - dead-center along 9-to-3 dial equator */
 .chrono__digits {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 2.2cqw;
+  gap: 1.7cqw;
+  padding-top: 2.6cqw;
   position: relative;
   z-index: 4;
 }
@@ -282,14 +285,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1cqw;
-  min-width: 12cqw;
+  gap: 1.1cqw;
+  min-width: 10.6cqw;
 }
 
 /* Digits - Light, wide, elegant Cormorant Garamond serif */
 .u b {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 10.5cqw;
+  font-size: 9.4cqw;
   font-weight: 300;
   line-height: 0.95;
   color: #fcf6eb;
@@ -300,20 +303,20 @@
 
 /* Labels */
 .u small {
-  font: 400 1.8cqw/1 'Jost', sans-serif;
+  font: 400 1.75cqw/1 'Jost', sans-serif;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #a58f68;
+  color: #ad9770;
 }
 
 /* Colons */
 .sep {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 10.5cqw;
+  font-size: 9.4cqw;
   font-weight: 300;
   line-height: 0.95;
   color: var(--gold);
-  transform: translateY(-0.4cqw);
+  transform: translateY(-0.35cqw);
 }
 
 /* ========================================

@@ -4,6 +4,7 @@ import { ArrowRight, Clock, Flame, ShieldAlert, CheckCircle2, Trophy, GitBranch,
 import type { BookPage } from '@/components/core/interactive-book';
 import { judgingCriteria } from '@/data/judging';
 import { rulesData } from '@/data/rules';
+import { event } from '@/data/event';
 
 export interface HandbookBookDeck {
   id: string;
@@ -256,12 +257,14 @@ function VolumeBackCover({
         >
           {ctaLabel} <ArrowRight size={12} />
         </Link>
-        <Link
-          href="/register"
+        <a
+          href={event.registrationUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[#1e140d] px-5 py-2 font-mono text-[11px] font-semibold text-[#f5efe5] hover:bg-[#322116]"
         >
           Register Now <ArrowRight size={12} />
-        </Link>
+        </a>
       </div>
     </div>
   );
@@ -544,7 +547,7 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
 
         <div className="flex items-center justify-between border-t border-[#e8decb] pt-2.5 font-mono text-[10px] text-[#6d5943]">
           <span>24-Hour Continuous Sprint</span>
-          <span className="text-[#8a5d26]">Solo (₹99) · Squad (₹200)</span>
+          <span className="text-[#8a5d26]">Squad Format · ₹200 Flat</span>
         </div>
       </div>
     ),
@@ -570,14 +573,14 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
 
             <div className="grid grid-cols-2 gap-2.5">
               <div className="rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3">
-                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Solo Entry</p>
-                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">₹99</p>
-                <p className="mt-0.5 text-[11px] text-[#534232]">1 builder · full rubric parity</p>
+                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Entry Format</p>
+                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">₹200</p>
+                <p className="mt-0.5 text-[11px] text-[#534232]">flat fee · alone or squad</p>
               </div>
               <div className="rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3">
-                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Squad Entry</p>
-                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">₹200</p>
-                <p className="mt-0.5 text-[11px] text-[#534232]">2–4 members · flat fee</p>
+                <p className="font-mono text-[9.5px] uppercase tracking-wider text-[#8a6539]">Squad Size</p>
+                <p className="mt-0.5 font-serif text-xl font-semibold text-[#1e150e]">1–4 Devs</p>
+                <p className="mt-0.5 text-[11px] text-[#534232]">unified squad track</p>
               </div>
             </div>
 
@@ -594,7 +597,7 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
               time="Step 01 · Before 25 Dec"
               badge="Entry"
               title="Format & Problem Brief"
-              desc="Enter Solo (₹99) or Squad of 2–4 (₹200 flat) and submit your problem brief."
+              desc="Enter in Squad format (1–4 members, ₹200 flat whether solo or team) and submit your brief."
               highlight
             />
             <div className="space-y-1.5 rounded-lg border border-[#e4d7c1] bg-[#faf5ea] p-3 text-[11.5px] text-[#463628]">
@@ -740,7 +743,7 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
         </div>
 
         <div className="flex items-center justify-between border-t border-[#e8decb] pt-2 font-mono text-[10px] text-[#6d5943]">
-          <span>Solo &amp; Squad Fairly Normalized</span>
+          <span>1–4 Member Entries Normalized</span>
           <span className="font-semibold text-[#8a5d26]">100 Points</span>
         </div>
       </div>
@@ -777,7 +780,7 @@ export const handbookBookDecks: Record<string, HandbookBookDeck> = {
                 How Judges Score
               </p>
               <p>• <strong>50% Core Weight:</strong> Working MVP (25 pts) + Verified 24h Effort (25 pts).</p>
-              <p>• <strong>Fair Solo &amp; Squad Scaling:</strong> Solo builders are evaluated on individual ownership without team-size penalties.</p>
+              <p>• <strong>Fair Team-Size Scaling:</strong> Entries with 1–4 members are scored fairly on engineering ownership without size penalties.</p>
               <p>• <strong>Evidence-First:</strong> Judges test live URLs and inspect git diffs, commit cadence, and hourly logs.</p>
             </div>
           </div>

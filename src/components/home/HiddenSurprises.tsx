@@ -1,11 +1,11 @@
-import { Sparkles } from "lucide-react";
+import { Gift } from "lucide-react";
 
 export default function HiddenSurprises() {
   return (
     <div className="rounded-2xl border border-sand-border/15 bg-[#120d09]/35 p-7 sm:p-8 backdrop-blur-xl transition-all duration-300 hover:border-sand-border/30">
       <div className="flex items-center gap-3">
         <div className="grid h-9 w-9 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d]">
-          <Sparkles size={18} />
+          <Gift size={18} />
         </div>
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#8e7a68]">
           Hidden Surprises

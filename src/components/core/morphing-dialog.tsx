@@ -264,7 +264,7 @@ export function MorphingDialogClose({
         e.stopPropagation();
         setIsOpen(false);
       }}
-      className={`absolute top-4 right-4 z-20 rounded-full p-2 text-[#d6cec2] transition-colors hover:bg-white/[0.1] hover:text-white ${className || ''}`}
+      className={`absolute top-5 right-5 z-20 rounded-lg p-1.5 text-[#a69b8d] transition-colors hover:bg-white/[0.07] hover:text-white ${className || ''}`}
       aria-label="Close dialog"
     >
       <X size={18} />

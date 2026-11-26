@@ -20,9 +20,9 @@ export default function AboutPage() {
       copy: "Participants must document genuine contributions, disclose AI and existing-code assistance honestly, and build the core solution during the competition.",
     },
     {
-      title: "Solo or Squad format",
+      title: "Unified Squad format",
       icon: Users,
-      copy: `Solo entry is ${event.soloFee} per individual builder. Squads contain 2–4 members and pay ${event.squadFee} flat for one unified project submission.`,
+      copy: `All entries run under the Squad format (1–4 members) at a flat ${event.squadFee} fee per entry—whether participating alone or as a team for one unified project submission.`,
     },
   ];
 
@@ -79,9 +79,14 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-4">
-              <Link href="/register" className="btn-primary">
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+              >
                 Register for Hackathon →
-              </Link>
+              </a>
               <Link href="/rules" className="btn-secondary">
                 Read Competition Rules
               </Link>

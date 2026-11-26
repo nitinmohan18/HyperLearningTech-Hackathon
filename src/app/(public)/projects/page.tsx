@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { ExternalLink, Github, X, FolderGit2 } from "lucide-react";
 import { projects } from "@/data/mock-data";
+import { event } from "@/data/event";
 
 export default function ProjectsPage() {
   const [selected, setSelected] = useState<(typeof projects)[number] | null>(null);
@@ -41,9 +41,14 @@ export default function ProjectsPage() {
               Verified project repositories, prototypes, and architecture artifacts built during Winter Hackathon ’26 will be showcased here following the final code freeze on 27 December 2026.
             </p>
             <div className="mt-6 flex justify-center">
-              <Link href="/register" className="btn-primary">
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+              >
                 Register Your Project Idea
-              </Link>
+              </a>
             </div>
           </div>
         ) : (

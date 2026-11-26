@@ -114,15 +114,15 @@ export const RegistrationSubmitSchema = z.object({
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["participants"],
-        message: "Solo registration must have exactly 1 participant",
+        message: "Registration must have at least 1 participant",
       });
     }
   } else {
-    if (data.participants.length < 2 || data.participants.length > 4) {
+    if (data.participants.length < 1 || data.participants.length > 4) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["participants"],
-        message: "Squad registration must have between 2 and 4 participants",
+        message: "Squad registration must have between 1 and 4 participants",
       });
     }
   }

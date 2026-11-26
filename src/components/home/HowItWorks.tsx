@@ -7,7 +7,7 @@ export default function HowItWorks() {
       name: "REGISTER",
       icon: UserCheck,
       headline: "Register & Pitch",
-      desc: "Register Solo (₹99) or Squad (₹200) and submit your initial problem brief before the 25 Dec deadline.",
+      desc: "Register in Squad format (₹200 flat, 1–4 members) and submit your initial problem brief before the 25 Dec deadline.",
     },
     {
       num: "02",

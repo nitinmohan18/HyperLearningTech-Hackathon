@@ -14,12 +14,21 @@ export default function Hero() {
       <div className="container-site relative z-10 grid items-center gap-7 py-8 sm:gap-12 sm:py-20 lg:min-h-[640px] lg:grid-cols-[1.25fr_0.75fr] lg:py-24">
         <div className="relative z-10 flex flex-col justify-center">
           {/* Main Title Hierarchy */}
-          <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] font-normal leading-[1.04] tracking-tight text-[#ffffff] drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
-            HyperLearningTech <br />
-            <span className="font-serif italic font-normal text-[#ffd89b] drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
-              Winter Hackathon ’26
-            </span>
-          </h1>
+          <div>
+            <p className="font-mono text-xs sm:text-sm font-bold uppercase tracking-[0.26em] text-[#e5ddd0]">
+              <span className="font-extrabold text-[#ff6b2b]">HYPERLEARNINGTECH</span>{" "}
+              <span className="text-[#cfc3b2]">PRESENTS</span>
+            </p>
+
+            <h1 className="mt-2.5 font-serif text-5xl sm:text-7xl lg:text-[5.25rem] font-normal leading-[1.03] tracking-tight text-[#ffffff] drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
+              Winter <br />
+              <span className="font-serif italic font-normal text-[#ffd89b] drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)]">
+                Hackathon 2026
+              </span>
+            </h1>
+
+            <div className="mt-4 h-[2px] w-12 bg-[#cfa972]/80 shadow-[0_2px_10px_rgba(0,0,0,0.7)]" />
+          </div>
 
           {/* Tagline: pure typography without pill container */}
           <div className="mt-4 sm:mt-5">
@@ -51,7 +60,12 @@ export default function Hero() {
 
           {/* Action Buttons with Creepy Peek-Eye Effect */}
           <div className="mt-7 sm:mt-9 flex flex-col gap-3.5 sm:gap-4 sm:flex-row sm:items-center">
-            <Link href="/register" className="w-full sm:w-auto">
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto"
+            >
               <CreepyButton
                 className="w-full sm:w-auto min-h-[48px]"
                 coverClassName="bg-gradient-to-b from-[#fbf8f3] to-[#e8decb] text-[#18110b] font-semibold text-sm shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]"
@@ -61,7 +75,7 @@ export default function Hero() {
                   <ArrowRight size={15} />
                 </span>
               </CreepyButton>
-            </Link>
+            </a>
 
             <a href="#overview" className="w-full sm:w-auto">
               <CreepyButton

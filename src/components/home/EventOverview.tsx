@@ -5,7 +5,7 @@ export default function EventOverview() {
     { value: "24 Hours", label: "Build challenge", note: "Continuous execution", icon: Clock },
     { value: "Up to ₹9,000", label: "Cash prize pool", note: "Direct cash awards", icon: Trophy },
     { value: "Top 25", label: "Ranked projects", note: "Recognised & certified", icon: Medal },
-    { value: "Solo & Squad", label: "Participation", note: "1 to 4 builders", icon: Users },
+    { value: "Squad Format", label: "Participation", note: "1 to 4 builders · ₹200 flat", icon: Users },
   ];
 
   return (

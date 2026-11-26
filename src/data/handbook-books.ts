@@ -233,7 +233,7 @@ export const handbookBooks: BookCfg[] = [
     year: 'Register → Submit',
     stars: 5,
     badgeLabel: 'End-to-End Flow',
-    desc: 'A structured 5-step journey from initial registration to final snapshot grading: Register & Pitch (Solo ₹99 / Squad ₹200), Setup on 25 Dec, Kickoff at 10 PM on 26 Dec, Ship with hourly checkpoints, and Freeze at 10 PM on 27 Dec.',
+    desc: 'A structured 5-step journey from initial registration to final snapshot grading: Register & Pitch (Squad ₹200 flat · 1–4 members), Setup on 25 Dec, Kickoff at 10 PM on 26 Dec, Ship with hourly checkpoints, and Freeze at 10 PM on 27 Dec.',
     edge: '#efe5d2',
     backBg: '#27150d',
     spineBg: '#321b11',
@@ -305,7 +305,7 @@ export const handbookBooks: BookCfg[] = [
     },
     back: (x, w, h) =>
       paintBookBack(x, w, h, '#26140c', '#f0c48b', 'VOLUME II', 'How It Works', [
-        '01 · Register Solo (₹99) or Squad (₹200)',
+        '01 · Register Squad Format (₹200 flat · 1–4 devs)',
         '02 · Setup Private Repo & Tooling (25 Dec)',
         '03 · Kickoff Baseline Snapshot (26 Dec 10 PM)',
         '04 · Continuous Build & Hourly Checkpoints',
@@ -468,7 +468,7 @@ export const handbookBooks: BookCfg[] = [
     },
     back: (x, w, h) =>
       paintBookBack(x, w, h, '#131d17', '#dfba88', 'VOLUME IV', 'Rules & Guidelines', [
-        'Open Innovation · Solo & 2–4 Squads',
+        'Open Innovation · Squad Format (1–4 Devs)',
         'AI Tools Allowed with Mandatory Disclosure',
         'Private Repo + Inspector Collaborator Protocol',
         'Builders Retain 100% IP Ownership',

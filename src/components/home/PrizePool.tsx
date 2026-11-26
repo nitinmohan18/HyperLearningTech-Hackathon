@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Trophy, Medal, Award, Sparkles } from "lucide-react";
+import { ArrowRight, Trophy, Medal, Award } from "lucide-react";
 import { overallPrizes, specialPrizes } from "@/data/prizes";
 
 export default function PrizePool() {
@@ -69,7 +69,7 @@ export default function PrizePool() {
             >
               <div className="flex items-start gap-3.5">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-sand-border/20 bg-[#1c140d]/60 text-[#c89f6d]">
-                  <Sparkles size={18} />
+                  <Award size={18} />
                 </div>
                 <div>
                   <h3 className="font-serif text-xl font-normal text-[#f0eae1]">

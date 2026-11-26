@@ -13,15 +13,15 @@ export const faqs: FAQItem[] = [
   },
   {
     category: "Participation",
-    question: "Can I participate individually (Solo), or is a team required?",
+    question: "Can I participate alone, or is a team required?",
     answer:
-      "You can participate as an individual builder in the Solo format (₹99 entry fee) or join forces with others in a Squad of 2 to 4 members (₹200 flat fee per team). Both solo builders and squads are evaluated on the same normalised 100-point rubric.",
+      "There is only one unified Squad format (1 to 4 members). Whether you participate alone (1 member) or as a team of 2–4 members, the flat entry fee is ₹200 per entry. All entries are evaluated on the same normalised 100-point rubric.",
   },
   {
     category: "Participation",
-    question: "What is the maximum squad size and how is the fee charged?",
+    question: "What is the squad size limit and how is the fee charged?",
     answer:
-      "The squad size is 2 to 4 members. The registration fee is a flat ₹200 per squad, NOT per person. This means a 2-person squad pays ₹100/person, a 3-person squad pays ~₹66.67/person, and a 4-person squad pays ₹50/person. Each squad nominates one team leader.",
+      "The squad size is 1 to 4 members. The registration fee is a flat ₹200 per entry—NOT per person—regardless of whether you compete alone or with up to 4 collaborators. Each entry nominates one team leader.",
   },
   {
     category: "Participation",
@@ -81,7 +81,7 @@ export const faqs: FAQItem[] = [
     category: "Prizes",
     question: "When will results be announced and prizes distributed?",
     answer:
-      "Official results will be announced at 11:00 PM IST on 27 December 2026. Organisers target immediate digital prize distribution by 11:05 PM IST to verified solo winners and squad team leaders (who distribute to their members).",
+      "Official results will be announced at 11:00 PM IST on 27 December 2026. Organisers target immediate digital prize distribution by 11:05 PM IST to verified squad team leaders and winning entry leads (who distribute to their members).",
   },
   {
     category: "Prizes",

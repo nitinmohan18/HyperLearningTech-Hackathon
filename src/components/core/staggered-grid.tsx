@@ -126,10 +126,10 @@ export function StaggeredGrid({
             <div
               key={item.id}
               className={cn(
-                "bento-card relative cursor-pointer overflow-hidden rounded-[24px] transition-all duration-600 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                "bento-card relative cursor-pointer overflow-hidden rounded-[24px] contain-layout transition-[flex-grow,border-color] duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
                 isActive
-                  ? "flex-[3.8] bg-gradient-to-b from-[#2e2117]/85 via-[#211710]/90 to-[#160f0a]/95 border border-[#e0b885]/30 shadow-[0_24px_60px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,235,205,0.28),inset_0_-1px_0_rgba(212,175,122,0.18)] backdrop-blur-2xl"
-                  : "flex-[1] bg-gradient-to-b from-[#251a13]/75 via-[#1b130d]/80 to-[#130d09]/85 border border-[#e0b885]/[0.14] hover:border-[#e0b885]/35 hover:from-[#2c1f16]/85 hover:to-[#18100b]/90 shadow-[0_12px_30px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,235,205,0.18)] backdrop-blur-xl"
+                  ? "flex-[3.8] bg-gradient-to-b from-[#322318] via-[#221710] to-[#160f0a] border border-[#e0b885]/35 shadow-[0_24px_60px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,235,205,0.35),inset_0_-1px_0_rgba(212,175,122,0.2)]"
+                  : "flex-[1] bg-gradient-to-b from-[#2b1e15] via-[#1d140e] to-[#140e0a] border border-[#e0b885]/[0.18] hover:border-[#e0b885]/40 hover:from-[#322318] hover:to-[#1a110b] shadow-[0_12px_30px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,235,205,0.24)]"
               )}
               onMouseEnter={() => setActiveBento(index)}
               onClick={() => setActiveBento(index)}
@@ -139,35 +139,43 @@ export function StaggeredGrid({
                 className={cn(
                   "absolute inset-0 pointer-events-none transition-opacity duration-500",
                   isActive
-                    ? "opacity-100 bg-gradient-to-br from-[#f5deb3]/[0.11] via-transparent to-[#d4af7a]/[0.06]"
-                    : "opacity-55 bg-gradient-to-b from-[#f5deb3]/[0.07] via-transparent to-transparent"
+                    ? "opacity-100 bg-gradient-to-br from-[#f5deb3]/[0.13] via-transparent to-[#d4af7a]/[0.07]"
+                    : "opacity-65 bg-gradient-to-b from-[#f5deb3]/[0.09] via-transparent to-transparent"
                 )} 
               />
 
               {/* Ultra-fine hairline specular rim highlight */}
-              <div className="absolute top-0 inset-x-6 h-[1px] bg-gradient-to-r from-transparent via-[#f5deb3]/55 to-transparent pointer-events-none z-10" />
+              <div className="absolute top-0 inset-x-5 h-[1px] bg-gradient-to-r from-transparent via-[#f5deb3]/75 to-transparent pointer-events-none z-10" />
 
-              {/* Realistic 3D Thematic Artwork in Opened Card (like prize cards) */}
+              {/* Realistic 3D Thematic Artwork in Opened Card */}
               {item.image && (
-                <div
-                  className={cn(
-                    "absolute inset-0 z-0 overflow-hidden pointer-events-none transition-opacity duration-700",
-                    isActive ? "opacity-45 scale-105" : "opacity-0 scale-95"
-                  )}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover object-center filter saturate-125 mix-blend-screen"
+                <>
+                  <div
+                    className={cn(
+                      "absolute inset-0 z-0 overflow-hidden pointer-events-none mix-blend-screen transition-[opacity,transform] duration-500 will-change-[opacity,transform]",
+                      isActive ? "opacity-85 scale-105" : "opacity-0 scale-95"
+                    )}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      decoding="async"
+                      className="w-full h-full object-cover object-center filter saturate-150 brightness-[1.18] contrast-105"
+                    />
+                  </div>
+                  <div
+                    className={cn(
+                      "absolute inset-0 z-[1] pointer-events-none bg-gradient-to-t from-[#140d08]/65 via-[#140d08]/10 to-transparent transition-opacity duration-500",
+                      isActive ? "opacity-100" : "opacity-0"
+                    )}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#140d08]/80 via-[#140d08]/25 to-transparent" />
-                </div>
+                </>
               )}
 
               {/* Active Expanded State Content */}
               <div
                 className={cn(
-                  "relative z-10 h-full flex flex-col justify-between p-8 transition-all duration-400",
+                  "relative z-10 h-full flex flex-col justify-between p-8 transition-[opacity,transform] duration-300",
                   isActive
                     ? "opacity-100 translate-y-0 pointer-events-auto"
                     : "opacity-0 translate-y-3 pointer-events-none"
@@ -175,35 +183,35 @@ export function StaggeredGrid({
               >
                 {/* Header: Subtitle Pill & Translucent Convex Glass Icon */}
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-[#f0d8b6] px-3.5 py-1 rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/25 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,235,205,0.2)]">
+                  <span className="font-mono text-[10.5px] uppercase tracking-[0.24em] text-[#f0d8b6] px-3.5 py-1 rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/25 shadow-[inset_0_1px_0_rgba(255,235,205,0.2)]">
                     {item.subtitle}
                   </span>
 
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/25 text-[#f3dcb8] shadow-[0_4px_16px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,235,205,0.35)] backdrop-blur-md">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/25 text-[#f3dcb8] shadow-[0_4px_16px_rgba(0,0,0,0.28),inset_0_1px_0_rgba(255,235,205,0.35)]">
                     {item.icon}
                   </div>
                 </div>
 
                 {/* Main Stat & Copy */}
                 <div className="my-auto py-2">
-                  <div className="font-mono text-4xl lg:text-5xl font-bold tracking-tight text-white mb-2 drop-shadow-[0_3px_16px_rgba(0,0,0,0.95)]">
+                  <div className="font-mono text-4xl lg:text-5xl font-bold tracking-tight text-white mb-2 [text-shadow:_0_2px_4px_rgba(0,0,0,1),_0_4px_18px_rgba(0,0,0,0.95),_0_0_28px_rgba(0,0,0,0.85)]">
                     {item.stat}
                   </div>
-                  <h3 className="font-serif text-2xl font-medium text-[#ffe4bd] leading-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)]">
+                  <h3 className="font-serif text-2xl font-semibold text-[#fff5e4] leading-tight [text-shadow:_0_1px_3px_rgba(0,0,0,1),_0_2px_12px_rgba(0,0,0,0.98),_0_0_20px_rgba(0,0,0,0.9)]">
                     {item.title}
                   </h3>
-                  <p className="mt-3.5 text-[13.5px] lg:text-sm leading-relaxed text-[#f2eae0] max-w-lg drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                  <p className="mt-3.5 text-[13.5px] lg:text-sm font-medium leading-relaxed text-[#ffffff] max-w-lg [text-shadow:_0_1px_2px_rgba(0,0,0,1),_0_2px_10px_rgba(0,0,0,1),_0_0_18px_rgba(0,0,0,0.92)]">
                     {item.description}
                   </p>
                 </div>
 
                 {/* Specification Line */}
                 {item.schedule && (
-                  <div className="pt-4 border-t border-white/[0.12] flex items-center justify-between font-mono text-[11px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)]">
-                    <span className="text-[#cfc2b2] uppercase tracking-wider text-[10px]">
+                  <div className="pt-4 border-t border-white/[0.15] flex items-center justify-between font-mono text-[11px] [text-shadow:_0_1px_3px_rgba(0,0,0,1),_0_2px_10px_rgba(0,0,0,0.95)]">
+                    <span className="text-[#e5dacb] font-medium uppercase tracking-wider text-[10px]">
                       SPECIFICATION
                     </span>
-                    <span className="text-[#fff6ea] font-medium">
+                    <span className="text-[#ffffff] font-semibold">
                       {item.schedule}
                     </span>
                   </div>
@@ -217,13 +225,13 @@ export function StaggeredGrid({
                   isActive ? "opacity-0" : "opacity-100"
                 )}
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/22 text-[#e8c696] shadow-[0_2px_10px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,235,205,0.25)]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#e0b885]/[0.12] border border-[#f5deb3]/40 text-[#fff1d6] shadow-[0_2px_10px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,235,205,0.35)]">
                   {item.icon}
                 </div>
-                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#ece3d6] [writing-mode:vertical-rl] rotate-180 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] font-medium select-none">
+                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#f5efe6] [writing-mode:vertical-rl] rotate-180 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] font-medium select-none">
                   {item.title}
                 </span>
-                <span className="font-mono text-xs text-[#e8c696] font-semibold px-2 py-0.5 rounded-full bg-[#e0b885]/[0.08] border border-[#e0b885]/20 shadow-sm">
+                <span className="font-mono text-xs text-[#ffd89b] font-semibold px-2.5 py-0.5 rounded-full bg-[#e0b885]/[0.12] border border-[#e0b885]/30 shadow-sm">
                   0{index + 1}
                 </span>
               </div>
@@ -262,17 +270,20 @@ export function StaggeredGrid({
               {/* Hairline top specular rim */}
               <div className="absolute top-0 inset-x-5 h-[1px] bg-gradient-to-r from-transparent via-[#f5deb3]/45 to-transparent pointer-events-none z-10" />
 
-              {/* Soft artwork layer rendered only when open, without heavy blend/blur */}
+              {/* Lightweight artwork layer rendered when open (no blend/filter for 60fps mobile scroll) */}
               {item.image && isOpen && (
-                <div className="absolute inset-0 z-0 pointer-events-none opacity-30">
-                  <img
-                    src={item.image}
-                    alt=""
-                    loading="lazy"
-                    className="w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#120c08] via-[#120c08]/65 to-[#120c08]/35" />
-                </div>
+                <>
+                  <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+                    <img
+                      src={item.image}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover object-center"
+                    />
+                  </div>
+                  <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-t from-[#120c08]/85 via-[#120c08]/40 to-[#120c08]/15" />
+                </>
               )}
 
               {/* Accordion Header */}
@@ -318,14 +329,14 @@ export function StaggeredGrid({
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="px-4 pb-4 pt-2.5 border-t border-white/[0.1]">
-                    <p className="text-[12.5px] text-[#e8ded1] leading-relaxed">
+                  <div className="px-4 pb-4 pt-2.5 border-t border-white/[0.12]">
+                    <p className="text-[12.5px] font-medium text-[#ffffff] leading-relaxed [text-shadow:_0_1px_2px_rgba(0,0,0,1),_0_2px_8px_rgba(0,0,0,0.95)]">
                       {item.description}
                     </p>
                     {item.schedule && (
-                      <div className="mt-3 pt-2.5 border-t border-white/[0.08] flex items-center justify-between gap-2 font-mono text-[10px]">
-                        <span className="text-[#a89987] uppercase tracking-wider shrink-0">Spec</span>
-                        <span className="text-[#ffd89b] font-medium text-right truncate">{item.schedule}</span>
+                      <div className="mt-3 pt-2.5 border-t border-white/[0.1] flex items-center justify-between gap-2 font-mono text-[10px] [text-shadow:_0_1px_4px_rgba(0,0,0,1)]">
+                        <span className="text-[#dfd3c3] uppercase tracking-wider shrink-0">Spec</span>
+                        <span className="text-[#ffe4bd] font-semibold text-right truncate">{item.schedule}</span>
                       </div>
                     )}
                   </div>

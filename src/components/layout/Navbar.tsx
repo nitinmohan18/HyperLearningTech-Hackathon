@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./Logo";
 import { LiquidMetalButton } from "@/components/core/liquid-metal-button";
+import { event } from "@/data/event";
 
 const navLinks = [
   { label: "Overview", href: "#overview" },
@@ -91,9 +92,8 @@ export default function Navbar() {
       {/* Top Announcement Bar (Desktop only for a clean, spacious mobile viewport) */}
       <div className="hidden sm:block border-b border-white/[0.08] bg-[#0d0a08]/60 px-4 py-1.5 text-center font-mono text-xs text-[#d6cec2] backdrop-blur-md">
         <div className="container-site flex items-center justify-center gap-3">
-          <span className="inline-flex items-center gap-1.5 text-[#e0b885] font-semibold">
-            <Sparkles size={13} />
-            <span>Winter Hackathon ’26</span>
+          <span className="text-[#e0b885] font-semibold">
+            Winter Hackathon ’26
           </span>
           <span className="text-white/30">·</span>
           <span className="text-white">26–27 December 2026 (24-Hour Online)</span>
@@ -144,7 +144,7 @@ export default function Navbar() {
           {/* Action CTAs (Desktop — only mount WebGL shader on >=640px) */}
           {isDesktopActions && (
             <div className="hidden sm:flex items-center gap-3.5">
-              <Link href="/register">
+              <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
                 <LiquidMetalButton
                   borderWidth={2}
                   metalConfig={{
@@ -158,13 +158,18 @@ export default function Navbar() {
                   <span>Register Now</span>
                   <ArrowRight size={13} />
                 </LiquidMetalButton>
-              </Link>
+              </a>
             </div>
           )}
 
           {/* Mobile Menu Actions (Visible below lg) */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link href="/register" className="sm:hidden">
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm:hidden"
+            >
               <LiquidMetalButton
                 borderWidth={1.5}
                 metalConfig={{
@@ -177,7 +182,7 @@ export default function Navbar() {
               >
                 <span className="text-[11px]">Register</span>
               </LiquidMetalButton>
-            </Link>
+            </a>
             <button
               type="button"
               className="rounded-full p-2 text-white hover:bg-white/10 transition-colors"
@@ -217,13 +222,15 @@ export default function Navbar() {
               })}
 
               <div className="mt-4 flex flex-col gap-2.5 border-t border-white/[0.1] pt-4">
-                <Link
-                  href="/register"
+                <a
+                  href={event.registrationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f5efe6] to-[#ded2c3] text-xs font-semibold text-[#120d09] shadow-md"
                   onClick={() => setOpen(false)}
                 >
                   Register Now <ArrowRight size={15} />
-                </Link>
+                </a>
               </div>
             </div>
           </div>

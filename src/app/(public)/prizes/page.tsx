@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { ArrowRight, Trophy, Medal, Award, Sparkles, ShieldCheck, FileCheck, Gift } from "lucide-react";
+import { ArrowRight, Trophy, Medal, Award, ShieldCheck, FileCheck, Gift } from "lucide-react";
 import { overallPrizes, specialPrizes } from "@/data/prizes";
+import { event } from "@/data/event";
 
 export default function PrizesPage() {
   const policies = [
@@ -101,7 +101,7 @@ export default function PrizesPage() {
                 <div>
                   <div className="flex items-center gap-3.5">
                     <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d]/60 text-[#c89f6d] shadow-sm">
-                      <Sparkles size={18} />
+                      <Award size={18} />
                     </div>
                     <div>
                       <h3 className="font-serif text-xl font-normal text-[#f0eae1]">
@@ -157,12 +157,17 @@ export default function PrizesPage() {
               Ready to build for rank and prizes?
             </h3>
             <p className="mt-1 text-sm text-[#9e8e7c]">
-              Registrations close on 25 December. Join as a solo builder or register your squad.
+              Registrations close on 25 December. Register your entry in Squad format (1–4 members, ₹200 flat).
             </p>
           </div>
-          <Link href="/register" className="btn-primary mt-4 shrink-0 sm:mt-0">
+          <a
+            href={event.registrationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary mt-4 shrink-0 sm:mt-0"
+          >
             Register Now <ArrowRight size={16} />
-          </Link>
+          </a>
         </div>
       </div>
     </div>

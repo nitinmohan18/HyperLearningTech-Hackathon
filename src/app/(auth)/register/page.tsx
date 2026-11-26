@@ -7,7 +7,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Users,
-  User,
   ShieldCheck,
   FileText,
   Upload,
@@ -40,9 +39,46 @@ interface MemberDetails {
   githubUsername: string;
 }
 
+/** Toggle to `true` to re-enable the internal multi-step registration UI component. */
+const ENABLE_INTERNAL_REGISTRATION = false;
+
 export default function RegisterPage() {
+  useEffect(() => {
+    if (!ENABLE_INTERNAL_REGISTRATION) {
+      window.location.replace(event.registrationUrl);
+    }
+  }, []);
+
+  if (!ENABLE_INTERNAL_REGISTRATION) {
+    return (
+      <div className="min-h-screen bg-[#0d0a08] px-4 py-24 flex items-center justify-center">
+        <div className="w-full max-w-md rounded-2xl border border-[#e0b885]/25 bg-[#150e0a]/90 p-7 text-center shadow-2xl">
+          <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-[#e0b885]">
+            Official Registration
+          </p>
+          <h1 className="mt-2 font-serif text-2xl font-normal text-[#f0eae1]">
+            Redirecting to Unstop
+          </h1>
+          <p className="mt-2.5 text-xs leading-relaxed text-[#cfc6ba]">
+            Student registrations for Winter Hackathon ’26 are handled on Unstop. If you are not redirected automatically, continue below.
+          </p>
+          <a
+            href={event.registrationUrl}
+            className="btn-primary mt-6 inline-flex w-full items-center justify-center gap-2"
+          >
+            Continue to Unstop <ArrowRight size={15} />
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  return <InternalRegisterPage />;
+}
+
+function InternalRegisterPage() {
   const [step, setStep] = useState(1);
-  const [type, setType] = useState<"Solo" | "Squad">("Solo");
+  const [type, setType] = useState<"Squad">("Squad");
   const [submittedData, setSubmittedData] = useState<{
     registrationNumber: string;
     type: string;
@@ -107,7 +143,7 @@ export default function RegisterPage() {
       try {
         const d = await getLocalDraft();
         if (d) {
-          if (d.type) setType(d.type);
+          setType("Squad");
           if (d.formData) setFormData((prev) => ({ ...prev, ...d.formData }));
           if (d.step && d.step >= 1 && d.step <= 5) setStep(d.step);
 
@@ -186,14 +222,33 @@ export default function RegisterPage() {
 
     if (step === 3) {
       if (!formData.teamName.trim() || formData.teamName.trim().length < 2) {
-        return setErrorMessage("Please provide a valid team name (at least 2 characters).");
+        return setErrorMessage("Please provide a valid squad name (at least 2 characters).");
       }
-      if (type === "Squad") {
-        if (!formData.member2Github.trim()) return setErrorMessage("Member 2 GitHub username is required for a squad.");
-        if (!formData.member2Name.trim()) return setErrorMessage("Member 2 full name is required.");
-        if (!formData.member2Email.trim() || !formData.member2Email.includes("@")) return setErrorMessage("Member 2 valid email is required.");
-        if (!formData.member2Phone.trim()) return setErrorMessage("Member 2 phone number is required.");
-      }
+
+      const validateOptionalMember = (
+        label: string,
+        name: string,
+        email: string,
+        phone: string,
+        github: string
+      ) => {
+        const hasAny = [name, email, phone, github].some((v) => v.trim().length > 0);
+        if (!hasAny) return null;
+        if (!name.trim()) return `${label} full name is required.`;
+        if (!email.trim() || !email.includes("@")) return `${label} valid email is required.`;
+        if (!phone.trim()) return `${label} phone number is required.`;
+        if (!github.trim()) return `${label} GitHub username is required.`;
+        return null;
+      };
+
+      const m2Err = validateOptionalMember("Member 2", formData.member2Name, formData.member2Email, formData.member2Phone, formData.member2Github);
+      if (m2Err) return setErrorMessage(m2Err);
+
+      const m3Err = validateOptionalMember("Member 3", formData.member3Name, formData.member3Email, formData.member3Phone, formData.member3Github);
+      if (m3Err) return setErrorMessage(m3Err);
+
+      const m4Err = validateOptionalMember("Member 4", formData.member4Name, formData.member4Email, formData.member4Phone, formData.member4Github);
+      if (m4Err) return setErrorMessage(m4Err);
     }
 
     if (step === 4) {
@@ -317,7 +372,7 @@ export default function RegisterPage() {
         },
       ];
 
-      if (type === "Squad") {
+      if (formData.member2Github.trim()) {
         participantsList.push({
           fullName: formData.member2Name.trim(),
           email: formData.member2Email.trim(),
@@ -327,37 +382,37 @@ export default function RegisterPage() {
           role: "MEMBER" as const,
           sortOrder: 1,
         });
+      }
 
-        if (formData.member3Github.trim()) {
-          participantsList.push({
-            fullName: formData.member3Name.trim() || `Member 3`,
-            email: formData.member3Email.trim(),
-            phone: formData.member3Phone.trim(),
-            college: (formData.member3College || formData.college).trim(),
-            githubUsername: formData.member3Github.trim(),
-            role: "MEMBER" as const,
-            sortOrder: 2,
-          });
-        }
+      if (formData.member3Github.trim()) {
+        participantsList.push({
+          fullName: formData.member3Name.trim() || `Member 3`,
+          email: formData.member3Email.trim(),
+          phone: formData.member3Phone.trim(),
+          college: (formData.member3College || formData.college).trim(),
+          githubUsername: formData.member3Github.trim(),
+          role: "MEMBER" as const,
+          sortOrder: 2,
+        });
+      }
 
-        if (formData.member4Github.trim()) {
-          participantsList.push({
-            fullName: formData.member4Name.trim() || `Member 4`,
-            email: formData.member4Email.trim(),
-            phone: formData.member4Phone.trim(),
-            college: (formData.member4College || formData.college).trim(),
-            githubUsername: formData.member4Github.trim(),
-            role: "MEMBER" as const,
-            sortOrder: 3,
-          });
-        }
+      if (formData.member4Github.trim()) {
+        participantsList.push({
+          fullName: formData.member4Name.trim() || `Member 4`,
+          email: formData.member4Email.trim(),
+          phone: formData.member4Phone.trim(),
+          college: (formData.member4College || formData.college).trim(),
+          githubUsername: formData.member4Github.trim(),
+          role: "MEMBER" as const,
+          sortOrder: 3,
+        });
       }
 
       // Generate a client idempotency key to prevent double-click duplicates
       const idempotencyKey = `sub_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 
       const payload = {
-        type: type.toUpperCase() as "SOLO" | "SQUAD",
+        type: "SQUAD" as const,
         teamName: formData.teamName.trim(),
         projectTitle: formData.projectTitle.trim() || "Untitled Project",
         techStack: formData.techStack.trim() || "TypeScript, Next.js",
@@ -523,62 +578,31 @@ export default function RegisterPage() {
             <div>
               <div className="border-b border-sand-border/15 pb-4">
                 <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
-                  Choose Participation Format
+                  Participation Format
                 </h2>
                 <p className="text-xs text-[#9e8e7c] mt-1">
-                  Select whether you are competing as a solo developer or as a squad.
+                  Unified Squad format for 1 to 4 builders at a flat ₹200 entry fee—whether competing alone or as a team.
                 </p>
               </div>
 
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {/* Solo Option */}
-                <button
-                  type="button"
-                  onClick={() => setType("Solo")}
-                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${type === "Solo"
-                    ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
-                    : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
-                    }`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d] text-[#c89f6d] shadow-sm">
-                        <User size={18} />
-                      </div>
-                      {type === "Solo" && (
-                        <span className="font-mono text-xs text-[#c89f6d]">Selected</span>
-                      )}
-                    </div>
-                    <h3 className="mt-4 font-serif text-2xl font-normal text-[#f0eae1]">Solo Entry</h3>
-                    <p className="mt-1 font-mono text-xs text-[#c89f6d] font-semibold">{event.soloFee} fee</p>
-                    <p className="mt-3 text-xs leading-relaxed text-[#9e8e7c]">
-                      One independent builder. Eligible for overall cash prizes, special category awards, and individual certification.
-                    </p>
-                  </div>
-                </button>
-
-                {/* Squad Option */}
+              <div className="mt-6">
+                {/* Squad Option (Single Unified Format) */}
                 <button
                   type="button"
                   onClick={() => setType("Squad")}
-                  className={`flex flex-col justify-between rounded-xl border p-6 text-left transition-all ${type === "Squad"
-                    ? "border-[#c89f6d]/50 bg-[#1c140d]/80 shadow-card"
-                    : "border-sand-border/15 bg-[#140e0a]/40 hover:border-sand-border/30 hover:bg-[#18110b]/50"
-                    }`}
+                  className="flex w-full flex-col justify-between rounded-xl border border-[#c89f6d]/50 bg-[#1c140d]/80 p-6 text-left shadow-card transition-all"
                 >
                   <div>
                     <div className="flex items-center justify-between">
                       <div className="grid h-10 w-10 place-items-center rounded-xl border border-sand-border/25 bg-[#1c140d] text-[#c89f6d] shadow-sm">
                         <Users size={18} />
                       </div>
-                      {type === "Squad" && (
-                        <span className="font-mono text-xs text-[#c89f6d]">Selected</span>
-                      )}
+                      <span className="font-mono text-xs text-[#c89f6d]">Selected</span>
                     </div>
-                    <h3 className="mt-4 font-serif text-2xl font-normal text-[#f0eae1]">Squad Entry</h3>
-                    <p className="mt-1 font-mono text-xs text-[#c89f6d] font-semibold">{event.squadFee} flat team fee</p>
+                    <h3 className="mt-4 font-serif text-2xl font-normal text-[#f0eae1]">Squad Entry (1–4 Members)</h3>
+                    <p className="mt-1 font-mono text-xs text-[#c89f6d] font-semibold">{event.squadFee} flat entry fee</p>
                     <p className="mt-3 text-xs leading-relaxed text-[#9e8e7c]">
-                      2 to 4 collaborators. One unified project repository. Every team member receives an individual ranking credential.
+                      Participate individually (1 member) or as a team of up to 4 collaborators for the same flat ₹200 fee. One unified project repository, and every team member receives an individual ranking credential.
                     </p>
                   </div>
                 </button>
@@ -591,7 +615,7 @@ export default function RegisterPage() {
             <div>
               <div className="border-b border-sand-border/15 pb-4">
                 <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
-                  {type === "Solo" ? "Builder Information" : "Team Leader Information"}
+                  Team Leader Information
                 </h2>
                 <p className="text-xs text-[#9e8e7c] mt-1">
                   Primary contact for repo collaboration invites and official updates.
@@ -674,124 +698,89 @@ export default function RegisterPage() {
             <div>
               <div className="border-b border-sand-border/15 pb-4">
                 <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
-                  {type === "Solo" ? "Solo Team Configuration" : "Squad Configuration"}
+                  Squad Configuration
                 </h2>
                 <p className="text-xs text-[#9e8e7c] mt-1">
-                  {type === "Solo"
-                    ? "Define your official team handle and verify builder details."
-                    : "Define squad name and verified credentials for all team collaborators (2–4 members)."}
+                  Define your squad name and add optional collaborators (1–4 members total). Leave member slots blank if participating alone.
                 </p>
               </div>
 
-              {type === "Solo" ? (
-                <div className="mt-6 space-y-6">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="soloTeamName">
-                        Team Name *
-                      </label>
-                      <input
-                        id="soloTeamName"
-                        className="input mt-1.5"
-                        placeholder="e.g. Solo - Aarav or Binary Forge"
-                        value={formData.teamName}
-                        onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
-                      />
-                      <p className="mt-1 font-mono text-[10px] text-[#8e7a68]">
-                        Mandatory official name for leaderboard, evaluations, and certifications.
-                      </p>
-                    </div>
+              <div className="mt-6 space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamName">
+                      Team Name *
+                    </label>
+                    <input
+                      id="teamName"
+                      className="input mt-1.5"
+                      placeholder="e.g. Team Null"
+                      value={formData.teamName}
+                      onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
+                    />
+                  </div>
 
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamLeader">
+                      Team Leader Name
+                    </label>
+                    <input
+                      id="teamLeader"
+                      className="input mt-1.5"
+                      placeholder="Lead coordinator"
+                      value={formData.fullName || formData.teamLeader}
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                {/* Member 2 Section (Optional) */}
+                <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
+                  <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
+                    <span>Member 2 (Optional)</span>
+                    <span className="font-mono text-[10px] text-[#8e7a68]">Optional</span>
+                  </h3>
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="soloBuilderName">
-                        Builder Name
-                      </label>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name</label>
                       <input
-                        id="soloBuilderName"
-                        className="input mt-1.5 bg-[#140e0a]/40 text-[#9e8e7c]"
-                        value={formData.fullName || "Solo Builder"}
-                        readOnly
+                        className="input mt-1.5"
+                        placeholder="e.g. Rohan Verma"
+                        value={formData.member2Name}
+                        onChange={(e) => setFormData({ ...formData, member2Name: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address</label>
+                      <input
+                        type="email"
+                        className="input mt-1.5"
+                        placeholder="e.g. rohan@example.com"
+                        value={formData.member2Email}
+                        onChange={(e) => setFormData({ ...formData, member2Email: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number</label>
+                      <input
+                        type="tel"
+                        className="input mt-1.5"
+                        placeholder="e.g. +91 91234 56789"
+                        value={formData.member2Phone}
+                        onChange={(e) => setFormData({ ...formData, member2Phone: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle</label>
+                      <input
+                        className="input mt-1.5 font-mono"
+                        placeholder="e.g. rohan-dev"
+                        value={formData.member2Github}
+                        onChange={(e) => setFormData({ ...formData, member2Github: e.target.value })}
                       />
                     </div>
                   </div>
                 </div>
-              ) : (
-                <div className="mt-6 space-y-6">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <div>
-                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamName">
-                        Team Name *
-                      </label>
-                      <input
-                        id="teamName"
-                        className="input mt-1.5"
-                        placeholder="e.g. Team Null"
-                        value={formData.teamName}
-                        onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]" htmlFor="teamLeader">
-                        Team Leader Name
-                      </label>
-                      <input
-                        id="teamLeader"
-                        className="input mt-1.5"
-                        placeholder="Lead coordinator"
-                        value={formData.fullName || formData.teamLeader}
-                        readOnly
-                      />
-                    </div>
-                  </div>
-
-                  {/* Member 2 Section (Required for Squad) */}
-                  <div className="rounded-xl border border-sand-border/20 bg-[#160f0a]/60 p-5">
-                    <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
-                      <span>Member 2 (Required)</span>
-                      <span className="font-mono text-[10px] text-[#c89f6d]">Squad Member</span>
-                    </h3>
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name *</label>
-                        <input
-                          className="input mt-1.5"
-                          placeholder="e.g. Rohan Verma"
-                          value={formData.member2Name}
-                          onChange={(e) => setFormData({ ...formData, member2Name: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address *</label>
-                        <input
-                          type="email"
-                          className="input mt-1.5"
-                          placeholder="e.g. rohan@example.com"
-                          value={formData.member2Email}
-                          onChange={(e) => setFormData({ ...formData, member2Email: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number *</label>
-                        <input
-                          type="tel"
-                          className="input mt-1.5"
-                          placeholder="e.g. +91 91234 56789"
-                          value={formData.member2Phone}
-                          onChange={(e) => setFormData({ ...formData, member2Phone: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle *</label>
-                        <input
-                          className="input mt-1.5 font-mono"
-                          placeholder="e.g. rohan-dev"
-                          value={formData.member2Github}
-                          onChange={(e) => setFormData({ ...formData, member2Github: e.target.value })}
-                        />
-                      </div>
-                    </div>
-                  </div>
 
                   {/* Member 3 Section (Optional) */}
                   <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
@@ -841,55 +830,54 @@ export default function RegisterPage() {
                     </div>
                   </div>
 
-                  {/* Member 4 Section (Optional) */}
-                  <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
-                    <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
-                      <span>Member 4 (Optional)</span>
-                      <span className="font-mono text-[10px] text-[#8e7a68]">Optional</span>
-                    </h3>
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name</label>
-                        <input
-                          className="input mt-1.5"
-                          placeholder="Full Name"
-                          value={formData.member4Name}
-                          onChange={(e) => setFormData({ ...formData, member4Name: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address</label>
-                        <input
-                          type="email"
-                          className="input mt-1.5"
-                          placeholder="Email"
-                          value={formData.member4Email}
-                          onChange={(e) => setFormData({ ...formData, member4Email: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number</label>
-                        <input
-                          type="tel"
-                          className="input mt-1.5"
-                          placeholder="Phone"
-                          value={formData.member4Phone}
-                          onChange={(e) => setFormData({ ...formData, member4Phone: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle</label>
-                        <input
-                          className="input mt-1.5 font-mono"
-                          placeholder="GitHub handle"
-                          value={formData.member4Github}
-                          onChange={(e) => setFormData({ ...formData, member4Github: e.target.value })}
-                        />
-                      </div>
-                    </div>
+              {/* Member 4 Section (Optional) */}
+              <div className="rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-5">
+                <h3 className="font-serif text-base font-normal text-[#f0eae1] flex items-center justify-between">
+                  <span>Member 4 (Optional)</span>
+                  <span className="font-mono text-[10px] text-[#8e7a68]">Optional</span>
+                </h3>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Full Name</label>
+                    <input
+                      className="input mt-1.5"
+                      placeholder="Full Name"
+                      value={formData.member4Name}
+                      onChange={(e) => setFormData({ ...formData, member4Name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Email Address</label>
+                    <input
+                      type="email"
+                      className="input mt-1.5"
+                      placeholder="Email"
+                      value={formData.member4Email}
+                      onChange={(e) => setFormData({ ...formData, member4Email: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">Phone Number</label>
+                    <input
+                      type="tel"
+                      className="input mt-1.5"
+                      placeholder="Phone"
+                      value={formData.member4Phone}
+                      onChange={(e) => setFormData({ ...formData, member4Phone: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="font-mono text-xs uppercase tracking-wider text-[#8e7a68]">GitHub Handle</label>
+                    <input
+                      className="input mt-1.5 font-mono"
+                      placeholder="GitHub handle"
+                      value={formData.member4Github}
+                      onChange={(e) => setFormData({ ...formData, member4Github: e.target.value })}
+                    />
                   </div>
                 </div>
-              )}
+              </div>
+              </div>
             </div>
           )}
 
@@ -1026,14 +1014,12 @@ export default function RegisterPage() {
               <div className="mt-6 divide-y divide-sand-border/15 rounded-xl border border-sand-border/15 bg-[#140e0a]/40 p-6 font-mono text-xs">
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#8e7a68]">Entry Format:</span>
-                  <span className="font-semibold text-[#f0eae1]">{type}</span>
+                  <span className="font-semibold text-[#f0eae1]">Squad (1–4 Members)</span>
                 </div>
-                {type === "Squad" && (
-                  <div className="flex justify-between py-2.5">
-                    <span className="text-[#8e7a68]">Team Name:</span>
-                    <span className="font-semibold text-[#f0eae1]">{formData.teamName || "—"}</span>
-                  </div>
-                )}
+                <div className="flex justify-between py-2.5">
+                  <span className="text-[#8e7a68]">Team Name:</span>
+                  <span className="font-semibold text-[#f0eae1]">{formData.teamName || "—"}</span>
+                </div>
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#8e7a68]">Lead Participant:</span>
                   <span className="text-[#f0eae1]">
@@ -1047,7 +1033,7 @@ export default function RegisterPage() {
                 <div className="flex justify-between py-2.5">
                   <span className="text-[#8e7a68]">Registration Fee:</span>
                   <span className="font-semibold text-[#c89f6d]">
-                    {type === "Solo" ? event.soloFee : event.squadFee}
+                    {event.squadFee}
                   </span>
                 </div>
                 <div className="flex justify-between py-2.5">
@@ -1063,7 +1049,7 @@ export default function RegisterPage() {
                 <div className="flex items-center gap-2 border-b border-sand-border/20 pb-3">
                   <QrCode size={18} className="text-[#c89f6d]" />
                   <h3 className="font-serif text-lg font-normal text-[#f0eae1]">
-                    Manual UPI Payment ({type === "Solo" ? event.soloFee : event.squadFee})
+                    Manual UPI Payment ({event.squadFee})
                   </h3>
                 </div>
 
@@ -1071,9 +1057,8 @@ export default function RegisterPage() {
                   {/* QR Image Container */}
                   <div className="flex flex-col items-center justify-center p-4 bg-[#1f150f] rounded-xl border border-sand-border/20 text-center">
                     <img
-                      key={type}
-                      src={type === "Solo" ? "/images/payment-qr-99.png" : "/images/payment-qr-200.png"}
-                      alt={type === "Solo" ? "Official Payment QR (₹99)" : "Official Payment QR (₹200)"}
+                      src="/images/payment-qr-200.png"
+                      alt="Official Payment QR (₹200)"
                       className="h-44 w-44 object-contain rounded-lg bg-white p-2"
                       onError={(e) => {
                         // If image not yet uploaded by organizer, show official instructions card
@@ -1098,7 +1083,7 @@ export default function RegisterPage() {
                   <div className="space-y-4">
                     <p className="text-xs text-[#9e8e7c] leading-relaxed">
                       1. Scan the official QR code via GPay, PhonePe, Paytm, or any UPI app.<br />
-                      2. Transfer the exact amount of <strong className="text-[#f0eae1]">{type === "Solo" ? "₹99" : "₹200"}</strong> (incorrect amounts will not be verified).<br />
+                      2. Transfer the exact amount of <strong className="text-[#f0eae1]">₹200</strong> (incorrect amounts will not be verified).<br />
                       3. Mandatory: Mention your team name in the UPI payment note before paying.<br />
                       4. Submit the 12-digit UPI UTR / Transaction Reference Number below to confirm your slot.
 

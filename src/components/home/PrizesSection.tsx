@@ -5,7 +5,6 @@ import {
   Trophy,
   Medal,
   Award,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
@@ -149,13 +148,12 @@ export default function PrizesSection() {
         <div className="mt-14 sm:mt-16">
           {/* Category Excellence Header */}
           <div className="mb-5 sm:mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-white/[0.06]">
-            <div className="flex items-center gap-2">
-              <Sparkles size={15} className="text-[#ffd89b] shrink-0" />
+            <div>
               <h3 className="font-serif text-lg sm:text-2xl font-normal text-white">
                 Category Excellence Awards
               </h3>
             </div>
-            <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs text-[#a89d90] pl-6 sm:pl-0">
+            <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs text-[#a89d90]">
               <span className="text-[#ffd89b] font-medium">3 Specialized Tracks</span>
               <span className="text-white/20">·</span>
               <span>₹1,497 Total Pool</span>
@@ -208,11 +206,14 @@ export default function PrizesSection() {
           </div>
         </div>
 
-        {/* Prize Assurance Note: Clean Editorial Line without Pill/Box */}
-        <div className="mt-12 pt-6 border-t border-white/[0.06] flex items-center justify-center gap-2 text-center text-xs font-mono text-[#a89d90]">
-          <ShieldCheck size={14} className="text-[#ffd89b] shrink-0" />
-          <p>
-            <span className="text-[#ffd89b] font-medium">Guaranteed Settlement:</span> Direct UPI disbursement within 48 hours of final verified repository freeze.
+        {/* Prize Assurance Note: Compact & Responsive on Mobile */}
+        <div className="mt-8 sm:mt-12 pt-5 sm:pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 text-center text-[11px] sm:text-xs font-mono text-[#a89d90] px-2">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <ShieldCheck size={13} className="text-[#ffd89b]" />
+            <span className="text-[#ffd89b] font-medium">Guaranteed Settlement:</span>
+          </div>
+          <p className="leading-relaxed">
+            Direct UPI disbursement within 48h of final verified repo freeze.
           </p>
         </div>
       </div>

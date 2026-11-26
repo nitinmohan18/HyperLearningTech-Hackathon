@@ -3,7 +3,7 @@ import { ArrowRight, HelpCircle } from "lucide-react";
 
 export default function FAQPreview() {
   const questions = [
-    { label: "Solo vs Squad participation rules", href: "/faq" },
+    { label: "Squad participation format (1–4 members) & ₹200 flat fee", href: "/faq" },
     { label: "GitHub repository & official collaborator access", href: "/faq" },
     { label: "Certificates, ranking verification & prize distribution", href: "/faq" },
   ];

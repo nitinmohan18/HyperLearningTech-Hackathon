@@ -15,7 +15,7 @@ export const scheduleMilestones: ScheduleMilestone[] = [
     phase: "Preparation",
     title: "Registration Closes & Roster Locked",
     description:
-      "All solo and squad registrations close. Squad rosters and leader details are permanently locked for the competition.",
+      "All squad registrations (1–4 members) close. Squad rosters and leader details are permanently locked for the competition.",
     statusBadge: "Pre-Event",
   },
   {
@@ -108,7 +108,7 @@ export const scheduleMilestones: ScheduleMilestone[] = [
     phase: "Results",
     title: "Target Direct Prize Distribution",
     description:
-      "Organisers initiate immediate electronic prize transfers to verified solo winners and squad team leaders (subject to payment-system availability).",
+      "Organisers initiate immediate electronic prize transfers to verified squad team leaders / winning entry leads (subject to payment-system availability).",
     statusBadge: "Disbursement",
   },
 ];

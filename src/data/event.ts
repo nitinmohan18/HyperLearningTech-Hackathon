@@ -7,6 +7,7 @@ export const event = {
   organiser: "HyperLearningTech",
   website: "hyperlearningtech.in",
   portalUrl: "hackathon.hyperlearningtech.in",
+  registrationUrl: "https://unstop.com/p/hyperlearningtech-winter-hackathon-26-hyper-learning-tech-1829487",
   competitionStart: "2026-12-26T22:00:00+05:30",
   competitionEnd: "2026-12-27T22:00:00+05:30",
   results: "27 December 2026, 11:00 PM IST",
@@ -16,7 +17,7 @@ export const event = {
   duration: "24 Hours",
   prizePool: "₹14,992",
   positionsCount: "8 cash positions",
-  soloFee: "₹99",
+  soloFee: "₹200",
   squadFee: "₹200",
-  squadSize: "2–4 members",
+  squadSize: "1–4 members",
 };

@@ -231,7 +231,7 @@ export default function RegistrationsPage() {
           onChange={(e) => setFilterType(e.target.value)}
         >
           <option value="ALL">All Entry Formats</option>
-          <option value="SOLO">Solo (₹99)</option>
+          <option value="SOLO">Solo (Legacy)</option>
           <option value="SQUAD">Squad (₹200)</option>
         </select>
       </div>

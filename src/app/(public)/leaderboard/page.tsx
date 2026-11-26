@@ -76,7 +76,7 @@ export default function LeaderboardPage() {
 
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs text-[#8e7a68] mr-1">Filter:</span>
-                {["All", "Solo", "Squad"].map((v) => (
+                {["All", "Squad"].map((v) => (
                   <button
                     key={v}
                     type="button"

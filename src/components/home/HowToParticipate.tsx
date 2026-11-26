@@ -6,7 +6,7 @@ export default function HowToParticipate() {
       step: "01",
       title: "Register",
       icon: UserCheck,
-      copy: "Choose solo or squad (2–4 members) and submit your project proposal and declarations.",
+      copy: "Register in the Squad format (1–4 members, ₹200 flat) and submit your project proposal and declarations.",
     },
     {
       step: "02",
