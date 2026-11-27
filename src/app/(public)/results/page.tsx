@@ -31,7 +31,7 @@ export default function ResultsPage() {
             </p>
           </div>
           <span className="font-mono text-xs text-[#8e7a68]">
-            Declaration: 27 Dec 2026, 11:00 PM IST
+            Declaration: Up to 3 hours after hackathon ends
           </span>
         </div>
 
@@ -40,11 +40,10 @@ export default function ResultsPage() {
           {overallPrizes.slice(0, 3).map((p, i) => (
             <div
               key={p.place}
-              className={`flex flex-col justify-between rounded-2xl border bg-[#120d09]/35 p-7 backdrop-blur-xl transition-all duration-300 ${
-                i === 0
-                  ? "border-[#c89f6d]/40 shadow-card"
-                  : "border-sand-border/15 hover:border-sand-border/30"
-              }`}
+              className={`flex flex-col justify-between rounded-2xl border bg-[#120d09]/35 p-7 backdrop-blur-xl transition-all duration-300 ${i === 0
+                ? "border-[#c89f6d]/40 shadow-card"
+                : "border-sand-border/15 hover:border-sand-border/30"
+                }`}
             >
               <div>
                 <div className="flex items-center justify-between">

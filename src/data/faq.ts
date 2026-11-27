@@ -81,7 +81,7 @@ export const faqs: FAQItem[] = [
     category: "Prizes",
     question: "When will results be announced and prizes distributed?",
     answer:
-      "Official results will be announced at 11:00 PM IST on 27 December 2026. Organisers target immediate digital prize distribution by 11:05 PM IST to verified squad team leaders and winning entry leads (who distribute to their members).",
+      "Official results will be announced up to 3 hours after the hackathon ends  . Organisers target digital prize distribution within 30 minutes of result declaration to verified squad team leaders and winning entry leads (who distribute to their members).",
   },
   {
     category: "Prizes",

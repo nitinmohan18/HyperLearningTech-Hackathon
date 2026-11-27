@@ -97,8 +97,8 @@ public/         Static assets
 - Solo registration: ₹99
 - Squad registration: ₹200 flat for 2–4 members
 - Total guaranteed cash prize pool: ₹14,992 (Maximum planned competition reward budget: ₹15,000)
-- Results: 27 December 2026, 12:00 AM IST
-- Prize distribution target: By 12:30 PM IST
+- Results: Announced up to 3 hours after hackathon ends  
+- Prize distribution target: Within 30 minutes of result declaration
 
 ## Building for production
 
