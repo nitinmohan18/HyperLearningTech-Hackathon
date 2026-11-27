@@ -128,8 +128,8 @@ export const GlowBorderCard = React.forwardRef<HTMLDivElement, GlowBorderCardPro
                 className={cn(
                     // Base Container Layout
                     "relative overflow-hidden flex flex-col isolate",
-                    // Glass Effect Background
-                    "bg-[#140e0a]/85 backdrop-blur-md",
+                    // Solid dark base (inner card provides full surface)
+                    "bg-[#140e0a]",
                     // Custom className support
                     className
                 )}

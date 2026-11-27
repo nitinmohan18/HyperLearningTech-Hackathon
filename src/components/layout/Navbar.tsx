@@ -22,40 +22,33 @@ const HANDBOOK_BOOK_IDS = new Set(["schedule", "how-it-works", "judging", "rules
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>("");
-  const [isDesktopActions, setIsDesktopActions] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === "/";
 
-  // Avoid mounting heavy WebGL LiquidMetalShader & MorphText SVG filters on mobile (< 640px)
-  useEffect(() => {
-    const mq = window.matchMedia("(min-width: 640px)");
-    const sync = () => setIsDesktopActions(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  // Track active section on scroll for the home page
+  // Track active section via IntersectionObserver (zero scroll-frame layout thrashing)
   useEffect(() => {
     if (!isHome) return;
 
     const scrollAnchors = ["overview", "prizes", "handbook", "registration", "faq", "contact"];
-    const handleScroll = () => {
-      const scrollPos = window.scrollY + 140;
-      for (let i = scrollAnchors.length - 1; i >= 0; i--) {
-        const id = scrollAnchors[i];
-        const el = document.getElementById(id);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(id);
-          return;
-        }
-      }
-      setActiveSection("");
-    };
+    const elements = scrollAnchors
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: "-35% 0px -55% 0px", threshold: 0 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
   }, [isHome]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -141,26 +134,24 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* Action CTAs (Desktop — only mount WebGL shader on >=640px) */}
-          {isDesktopActions && (
-            <div className="hidden sm:flex items-center gap-3.5">
-              <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
-                <LiquidMetalButton
-                  borderWidth={2}
-                  metalConfig={{
-                    colorBack: "#c99a5e",
-                    colorTint: "#ffffff",
-                    speed: 0.6,
-                    distortion: 0.2,
-                    repetition: 4,
-                  }}
-                >
-                  <span>Register Now</span>
-                  <ArrowRight size={13} />
-                </LiquidMetalButton>
-              </a>
-            </div>
-          )}
+          {/* Action CTAs (Desktop) */}
+          <div className="hidden sm:flex items-center gap-3.5">
+            <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
+              <LiquidMetalButton
+                borderWidth={2}
+                metalConfig={{
+                  colorBack: "#c99a5e",
+                  colorTint: "#ffffff",
+                  speed: 0.6,
+                  distortion: 0.2,
+                  repetition: 4,
+                }}
+              >
+                <span>Register Now</span>
+                <ArrowRight size={13} />
+              </LiquidMetalButton>
+            </a>
+          </div>
 
           {/* Mobile Menu Actions (Visible below lg) */}
           <div className="flex items-center gap-2 lg:hidden">

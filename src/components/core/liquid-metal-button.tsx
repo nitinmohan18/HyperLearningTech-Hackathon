@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, forwardRef } from "react";
+import React, { memo, forwardRef, useEffect, useState } from "react";
 import { LiquidMetal as LiquidMetalShader } from "@paper-design/shaders-react";
 import { cn } from "@/lib/utils";
 
@@ -37,26 +37,48 @@ export const LiquidMetal = memo(function LiquidMetal({
   className,
   style,
 }: LiquidMetalProps) {
+  const [shaderReady, setShaderReady] = useState(false);
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => {
+      setShaderReady(true);
+    });
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <div
-      className={cn("absolute inset-0 z-0 overflow-hidden pointer-events-none", className)}
-      style={style}
+      className={cn(
+        "absolute inset-0 z-0 overflow-hidden pointer-events-none",
+        className
+      )}
+      style={{
+        background: `linear-gradient(135deg, ${colorTint} 0%, ${colorBack} 32%, #4a3721 55%, ${colorTint} 82%, ${colorBack} 100%)`,
+        ...style,
+      }}
     >
-      <LiquidMetalShader
-        colorBack={colorBack}
-        colorTint={colorTint}
-        speed={speed}
-        repetition={repetition}
-        distortion={distortion}
-        softness={0}
-        shiftRed={0.3}
-        shiftBlue={-0.3}
-        angle={45}
-        shape="none"
-        scale={scale}
-        fit="cover"
-        style={{ width: "100%", height: "100%" }}
-      />
+      <div
+        className={cn(
+          "h-full w-full transition-opacity duration-300",
+          shaderReady ? "opacity-100" : "opacity-0"
+        )}
+      >
+        <LiquidMetalShader
+          colorBack={colorBack}
+          colorTint={colorTint}
+          speed={speed}
+          repetition={repetition}
+          distortion={distortion}
+          softness={0}
+          shiftRed={0.3}
+          shiftBlue={-0.3}
+          angle={45}
+          shape="none"
+          scale={scale}
+          fit="cover"
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
     </div>
   );
 });

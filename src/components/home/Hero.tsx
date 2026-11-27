@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Clock3, Zap, CheckCircle2, Trophy, Globe } from "lucide-react";
+import { ArrowRight, ArrowUpRight, CalendarDays, Clock3, Zap, CheckCircle2, Trophy, Globe } from "lucide-react";
 import { event } from "@/data/event";
 import Clock from "./Clock";
 import { TextRoll } from "@/components/core/text-roll";
 import { CreepyButton } from "@/components/core/creepy-button";
 import LuxuryBackground from "@/components/common/LuxuryBackground";
+import { UnstopLogo } from "@/components/common/UnstopLogo";
 
 export default function Hero() {
   return (
@@ -84,6 +85,30 @@ export default function Hero() {
               >
                 <span>Explore Event</span>
               </CreepyButton>
+            </a>
+          </div>
+
+          {/* Collaboration / Official Platform Partner */}
+          <div className="mt-7 sm:mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/[0.1] pt-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#b8ada0]">
+              Powered By
+            </span>
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Unstop — Official Platform Partner"
+              className="group inline-flex items-center gap-2.5 transition-opacity hover:opacity-95"
+            >
+              <UnstopLogo className="h-7 w-auto transition-transform duration-300 group-hover:scale-[1.02]" />
+              <span className="text-white/25" aria-hidden="true">·</span>
+              <span className="font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-[#ffd89b] underline decoration-[#e0b885]/35 underline-offset-4 transition-colors group-hover:text-white group-hover:decoration-[#ffd89b]">
+                Official Partner
+              </span>
+              <ArrowUpRight
+                size={13}
+                className="text-[#e0b885] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
             </a>
           </div>
         </div>

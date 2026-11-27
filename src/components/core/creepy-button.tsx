@@ -37,6 +37,7 @@ export const CreepyButton = ({
   const [isHovered, setIsHovered] = useState(false);
 
   const updateEyes = (e: React.MouseEvent | React.TouchEvent) => {
+    if (typeof window !== "undefined" && !window.matchMedia("(hover: hover)").matches) return;
     const userEvent =
       "touches" in e ? (e as React.TouchEvent).touches[0] : (e as React.MouseEvent);
 

@@ -20,7 +20,7 @@ export interface TeamRevealMember {
   id: string;
   name: string;
   role: string;
-  expertise: string;
+  expertise: string | readonly string[];
   /** Any browser-readable image URL. When omitted, an initial-based portrait is rendered. */
   image?: string;
   imageAlt?: string;
@@ -56,9 +56,13 @@ const DEFAULT_MEMBERS: readonly TeamRevealMember[] = [
   {
     id: "shiv",
     name: "Shiv Raj Singh",
-    role: "Full-Stack Engineer",
-    expertise:
-      "Creator of Hyper Learning. Built the entire platform from scratch, designed the architecture, AI systems, and leads product development.",
+    role: "Product & Tech Lead · Full Stack Developer",
+    expertise: [
+      "Leads product vision & platform strategy",
+      "Defines features & technology roadmap",
+      "Architects AI systems & core engineering",
+      "Oversees platform build & execution",
+    ],
     image: "/team/shiv.webp",
     imagePosition: "center 18%",
     accent: "#e0b885",
@@ -66,9 +70,13 @@ const DEFAULT_MEMBERS: readonly TeamRevealMember[] = [
   {
     id: "nitin",
     name: "Nitin Mohan",
-    role: "UI/UX Designer & Full Stack Developer",
-    expertise:
-      "Designs intuitive user interfaces and improves the overall user experience of Hyper Learning.",
+    role: "Design & UI/UX Lead · Full Stack Developer",
+    expertise: [
+      "Leads creative & visual direction",
+      "Owns brand identity, colors & typography",
+      "Oversees UI/UX & user experience",
+      "Ensures consistent, engaging product design",
+    ],
     image: "/team/nitin.webp",
     imagePosition: "center 24%",
     accent: "#ff6b2b",
@@ -76,9 +84,13 @@ const DEFAULT_MEMBERS: readonly TeamRevealMember[] = [
   {
     id: "ramoo",
     name: "Ramoo Kachhee",
-    role: "Content Contributor & Full Stack Developer",
-    expertise:
-      "Actively contributes to Hyper Learning by curating and uploading essential study materials, including PYQs, syllabuses, and question papers.",
+    role: "Operations Lead · Full Stack Developer",
+    expertise: [
+      "Leads operations, coordination & growth",
+      "Drives community & partnerships",
+      "Contributes to platform development",
+      "Manages academic & learning resources",
+    ],
     image: "/team/ramoo.webp",
     imagePosition: "center 16%",
     accent: "#ffd89b",
@@ -327,6 +339,7 @@ export function TeamRevealGrid({
     defaultActiveMemberId === undefined ? firstMemberId : defaultActiveMemberId,
   );
   const [interacting, setInteracting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [previewSocialKey, setPreviewSocialKey] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastSocialPointerRef = useRef<string>("mouse");
@@ -361,7 +374,18 @@ export function TeamRevealGrid({
   );
 
   useEffect(() => {
-    if (!autoPlay || interacting || members.length < 2) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsVisible(entry.isIntersecting),
+      { threshold: 0.1 },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!autoPlay || interacting || !isVisible || members.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const timer = window.setInterval(() => {
@@ -371,7 +395,7 @@ export function TeamRevealGrid({
     }, Math.max(rotationInterval, 1200));
 
     return () => window.clearInterval(timer);
-  }, [autoPlay, interacting, members, resolvedActiveId, rotationInterval, selectMember]);
+  }, [autoPlay, interacting, isVisible, members, resolvedActiveId, rotationInterval, selectMember]);
 
   return (
     <div
@@ -514,18 +538,37 @@ export function TeamRevealGrid({
                     className={cn(
                       "overflow-hidden transition-[max-height,opacity,margin] duration-[450ms] ease-out motion-reduce:transition-none",
                       isActive
-                        ? "mt-1.5 sm:mt-2.5 max-h-[160px] opacity-100"
+                        ? "mt-1.5 sm:mt-2.5 max-h-[180px] opacity-100"
                         : "mt-0 max-h-0 opacity-0",
                     )}
                   >
-                    <p
-                      className={cn(
-                        "font-sans text-[11.5px] leading-[1.45] sm:leading-[1.48] text-[#cfc6ba]",
-                        isActive && "sm:min-h-[104px] lg:min-h-[88px]",
-                      )}
-                    >
-                      {member.expertise}
-                    </p>
+                    {Array.isArray(member.expertise) ? (
+                      <ul
+                        className={cn(
+                          "space-y-1 font-sans text-[11px] leading-[1.35] text-[#cfc6ba]",
+                          isActive && "sm:min-h-[104px] lg:min-h-[88px]",
+                        )}
+                      >
+                        {member.expertise.map((point) => (
+                          <li key={point} className="flex items-start gap-1.5">
+                            <span
+                              aria-hidden="true"
+                              className="mt-[5px] h-1 w-1 shrink-0 rounded-full bg-[var(--team-accent)] opacity-80"
+                            />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p
+                        className={cn(
+                          "font-sans text-[11.5px] leading-[1.45] sm:leading-[1.48] text-[#cfc6ba]",
+                          isActive && "sm:min-h-[104px] lg:min-h-[88px]",
+                        )}
+                      >
+                        {member.expertise}
+                      </p>
+                    )}
                   </div>
                 </div>
               </button>
