@@ -31,7 +31,7 @@ export default function ResultsPage() {
             </p>
           </div>
           <span className="font-mono text-xs text-[#8e7a68]">
-            Declaration: Up to 3 hours after hackathon ends
+            Declaration: Following completion of final judging
           </span>
         </div>
 

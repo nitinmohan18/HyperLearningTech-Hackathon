@@ -40,7 +40,7 @@ export default function Hero() {
 
           {/* Description Paragraph with high-contrast text and crisp legibility */}
           <p className="mt-4 sm:mt-6 max-w-xl text-sm leading-relaxed text-[#f7f2ea] sm:text-base lg:text-lg font-normal drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]">
-            A live 24-hour online engineering challenge to build a working, useful software project with provable repository history, transparent progress, and direct cash awards.
+            A 24-hour open innovation competition designed for practical learning, meaningful problem-solving, and responsible development. Compete with integrity and build solutions you genuinely understand.
           </p>
 
           {/* Event metadata line */}
@@ -151,7 +151,7 @@ export default function Hero() {
               </span>
               <span className="font-mono text-xs font-semibold text-[#e0b885]">
                 <TextRoll className="font-mono text-xs font-semibold text-[#e0b885]">
-                  27 Dec · 11:00 PM IST
+                  Following Final Judging
                 </TextRoll>
               </span>
             </div>

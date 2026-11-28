@@ -12,19 +12,19 @@ export default function HowToParticipate() {
       step: "02",
       title: "Prepare",
       icon: FolderGit2,
-      copy: "Set up your private GitHub repository and complete pre-event briefings on 25 December.",
+      copy: "Set up your dedicated GitHub repo (public or private) and invite official organiser access before 9 PM on 26 Dec.",
     },
     {
       step: "03",
       title: "Build",
       icon: Terminal,
-      copy: "24-hour sprint begins 26 Dec at 10 PM IST. Log hourly checkpoints and git commits.",
+      copy: "24-hour sprint begins 26 Dec at 10 PM IST. First commit must contain initial README documentation before coding.",
     },
     {
       step: "04",
       title: "Submit",
       icon: Rocket,
-      copy: "Deploy your project, submit repo access, feature breakdown, and demo before 10 PM IST.",
+      copy: "Freeze at 10 PM IST on 27 Dec. Finalise updated README and prepare for Top 25 live Google Meet judging.",
     },
   ];
 

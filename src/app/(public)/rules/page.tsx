@@ -8,21 +8,21 @@ import {
   GitBranch,
   Scale,
   FileCode2,
-  Lock,
   Send,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { rulesData } from "@/data/rules";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   eligibility: Users,
-  "ai-libraries": Terminal,
-  "existing-code": FileCode2,
-  plagiarism: ShieldAlert,
+  "mandatory-requirements": GitBranch,
+  "recommended-practices": FileCode2,
+  "ai-tools": Terminal,
+  originality: Sparkles,
+  "code-of-conduct": ShieldAlert,
   "ip-ownership": Scale,
-  "repo-requirements": GitBranch,
-  "security-privacy": Lock,
-  "submission-demo": Send,
+  "submission-evaluation": Send,
 };
 
 export default function RulesPage() {
@@ -42,7 +42,7 @@ export default function RulesPage() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#e2d8ca] sm:text-lg">
-            Winter Hackathon ’26 rules ensure fair play, verified 9:00 PM repository access, transparent AI disclosure, and 100% builder IP ownership across all 8 official pillars.
+            Winter Hackathon 2026 rules ensure open innovation freedom, verified GitHub repository access, documentation-first development, and 100% builder IP ownership across all 8 official pillars.
           </p>
         </div>
 
@@ -115,10 +115,10 @@ export default function RulesPage() {
               <ShieldAlert size={20} className="text-[#e0b885] shrink-0 mt-0.5" />
               <div>
                 <h3 className="font-serif text-xl font-normal text-[#faf5ee]">
-                  Strict Repository Inspection (9:00 PM IST Deadline)
+                  Repository Access & Organiser Verification (Before 9:00 PM IST, 26 Dec)
                 </h3>
                 <p className="mt-1 text-sm text-[#cfc5b7]">
-                  Collaborator access must be accepted before 9:00 PM IST on 26 December. Organisers verify commit timestamps, cadence, and checkpoint logs.
+                  Collaborator access for the official HyperLearningTech account must be active and verified before 9:00 PM IST on 26 December. First commit must include initial README documentation before project implementation begins.
                 </p>
               </div>
             </div>

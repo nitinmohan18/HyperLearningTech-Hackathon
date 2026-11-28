@@ -152,7 +152,7 @@ export const handbookBooks: BookCfg[] = [
     year: '25–27 Dec 2026',
     stars: 5,
     badgeLabel: '3 Chronological Phases',
-    desc: 'Every milestone operates strictly in Indian Standard Time (IST). From 25 December preparation & roster lock, through the 24-hour continuous build sprint (26 Dec 10 PM – 27 Dec 10 PM), to the 8 PM public reveal and 11 PM results.',
+    desc: 'Every milestone operates strictly in Indian Standard Time (IST). From 25 December preparation & roster lock, through the 24-hour continuous build sprint (26 Dec 10 PM – 27 Dec 10 PM), to the 10 PM code freeze, three-stage evaluation, and results post-judging.',
     edge: '#efe5d2',
     backBg: '#19110b',
     spineBg: '#23170f',
@@ -160,14 +160,14 @@ export const handbookBooks: BookCfg[] = [
     spineFont: '700 38px Georgia',
     chapters: [
       '25 Dec · Registration & Lock',
-      '25 Dec · Prep & Private Repo',
-      '26 Dec 9:00 PM · Repo Check',
+      '25 Dec · Prep & Repo Setup',
+      '26 Dec 9:00 PM · Access Check',
       '26 Dec 9:30 PM · Final Briefing',
       '26 Dec 10:00 PM · Kickoff',
-      '24h · Hourly Checkpoints',
-      '27 Dec 8:00 PM · Public Reveal',
+      '24h · Development Journey',
       '27 Dec 10:00 PM · Code Freeze',
-      '27 Dec 11:00 PM · Results',
+      'Top 25 · Live Google Meet',
+      'Results & UPI Payout (2–4h)',
     ],
     front: (x, w, h) => {
       const bg = '#1c120b';
@@ -221,8 +221,8 @@ export const handbookBooks: BookCfg[] = [
       paintBookBack(x, w, h, '#18100a', '#e0b885', 'VOLUME I', 'Event Schedule', [
         'Phase 01 · 25 Dec Preparation Day',
         'Phase 02 · 26–27 Dec 24h Build Sprint',
-        'Phase 03 · Public Reveal & Code Freeze',
-        'Results Announced 27 Dec · 11:00 PM IST',
+        'Phase 03 · Code Freeze & Three-Stage Review',
+        'Results & UPI Transfers Post-Judging',
       ]),
   },
   {
@@ -244,7 +244,7 @@ export const handbookBooks: BookCfg[] = [
       '02 · Setup on 25 Dec',
       '03 · Kickoff 10 PM 26 Dec',
       '04 · Ship & Checkpoint',
-      '05 · Public Reveal 8 PM',
+      '05 · Documentation & Final README',
       '06 · Freeze 10 PM 27 Dec',
       'Sprint Boundary Policy',
     ],
@@ -309,31 +309,32 @@ export const handbookBooks: BookCfg[] = [
         '02 · Setup Private Repo & Tooling (25 Dec)',
         '03 · Kickoff Baseline Snapshot (26 Dec 10 PM)',
         '04 · Continuous Build & Hourly Checkpoints',
-        '05 · Public Reveal & Final Freeze (27 Dec)',
+        '05 · Final Submission Freeze & Evaluation',
       ]),
   },
   {
     id: 'judging',
     title: 'Judging & Scoring',
-    subtitle: 'Normalized 100-Point Rubric',
+    subtitle: 'Official 100-Point Rubric',
     author: '100-Point Rubric',
-    year: '7 Criteria',
+    year: '8 Criteria',
     stars: 5,
     badgeLabel: '100% Normalized',
-    desc: 'A transparent 100-point evaluation rubric rewarding both a working MVP (25 pts) and verifiable 24-hour development effort (25 pts), alongside technical craft (15 pts), team contribution (15 pts), live deployment (10 pts), docs (5 pts), and demo (5 pts).',
+    desc: 'The official 100-point evaluation rubric: Technical Implementation (20 pts), Problem Understanding (15 pts), Originality & Innovation (15 pts), Functionality & Usability (15 pts), Engineering & Documentation (10 pts), Impact & Feasibility (10 pts), Learning & Project Understanding (10 pts), and Communication (5 pts).',
     edge: '#ede3cf',
     backBg: '#121826',
     spineBg: '#192236',
     spineInk: '#e0b885',
     spineFont: '700 36px Georgia',
     chapters: [
-      'Working MVP · 25 pts',
-      'Verified Effort · 25 pts',
-      'Tech Implementation · 15 pts',
-      'Team Contribution · 15 pts',
-      'Live Deployment · 10 pts',
-      'Documentation · 5 pts',
-      'Final Demo · 5 pts',
+      'Tech Implementation · 20 pts',
+      'Problem Understanding · 15 pts',
+      'Originality & Innovation · 15 pts',
+      'Functionality & Usability · 15 pts',
+      'Engineering & Docs · 10 pts',
+      'Impact & Feasibility · 10 pts',
+      'Learning & Understanding · 10 pts',
+      'Communication · 5 pts',
     ],
     front: (x, w, h) => {
       const bg = '#141b2b';
@@ -343,32 +344,33 @@ export const handbookBooks: BookCfg[] = [
 
       // Precision Rubric Bars Graphic
       const bars = [
-        { label: 'MVP', pts: 25, pct: 1.0 },
-        { label: 'EFFORT', pts: 25, pct: 1.0 },
-        { label: 'TECH', pts: 15, pct: 0.65 },
-        { label: 'SQUAD', pts: 15, pct: 0.65 },
-        { label: 'DEPLOY', pts: 10, pct: 0.45 },
-        { label: 'DOCS', pts: 5, pct: 0.28 },
-        { label: 'DEMO', pts: 5, pct: 0.28 },
+        { label: 'TECH', pts: 20, pct: 1.0 },
+        { label: 'PROB', pts: 15, pct: 0.75 },
+        { label: 'ORIG', pts: 15, pct: 0.75 },
+        { label: 'FUNC', pts: 15, pct: 0.75 },
+        { label: 'ENGR', pts: 10, pct: 0.5 },
+        { label: 'IMPT', pts: 10, pct: 0.5 },
+        { label: 'LRNG', pts: 10, pct: 0.5 },
+        { label: 'COMM', pts: 5, pct: 0.25 },
       ];
       const bx = 210;
       const bw = w - 420;
-      let by = h * 0.27;
+      let by = h * 0.25;
       x.save();
       bars.forEach((b, idx) => {
         x.fillStyle = 'rgba(255,255,255,0.08)';
-        x.fillRect(bx, by, bw, 16);
-        x.fillStyle = idx < 2 ? accent : 'rgba(224, 184, 133, 0.72)';
-        x.fillRect(bx, by, bw * b.pct, 16);
+        x.fillRect(bx, by, bw, 14);
+        x.fillStyle = idx === 0 ? accent : 'rgba(224, 184, 133, 0.72)';
+        x.fillRect(bx, by, bw * b.pct, 14);
 
         x.fillStyle = '#d6cec2';
-        x.font = '500 18px "JetBrains Mono", monospace';
+        x.font = '500 17px "JetBrains Mono", monospace';
         x.textAlign = 'left';
-        x.fillText(b.label, bx, by - 8);
+        x.fillText(b.label, bx, by - 6);
         x.textAlign = 'right';
         x.fillStyle = accent;
-        x.fillText(`${b.pts} PTS`, bx + bw, by - 8);
-        by += 52;
+        x.fillText(`${b.pts} PTS`, bx + bw, by - 6);
+        by += 46;
       });
       x.restore();
 
@@ -380,14 +382,14 @@ export const handbookBooks: BookCfg[] = [
       x.font = 'italic 104px Georgia, serif';
       x.fillText('Scoring', w / 2, h * 0.755);
 
-      paintCoverFooter(x, w, h, '100-Point Normalized Rubric', 'Code Diffs · Live Product · Fair Ownership', accent);
+      paintCoverFooter(x, w, h, '100-Point Normalized Rubric', '8 Criteria · Tech Craft · Genuine Learning', accent);
     },
     back: (x, w, h) =>
       paintBookBack(x, w, h, '#121826', '#e0b885', 'VOLUME III', 'Judging & Scoring', [
-        'Working MVP (25) + Verified Effort (25)',
-        'Technical Craft (15) + Contribution (15)',
-        'Live Deployment (10) + Docs (5) + Demo (5)',
-        'Normalized 100-Point Evaluation Standard',
+        'Technical Implementation (20 pts)',
+        'Problem & Innovation (15 + 15 pts)',
+        'Functionality & Engineering (15 + 10 pts)',
+        'Impact (10), Learning (10), Comm (5)',
       ]),
   },
   {
@@ -398,21 +400,21 @@ export const handbookBooks: BookCfg[] = [
     year: '8 Policy Groups',
     stars: 5,
     badgeLabel: '100% IP Retained',
-    desc: 'Clear operational policies governing open innovation eligibility, mandatory AI & third-party library disclosures, preparation-day boundaries, zero-tolerance plagiarism rules, private GitHub inspection, secrets safety, and 100% builder IP ownership.',
+    desc: 'Clear operational policies governing open innovation eligibility, two mandatory technical requirements, recommended practices, tools & AI freedom, originality, code of conduct, and 100% builder IP ownership.',
     edge: '#efe5d2',
     backBg: '#131d17',
     spineBg: '#1a2820',
     spineInk: '#dfba88',
     spineFont: '700 36px Georgia',
     chapters: [
-      'Project Eligibility',
-      'AI & Library Disclosure',
-      'Existing Code Boundaries',
-      'Plagiarism & Conduct',
-      '100% IP Ownership',
-      'GitHub Repo Protocol',
-      'Security & Secrets',
-      'Submission Checklist',
+      'Open Innovation Scope',
+      'Mandatory Requirements (2)',
+      'Recommended Practices',
+      'Tools & AI Freedom',
+      'Originality & Integrity',
+      'Code of Conduct & Review',
+      '100% IP & Privacy',
+      'Three-Stage Evaluation',
     ],
     front: (x, w, h) => {
       const bg = '#15211a';
@@ -469,34 +471,33 @@ export const handbookBooks: BookCfg[] = [
     back: (x, w, h) =>
       paintBookBack(x, w, h, '#131d17', '#dfba88', 'VOLUME IV', 'Rules & Guidelines', [
         'Open Innovation · Squad Format (1–4 Devs)',
-        'AI Tools Allowed with Mandatory Disclosure',
-        'Private Repo + Inspector Collaborator Protocol',
+        'Two Mandatory Technical Requirements',
+        'Tools & AI Freedom with Honest Ownership',
         'Builders Retain 100% IP Ownership',
       ]),
   },
   {
     id: 'github-submission',
     title: 'GitHub & Submission',
-    subtitle: '7-Step Repository Inspection Protocol',
+    subtitle: '7-Step Repository Protocol',
     author: 'Repository Integrity',
     year: '7 Steps · Git',
     stars: 5,
-    badgeLabel: 'Private → Public',
-    desc: 'A transparent 7-step inspection process through private GitHub repositories: create 1 private repo, confirm inspector collaborator access before 9 PM, capture 10 PM baseline, commit steadily, reveal public at 8 PM, and freeze at 10 PM.',
+    badgeLabel: 'Dedicated Repo',
+    desc: 'A transparent submission and evaluation process: create 1 dedicated repo, confirm organiser access before 9 PM, commit initial README first, build 24 hours, update final README, freeze at 10 PM, and enter three-stage review.',
     edge: '#efe5d2',
     backBg: '#161920',
     spineBg: '#1e222b',
     spineInk: '#e0b885',
     spineFont: '700 34px Georgia',
     chapters: [
-      '01 · Private Repo',
-      '02 · Inspector Access',
-      '03 · Access Confirmed',
-      '04 · Baseline Snapshot',
-      '05 · Continuous Commits',
-      '06 · Public Reveal 8 PM',
-      '07 · Final Freeze 10 PM',
-      'Collaborator Requirement',
+      '01 · Dedicated GitHub Repo',
+      '02 · Organiser Access Verification',
+      '03 · Initial README First Commit',
+      '04 · 24h Continuous Build Window',
+      '05 · Final README Documentation',
+      '06 · Final Submission Freeze (10 PM)',
+      '07 · Three-Stage Evaluation',
     ],
     front: (x, w, h) => {
       const bg = '#171b24';
@@ -553,7 +554,7 @@ export const handbookBooks: BookCfg[] = [
       x.globalAlpha = 0.72;
       x.font = 'italic 30px Georgia, serif';
       x.textAlign = 'center';
-      x.fillText('7-Step Inspection Protocol', cx, botY + 75);
+      x.fillText('7-Step Submission Protocol', cx, botY + 75);
       x.restore();
 
       x.fillStyle = '#f5efe5';
@@ -564,14 +565,14 @@ export const handbookBooks: BookCfg[] = [
       x.font = 'italic 94px Georgia, serif';
       x.fillText('Submission', w / 2, h * 0.745);
 
-      paintCoverFooter(x, w, h, 'Private Repo · Inspector · Freeze', 'Transparent Git Audit · No 3rd-Party Apps', accent);
+      paintCoverFooter(x, w, h, 'Dedicated Repo · Organiser Access · Freeze', 'Two Mandatory Requirements · No 3rd-Party Apps', accent);
     },
     back: (x, w, h) =>
       paintBookBack(x, w, h, '#15181f', '#e0b885', 'VOLUME V', 'GitHub & Submission', [
-        '01–03 · Private Repo & Inspector Verified',
-        '04–05 · 10 PM Baseline & Steady Commits',
-        '06–07 · 8 PM Public Reveal & 10 PM Freeze',
-        'No Third-Party Tracking Apps Required',
+        '01–03 · Dedicated Repo & Initial README',
+        '04–05 · 24h Build & Final README Update',
+        '06–07 · 10 PM Freeze & Three-Stage Review',
+        'Top 25 Live Finals on Google Meet',
       ]),
   },
 ];

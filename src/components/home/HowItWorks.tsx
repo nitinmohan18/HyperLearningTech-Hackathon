@@ -14,28 +14,28 @@ export default function HowItWorks() {
       name: "PREPARE",
       icon: Compass,
       headline: "Setup on 25 Dec",
-      desc: "Plan architecture, configure tooling, create your private Git repository, and invite the inspector account.",
+      desc: "Plan architecture, configure tooling, create your dedicated Git repo (public or private), and ensure organiser access.",
     },
     {
       num: "03",
       name: "START",
       icon: Play,
       headline: "Kickoff at 10 PM, 26 Dec",
-      desc: "Baseline snapshot is taken at 10:00 PM IST and the 24-hour continuous build clock officially begins.",
+      desc: "24-hour sprint begins. First commit must contain initial README documentation before development starts.",
     },
     {
       num: "04",
       name: "BUILD",
       icon: GitCommit,
-      headline: "Ship & Checkpoint",
-      desc: "Commit code steadily and submit concise hourly checkpoints to log verifiable development progress.",
+      headline: "Ship & Integrate",
+      desc: "Follow the recommended development journey from core solution to feature integration and testing.",
     },
     {
       num: "05",
       name: "SUBMIT",
       icon: Send,
       headline: "Freeze at 10 PM, 27 Dec",
-      desc: "Reveal repository public at 8:00 PM. Final snapshot freezes at 10:00 PM IST with live deployment link.",
+      desc: "Final snapshot freezes at 10:00 PM IST with updated README and project evidence for three-stage evaluation.",
     },
   ];
 

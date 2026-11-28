@@ -30,7 +30,7 @@ export default function LeaderboardPage() {
               Competition Leaderboard
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-              Real-time rankings and verified checkpoint scores. Official results declared on 27 Dec, 11:00 PM IST.
+              Real-time rankings and verified evaluation scores. Official results declared following completion of final judging.
             </p>
           </div>
           <span className="font-mono text-xs text-[#8e7a68]">

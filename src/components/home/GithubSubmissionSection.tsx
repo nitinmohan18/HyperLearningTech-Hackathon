@@ -8,38 +8,38 @@ export default function GithubSubmissionSection() {
   const inspectionSteps = [
     {
       num: "01",
-      title: "Private Repo",
-      desc: "Leader creates 1 private GitHub repo for the squad before deadline.",
+      title: "Dedicated Repository",
+      desc: "Leader creates 1 dedicated GitHub repository (public or private) for the project.",
     },
     {
       num: "02",
-      title: "Inspector Access",
-      desc: "Add the official organiser inspection account as collaborator.",
+      title: "Organiser Access",
+      desc: "Invite official HyperLearningTech account as collaborator, verified before 9:00 PM IST on 26 Dec.",
     },
     {
       num: "03",
-      title: "Access Confirmed",
-      desc: "Must be accepted & verified before 9:00 PM IST on 26 Dec.",
+      title: "Initial README First",
+      desc: "First commit must include initial README documentation before implementation begins.",
     },
     {
       num: "04",
-      title: "Baseline Snapshot",
-      desc: "At 10:00 PM IST kickoff, initial baseline state is captured.",
+      title: "24-Hour Active Build",
+      desc: "Develop your solution between 10:00 PM 26 Dec and 10:00 PM 27 Dec with regular commits.",
     },
     {
       num: "05",
-      title: "Continuous Commits",
-      desc: "Push commits & diffs across the 24 hours with hourly checkpoints.",
+      title: "Updated Final README",
+      desc: "Document features, setup steps, external resources, and AI-assisted components before deadline.",
     },
     {
       num: "06",
-      title: "Public Reveal",
-      desc: "Switch repository to Public at 8:00 PM IST, 27 Dec for peer audit.",
+      title: "Final Freeze at 10 PM",
+      desc: "At 10:00 PM IST, final commit is frozen. No post-deadline commits are scored.",
     },
     {
       num: "07",
-      title: "Final Freeze",
-      desc: "At 10:00 PM IST, final snapshot freezes code for grading.",
+      title: "Three-Stage Evaluation",
+      desc: "Compliance check, 100-point rubric shortlisting, and Top 25 live Google Meet presentations.",
     },
   ];
 
@@ -53,14 +53,14 @@ export default function GithubSubmissionSection() {
             GitHub & <span className="font-serif italic text-[#e0b885]">Project Submission</span>
           </h2>
           <p className="section-copy mx-auto">
-            A transparent inspection process through private repositories. No third-party apps required.
+            A transparent evaluation process with only two mandatory technical requirements: verified organiser repository access and documentation-first README development.
           </p>
         </div>
 
-        {/* 7-Step Inspection Protocol - Clean modern minimal list */}
+        {/* 7-Step Inspection Protocol */}
         <div className="mt-14 border-t border-white/[0.08] pt-10">
           <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#e0b885] mb-8">
-            Inspection Protocol
+            Submission & Evaluation Protocol
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -89,10 +89,10 @@ export default function GithubSubmissionSection() {
             <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
             <div>
               <h4 className="font-serif text-base font-normal text-white">
-                Collaborator Invitation Requirement
+                Two Mandatory Technical Requirements
               </h4>
               <p className="mt-1 leading-relaxed text-[#d6cec2]">
-                Every team leader must invite the official HyperLearningTech GitHub inspection account and confirm that access is active before 9:00 PM IST on 26 December. Pending or unaccepted invites cannot be evaluated.
+                1) Provide verified collaborator access for the official HyperLearningTech GitHub account before 9:00 PM IST on 26 December. 2) Commit initial README documentation before project application development begins. Recommended practices (PRs, CI/CD, live deployment) are optional evidence of quality, not disqualification triggers.
               </p>
             </div>
           </div>

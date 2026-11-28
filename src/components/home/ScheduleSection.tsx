@@ -27,7 +27,7 @@ export default function ScheduleSection() {
           </div>
         </div>
 
-        {/* 3 Chronological Timeline Phases - Clean Borderless Layout */}
+        {/* 3 Chronological Timeline Phases */}
         <div className="mt-14 space-y-12">
           {/* PHASE 1: PREPARATION DAY (25 Dec) */}
           <div className="border-t border-white/[0.08] pt-8">
@@ -58,10 +58,10 @@ export default function ScheduleSection() {
               <div className="pt-4 md:pt-0 md:pl-8">
                 <span className="font-mono text-xs text-[#e0b885]">Throughout the Day</span>
                 <h4 className="mt-1 font-serif text-lg font-normal text-white">
-                  Tooling Setup & Private Repo Creation
+                  Tooling Setup & Dedicated Repo Creation
                 </h4>
                 <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
-                  Install dependencies, create your private Git repository, and invite the organiser inspection account.
+                  Install dependencies, create your dedicated Git repository (public or private), and ensure organiser access is ready.
                 </p>
               </div>
             </div>
@@ -88,10 +88,10 @@ export default function ScheduleSection() {
               <div className="pt-4 md:pt-0">
                 <span className="font-mono text-xs text-[#b8ada0]">26 Dec · Before 9:00 PM</span>
                 <h4 className="mt-1 font-serif text-base font-normal text-white">
-                  Collaborator Access Check
+                  Organiser Access Verification
                 </h4>
                 <p className="mt-1.5 text-xs text-[#d6cec2]">
-                  Verification that GitHub collaborator invitations are accepted and active.
+                  Verification that official HyperLearningTech collaborator access is active for evaluation.
                 </p>
               </div>
 
@@ -101,7 +101,7 @@ export default function ScheduleSection() {
                   Official Final Briefing
                 </h4>
                 <p className="mt-1.5 text-xs text-[#d6cec2]">
-                  Final operational briefing outlining checkpoint guidelines and evaluation criteria.
+                  Final operational briefing outlining documentation requirements and evaluation procedures.
                 </p>
               </div>
 
@@ -111,36 +111,22 @@ export default function ScheduleSection() {
                   Competition Kickoff
                 </h4>
                 <p className="mt-1.5 text-xs text-[#d6cec2]">
-                  Continuous timer begins. Initial snapshot recorded as the baseline for 24h work.
+                  24-hour sprint begins. First commit must include initial README before development starts.
                 </p>
               </div>
             </div>
 
-            {/* During the 24h & Reveal */}
-            <div className="mt-8 grid gap-8 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/[0.08] border-t border-white/[0.08] pt-6">
-              <div className="pt-4 md:pt-0">
-                <span className="font-mono text-xs text-[#e0b885]">
-                  26 Dec 10:00 PM – 27 Dec 10:00 PM
-                </span>
-                <h4 className="mt-1 font-serif text-lg font-normal text-white">
-                  Active Build & Hourly Progress Checkpoints
-                </h4>
-                <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
-                  Develop your MVP, commit steadily, and log concise hourly updates to verify genuine engineering effort.
-                </p>
-              </div>
-
-              <div className="pt-4 md:pt-0 md:pl-8">
-                <span className="font-mono text-xs text-[#e0b885]">
-                  27 Dec · 8:00 PM IST
-                </span>
-                <h4 className="mt-1 font-serif text-lg font-normal text-white">
-                  Public Repository Reveal
-                </h4>
-                <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
-                  Switch repository visibility to public for transparent inspection before final code freeze.
-                </p>
-              </div>
+            {/* Development Journey */}
+            <div className="mt-8 border-t border-white/[0.08] pt-6">
+              <span className="font-mono text-xs text-[#e0b885]">
+                26 Dec 10:00 PM – 27 Dec 10:00 PM IST
+              </span>
+              <h4 className="mt-1 font-serif text-lg font-normal text-white">
+                Recommended 24-Hour Development Journey
+              </h4>
+              <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
+                Hour 0–2: Kickoff, problem selection & initial README • Hour 2–8: Core solution engineering • Hour 8–16: Feature integration • Hour 16–20: Testing & debugging • Hour 20–23: Documentation & demo prep • Hour 23–24: Final submission.
+              </p>
             </div>
           </div>
 
@@ -151,7 +137,7 @@ export default function ScheduleSection() {
                 <span className="font-mono text-xs font-semibold text-[#e0b885]">PHASE 03</span>
                 <span className="text-white/20">/</span>
                 <h3 className="font-serif text-2xl font-normal text-white">
-                  27 December 2026 · Submission Freeze & Judging
+                  27 December 2026 · Submission Freeze, Evaluation & Results
                 </h3>
               </div>
               <span className="font-mono text-[11px] uppercase tracking-wider text-[#b8ada0]">
@@ -163,20 +149,20 @@ export default function ScheduleSection() {
               <div className="pt-4 md:pt-0">
                 <span className="font-mono text-xs font-semibold text-[#e0b885]">27 Dec · 10:00 PM IST</span>
                 <h4 className="mt-1 font-serif text-lg font-normal text-white">
-                  Code Freeze & Final Snapshot
+                  Code Freeze & Final Submission
                 </h4>
                 <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
-                  Development window ends. Final snapshot taken; commits after this mark are excluded from scoring.
+                  Development window closes. Final commit and updated README are frozen for evaluation. No post-deadline commits are scored.
                 </p>
               </div>
 
               <div className="pt-4 md:pt-0 md:pl-8">
-                <span className="font-mono text-xs text-[#e0b885]">27 Dec · 11:00 PM IST</span>
+                <span className="font-mono text-xs text-[#e0b885]">Post-Freeze · Three-Stage Assessment</span>
                 <h4 className="mt-1 font-serif text-lg font-normal text-white">
-                  Results & Winner Announcement
+                  Top 25 Live Finals & Results
                 </h4>
                 <p className="mt-1.5 text-xs leading-relaxed text-[#d6cec2]">
-                  Final scores published on the verified leaderboard and prize distribution initiated.
+                  Stage 1 compliance check, Stage 2 100-point rubric shortlisting, and Stage 3 Top 25 live Google Meet presentations (5–7 min/team). Results follow final judging, with UPI prize distribution within 2–4 hours.
                 </p>
               </div>
             </div>

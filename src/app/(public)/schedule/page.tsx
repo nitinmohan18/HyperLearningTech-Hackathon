@@ -5,11 +5,12 @@ import {
   Calendar,
   Flame,
   GitCommit,
-  Eye,
   CheckSquare,
   Scale,
   Trophy,
   CreditCard,
+  Video,
+  FileCheck,
 } from "lucide-react";
 
 export default function SchedulePage() {
@@ -19,70 +20,77 @@ export default function SchedulePage() {
       phase: "Preparation Day",
       icon: Calendar,
       title: "Registration Closes & Squad Roster Lock",
-      copy: "Final registrations accepted until the published closing time. Repository guidance and collaboration checklists released to registered builders.",
+      copy: "Final registrations accepted until the published closing time. All squad entries (1–4 members) and leaders are permanently locked.",
     },
     {
       time: "25 Dec 2026 · Throughout Day",
       phase: "Preparation Day",
       icon: Calendar,
       title: "Environment Setup & Architecture Planning",
-      copy: "Install dependencies, configure local environments, create private Git repositories, and invite the organiser inspection collaborator (non-competition period).",
+      copy: "Install dependencies, configure local environments, create dedicated Git repository (public or private), and conduct initial conceptual planning.",
+    },
+    {
+      time: "26 Dec 2026 · Before 9:00 PM IST",
+      phase: "Preparation",
+      icon: FileCheck,
+      title: "Organiser Repository Access Verification",
+      copy: "Organisers verify registered entries and ensure the official HyperLearningTech GitHub inspection account has verified access for evaluation.",
     },
     {
       time: "26 Dec 2026 · 9:30 PM IST",
       phase: "Briefing",
       icon: Flame,
       title: "Official Final Briefing",
-      copy: "Live participant briefing on rules, checkpoint formats, judging rubric, repository inspection procedures, and support communication channels.",
+      copy: "Live participant briefing on rules, documentation requirements, 100-point judging rubric, repository inspection procedures, and support channels.",
     },
     {
       time: "26 Dec 2026 · 10:00 PM IST",
       phase: "Official Kickoff",
       icon: Flame,
-      title: "24-Hour Competition Sprint Begins",
-      copy: "The continuous build clock starts. Organisers take the initial private repository snapshot and kickoff confirmation is locked.",
+      title: "24-Hour Competition Kickoff",
+      copy: "The continuous build clock starts. The first meaningful commit must contain initial README documentation before project application development begins.",
     },
     {
-      time: "Hourly · Continuous Cadence",
-      phase: "Sprint Tracking",
+      time: "26–27 Dec 2026 · 24-Hour Window",
+      phase: "Sprint Journey",
       icon: GitCommit,
-      title: "Hourly Checkpoint Submissions",
-      copy: "Participants submit short milestone progress notes, blockers, and git commit hashes via the dashboard to maintain inspectable development evidence.",
-    },
-    {
-      time: "27 Dec 2026 · 8:00 PM IST",
-      phase: "Transparency Reveal",
-      icon: Eye,
-      title: "Repository Public Reveal",
-      copy: "All private hackathon repositories flip to public visibility. Final pushes, documentation, and polish commence for the final two sprint hours.",
+      title: "Recommended Development Journey",
+      copy: "Hour 0–2: Kickoff & initial README • Hour 2–8: Core solution development • Hour 8–16: Feature integration • Hour 16–20: Testing & debugging • Hour 20–23: Documentation & demo prep • Hour 23–24: Final submission.",
     },
     {
       time: "27 Dec 2026 · 10:00 PM IST",
       phase: "Hard Deadline",
       icon: CheckSquare,
-      title: "Final Submission Window Closes",
-      copy: "Final git commit snapshot recorded. All deployment URLs, presentation decks/demos, and team declarations must be submitted.",
+      title: "Competition Ends · Final Submission Freeze",
+      copy: "All development freezes strictly at 10:00 PM IST. Final repository commit and updated README are locked for evaluation. Commits after this deadline are excluded from scoring.",
     },
     {
-      time: "27 Dec 2026 · 10:00–11:00 PM IST",
-      phase: "Evaluation",
+      time: "Post-Freeze · Assessment",
+      phase: "Stage 1 & 2",
       icon: Scale,
-      title: "Judging & Verification Review",
-      copy: "Judges review functionality, technical execution, UI/UX, and commit histories to determine category winners and final Top 25 rankings.",
+      title: "Compliance Verification & 100-Point Evaluation",
+      copy: "Stage 1 verifies registration, repo access, README, and deadlines. Stage 2 evaluates projects against the official 100-point rubric to shortlist the top 25 eligible teams.",
     },
     {
-      time: "27 Dec 2026 · 11:00 PM IST",
+      time: "Live Session · Top 25",
+      phase: "Stage 3",
+      icon: Video,
+      title: "Top 25 Live Final Round (Google Meet)",
+      copy: "Shortlisted teams present live via Google Meet in a 5–7 minute session per team (explaining problem, demonstrating solution, detailing implementation, and answering jury questions).",
+    },
+    {
+      time: "Following Final Judging",
       phase: "Ceremony",
       icon: Trophy,
       title: "Official Results Declaration",
-      copy: "The official leaderboard is declared on the platform, announcing category winners and Top 25 certified projects.",
+      copy: "Official results declared following completion of final judging, revealing Overall Champions, Category Pioneers, and Top 25 certified projects.",
     },
     {
-      time: "27 Dec 2026 · by 11:05 PM IST",
+      time: "Within 2–4 Hours Post-Results",
       phase: "Disbursement",
       icon: CreditCard,
-      title: "Prize Distribution & Transfers",
-      copy: "Target window for immediate prize transfers and electronic certificate generation initiation.",
+      title: "Direct UPI Prize Distribution",
+      copy: "Prize money transferred through UPI within 2–4 hours after the official result announcement, subject to winner verification and successful payment processing.",
     },
   ];
 
@@ -100,7 +108,7 @@ export default function SchedulePage() {
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-            All times are specified in Indian Standard Time (IST, UTC+5:30). Plan your build schedule, sleep intervals, and submission cadence accordingly.
+            All times operate strictly in Indian Standard Time (IST, UTC+5:30). Plan your build schedule, documentation cadence, and final submission accordingly.
           </p>
         </div>
 
@@ -110,7 +118,7 @@ export default function SchedulePage() {
             {milestones.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.time} className="relative flex items-start gap-5 sm:gap-6">
+                <div key={item.title} className="relative flex items-start gap-5 sm:gap-6">
                   {/* Icon Node */}
                   <div className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-sand-border/30 bg-[#16100c] text-[#c89f6d] shadow-sm sm:h-12 sm:w-12">
                     <Icon size={18} />

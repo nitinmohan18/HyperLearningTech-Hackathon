@@ -12,201 +12,207 @@ export interface RuleAccordionItem {
 export const rulesData: RuleAccordionItem[] = [
   {
     id: "eligibility",
-    category: "Project Eligibility and Open Innovation",
-    summary: "Open innovation model with clear software scope and participant structure.",
+    category: "Project Eligibility & Open Innovation",
+    summary: "Unrestricted open innovation model with clear software scope and unified squad format.",
     rules: [
       {
-        title: "Software & Technology Focus",
+        title: "Open Innovation Model",
         description:
-          "Projects must be functional software or technology products capable of being evaluated through a working MVP, inspectable source code, deployment, and live demonstration.",
-        tag: "Requirement",
+          "Participants may identify any meaningful problem and engineer a technological solution using their preferred tools, programming languages, and technology stacks without predefined statement restrictions.",
+        tag: "Theme",
       },
       {
-        title: "Open Innovation Format",
+        title: "Accepted Project Formats",
         description:
-          "Participants may choose their own problem statement, industry domain, and architecture. Organisers will not impose arbitrary theme restrictions unless announced before registration.",
+          "Accepted formats include websites, web applications, mobile applications, AI agents, APIs, browser extensions, games, data tools, software applications, IoT systems, and hardware prototypes.",
+        tag: "Scope",
+      },
+      {
+        title: "Unified Squad Participation Structure",
+        description:
+          "Participation operates in a unified Squad format (1–4 members) at a flat ₹200 fee per entry, whether competing alone or as a collaborative team. An individual may belong to only one registered entry, and each entry submits one project.",
         tag: "Format",
       },
       {
-        title: "Participation Structure",
+        title: "Roster Lock & Start Boundary",
         description:
-          "Participation is conducted exclusively in Squad format (1–4 members) at a flat ₹200 fee per entry, whether competing alone or as a team. An individual may belong to only one registered entry, and each entry submits one project.",
-        tag: "Eligibility",
-      },
-      {
-        title: "Roster Lock",
-        description:
-          "Squad rosters and member details are locked at the official competition start (10:00 PM IST on 26 December). Changes after the start require explicit organiser approval with a documented reason.",
-        tag: "Lock",
+          "Squad rosters and member details are locked at the official competition start (10:00 PM IST on 26 December). Project-specific implementation must take place during the official 24-hour competition window.",
+        tag: "Schedule",
       },
     ],
   },
   {
-    id: "ai-libraries",
-    category: "AI Tools and Third-Party Libraries",
-    summary: "Clear permissions and mandatory disclosures for AI assistants and external libraries.",
+    id: "mandatory-requirements",
+    category: "Mandatory Technical Requirements (Only Two)",
+    summary: "The hackathon enforces ONLY TWO mandatory technical requirements for all participants.",
     rules: [
       {
-        title: "AI Coding Assistants Allowed",
+        title: "Requirement 01: GitHub Repository & Organiser Access",
         description:
-          "AI tools (such as GitHub Copilot, Cursor, ChatGPT, Claude, etc.) are permitted to assist development. They are a force multiplier, not a replacement for engineering craft.",
+          "Every team must create a dedicated GitHub repository (public or private). The team leader must manage repository access and ensure the official HyperLearningTech GitHub account has verified collaborator access for evaluation and originality verification until the process concludes. Participants retain complete project ownership.",
+        tag: "Mandatory",
+      },
+      {
+        title: "Requirement 02: Documentation-First Development",
+        description:
+          "The first meaningful project commit must contain initial README documentation before project-specific application development begins (explaining title, team details, problem statement, target users, proposed solution, planned features, and intended tech stack).",
+        tag: "Mandatory",
+      },
+      {
+        title: "Final Submission README Update",
+        description:
+          "Teams must update their README before the final deadline to explain implemented functionality, setup and running instructions, external resources, significant reused or AI-assisted components, and known limitations. The README is directly utilized during evaluation.",
+        tag: "Mandatory",
+      },
+    ],
+  },
+  {
+    id: "recommended-practices",
+    category: "Recommended Engineering Practices (NOT Mandatory)",
+    summary: "Encouraged professional standards that serve as quality evidence, not disqualification triggers.",
+    rules: [
+      {
+        title: "Encouraged Development Practices",
+        description:
+          "Regular Git commits, feature branches, pull requests, branch protection, code reviews, descriptive commit messages, automated tests, CI/CD, modular code, and architecture diagrams are recommended professional practices.",
+        tag: "Recommended",
+      },
+      {
+        title: "No Automatic Penalties for Optional Practices",
+        description:
+          "Not following a recommended engineering practice does NOT automatically cause disqualification or a fixed scoring penalty. Judges evaluate demonstrated quality through any suitable evidence provided.",
+        tag: "Policy",
+      },
+      {
+        title: "Live Deployment & Demonstration Alternatives",
+        description:
+          "Live cloud deployment is strongly encouraged. However, runnable local applications, recorded demonstration videos, interactive prototypes, and equivalent evaluation methods are fully acceptable alternatives.",
+        tag: "Flexibility",
+      },
+    ],
+  },
+  {
+    id: "ai-tools",
+    category: "Tools, AI & Internet Resources",
+    summary: "Full freedom to use modern tools, AI assistants, and open-source libraries with honest ownership.",
+    rules: [
+      {
+        title: "Free & Premium Tools Permitted",
+        description:
+          "Participants are free to use any legally accessible development tools, platforms, AI coding assistants (Copilot, Cursor, ChatGPT, Claude), AI agents, cloud services, and starter templates across both free and premium tiers.",
         tag: "Permitted",
       },
       {
-        title: "Mandatory AI Disclosure",
+        title: "Zero AI Penalty & Project Responsibility",
         description:
-          "Participants must transparently disclose any material use of AI in both their project proposal and final submission declaration, detailing which parts of the application were AI-assisted.",
-        tag: "Disclosure",
+          "The competition does not penalise participants for using AI. However, participants must understand and take responsibility for their submitted work and clearly distinguish significant external or AI-assisted contributions in their README.",
+        tag: "Transparency",
       },
       {
-        title: "Third-Party Libraries & Frameworks",
+        title: "Learning-Oriented Technology Selection",
         description:
-          "Standard open-source packages, frameworks (e.g. Next.js, FastAPI, Tailwind), and public APIs are welcome. They must be declared and cannot substitute for the core build effort of the event.",
-        tag: "Libraries",
+          "There are no restrictions on programming languages, frameworks, or AI providers. The objective is to encourage learning, experimentation, and genuine productivity.",
+        tag: "Freedom",
       },
     ],
   },
   {
-    id: "existing-code",
-    category: "Existing Code and Asset Disclosure",
-    summary: "Fair distinction between preparation day and competition-window development.",
+    id: "originality",
+    category: "Originality & Fair Competition",
+    summary: "An encouraging, learning-first philosophy prioritizing genuine effort and understanding.",
     rules: [
       {
-        title: "Prior Code & Scaffolding Disclosure",
+        title: "Build with Purpose & Integrity",
         description:
-          "Any pre-existing codebases, starter templates, pre-trained custom models, UI kits, or pre-built datasets must be declared upfront in your proposal and repository README.",
-        tag: "Disclosure",
+          "You are encouraged to use the best tools available to you. The objective is not to restrict how you build, but to ensure that what you submit represents genuine learning, creativity, and original effort during the hackathon.",
+        tag: "Philosophy",
       },
       {
-        title: "Preparation Day Boundaries",
+        title: "Pre-Event Planning vs. Sprint Implementation",
         description:
-          "Work done on Preparation Day (25 December)—such as environment setup, library installation, and planning—is encouraged, but does not count toward the 24-hour sprint development effort points.",
+          "Research, brainstorming, conceptual planning, and general environment setup are welcomed before the event on 25 December. However, project-specific implementation must take place during the official 24-hour window.",
         tag: "Boundary",
       },
       {
-        title: "Core Build Requirement",
+        title: "Prohibited Submissions",
         description:
-          "The core product logic, primary features, and demonstrable MVP must be engineered between 10:00 PM IST on 26 December and 10:00 PM IST on 27 December 2026.",
-        tag: "Build Rule",
-      },
-    ],
-  },
-  {
-    id: "plagiarism",
-    category: "Plagiarism and Misconduct",
-    summary: "Zero tolerance for plagiarism, deceptive demos, or dishonest progress reporting.",
-    rules: [
-      {
-        title: "Plagiarism & Impersonation",
-        description:
-          "Submitting another author's work as your own, cloning uncredited repositories, or impersonating team members will result in immediate disqualification.",
-        tag: "Strict",
-      },
-      {
-        title: "Deceptive Demos & Fake Activity",
-        description:
-          "Simulated mockups presented as working backends, fabricated commit timestamps, empty progress checkpoints, or attempts to manipulate the leaderboard are strictly prohibited.",
-        tag: "Strict",
-      },
-      {
-        title: "Fair Response Opportunity",
-        description:
-          "In the event of suspicious activity or audit questions, organisers will request a short explanation from the team leader, giving builders a reasonable opportunity to respond before any disqualification.",
+          "Submitting an already-built application as original hackathon work, copy-pasting complete existing repositories, or reusing previously completed academic projects is prohibited. An honest prototype with original work is more valuable than pre-built complexity.",
         tag: "Fairness",
       },
     ],
   },
   {
+    id: "code-of-conduct",
+    category: "Code of Conduct & Misconduct Review",
+    summary: "A safe, respectful, and transparent environment with fair, evidence-based review processes.",
+    rules: [
+      {
+        title: "Universal Code of Conduct",
+        description:
+          "All participants, organisers, judges, mentors, and volunteers must maintain professional, respectful, and inclusive communication. Harassment, discrimination, sabotage, and impersonation are strictly prohibited.",
+        tag: "Conduct",
+      },
+      {
+        title: "Fair Misconduct Review Process",
+        description:
+          "Suspected violations are reviewed fairly and confidentially. Participants receive a reasonable opportunity to clarify suspected competition misconduct before any disciplinary decision.",
+        tag: "Due Process",
+      },
+      {
+        title: "Automated Flags Are Not Conclusive",
+        description:
+          "Automated AI detection, unusual commit patterns, or code similarity alone are not treated as conclusive evidence of cheating. Judgments are based on holistic evidence, understanding, and human review.",
+        tag: "Fair Review",
+      },
+    ],
+  },
+  {
     id: "ip-ownership",
-    category: "Intellectual Property Ownership",
-    summary: "100% builder ownership of all code, assets, and inventions.",
+    category: "Intellectual Property & Privacy",
+    summary: "100% builder ownership of code, assets, and inventions with strict secrets protection.",
     rules: [
       {
         title: "Participants Retain 100% IP Ownership",
         description:
-          "You and your squad retain all intellectual property rights, copyright, and patent potential for everything you conceptualise and build during the hackathon.",
+          "Participation does not transfer intellectual property or source code ownership to HyperLearningTech. Builders retain complete ownership, copyright, and commercial rights to their creations.",
         tag: "Full IP Rights",
       },
       {
-        title: "Limited Organiser Showcase License",
+        title: "Confidentiality & Showcase Permission",
         description:
-          "HyperLearningTech receives only a limited, non-exclusive permission to display your project name, screenshots, public demo excerpts, and links for event reporting and community showcases.",
-        tag: "Showcase Only",
-      },
-    ],
-  },
-  {
-    id: "repo-requirements",
-    category: "Repository Requirements",
-    summary: "Mandatory private GitHub setup, inspection collaborator, and public reveal workflow.",
-    rules: [
-      {
-        title: "Single Private GitHub Repository",
-        description:
-          "The team leader must create exactly one private GitHub repository for the project before the organiser verification deadline.",
-        tag: "Mandatory",
+          "Private repositories and confidential project information will never be publicly distributed without participant permission. Organiser access is strictly for competition administration, evaluation, and originality verification.",
+        tag: "Privacy",
       },
       {
-        title: "Official Inspection Collaborator",
+        title: "Secrets & Credentials Protection",
         description:
-          "You must invite the official HyperLearningTech inspection GitHub account (announced before registration closes) as a collaborator. Access must be verified and accepted before kickoff.",
-        tag: "Inspection",
-      },
-      {
-        title: "Pending Invitations Are Insufficient",
-        description:
-          "Do not assume organisers can inspect a repository while the invitation is still pending. Access must be verified before 9:00 PM IST on 26 December.",
-        tag: "Critical",
-      },
-      {
-        title: "Public Reveal Protocol",
-        description:
-          "At 8:00 PM IST on 27 December, team leaders will be instructed to toggle repository visibility to public for transparent peer and judge inspection.",
-        tag: "Reveal",
-      },
-    ],
-  },
-  {
-    id: "security-privacy",
-    category: "Security and Privacy",
-    summary: "Protecting sensitive keys, credentials, and participant data.",
-    rules: [
-      {
-        title: "Never Expose Secrets in Repositories",
-        description:
-          "Do not commit API keys, database credentials, server private keys, access tokens, or personal confidential data to your repository. Use .env.example files with mock placeholders.",
+          "Participants must never commit private API keys, database credentials, server certificates, or sensitive secrets into repositories. Organisers will never request passwords or 2FA codes.",
         tag: "Security",
       },
-      {
-        title: "No Account Sharing",
-        description:
-          "Organisers will never ask for your GitHub password, personal access token, or 2FA codes. All inspection occurs strictly through standard GitHub collaborator permissions.",
-        tag: "Safety",
-      },
     ],
   },
   {
-    id: "submission-demo",
-    category: "Submission and Demonstration",
-    summary: "Checklist for the 10:00 PM deadline, live deployments, and optional video demo.",
+    id: "submission-evaluation",
+    category: "Submission & Three-Stage Evaluation",
+    summary: "Clear submission checklist, three-stage evaluation, and live Google Meet final round.",
     rules: [
       {
-        title: "Submission Freeze at 10:00 PM IST",
+        title: "Minimum Submission Requirements",
         description:
-          "The submission window and GitHub snapshot freeze strictly at 10:00 PM IST on 27 December 2026. No post-deadline commits or form edits will be evaluated as competition work.",
-        tag: "Deadline",
+          "Submissions require: registered team identity, project title, selected theme/track, GitHub repository URL with verified organiser access, and an updated final README. Live URLs, demo videos, and presentations are recommended supporting evidence.",
+        tag: "Submission",
       },
       {
-        title: "Required Submission Artifacts",
+        title: "Stage 1 & Stage 2: Verification and Shortlisting",
         description:
-          "Entries must submit: Project title, problem statement, solution overview, feature list, live deployment URL, public repository URL, setup instructions, squad contribution breakdown, and AI/asset declarations.",
-        tag: "Checklist",
+          "Organisers first verify compliance with registration, repo access, README, and deadlines. Eligible projects are evaluated against the 100-point rubric, and the top 25 eligible teams advance to the live final round.",
+        tag: "Evaluation",
       },
       {
-        title: "Presentation Video Is Optional",
+        title: "Stage 3: Top 25 Live Final Round",
         description:
-          "A 3–5 minute presentation video (e.g. unlisted YouTube or Google Drive link) is recommended but purely optional. Live deployments and inspectable code are evaluated on merit so video editing skills do not become a barrier.",
-        tag: "Optional",
+          "Shortlisted teams present live via Google Meet in a 5–7 minute session per team (explaining problem, demonstrating solution, detailing implementation, and answering jury questions), scored afresh using the official 100-point rubric.",
+        tag: "Live Final",
       },
     ],
   },

@@ -5,24 +5,24 @@ import { event } from "@/data/event";
 export default function AboutPage() {
   const pillars = [
     {
-      title: "What you will build",
+      title: "Open Innovation Freedom",
       icon: Code,
-      copy: "Choose a meaningful problem and deliver a functional project with a clear user journey, working features, and inspectable source code.",
+      copy: "Identify any meaningful problem across AI, Sustainability, EdTech, Healthcare, or Developer Tools and build a software solution using your preferred technology stack.",
     },
     {
-      title: "What makes it different",
+      title: "Two Mandatory Requirements",
       icon: ShieldCheck,
-      copy: "Repository snapshots, hourly checkpoints, and collaborator inspection are used to keep development effort visible, credible, and fair.",
+      copy: "Only two technical requirements: verified organiser access to your dedicated GitHub repository (public or private), and documentation-first development with initial README committed before coding.",
     },
     {
-      title: "Genuine development effort",
+      title: "Genuine Learning & AI Freedom",
       icon: Terminal,
-      copy: "Participants must document genuine contributions, disclose AI and existing-code assistance honestly, and build the core solution during the competition.",
+      copy: "Free and premium AI tools, coding assistants, and open-source libraries are permitted without penalty. Understand your work, compete with integrity, and disclose AI contributions transparently.",
     },
     {
-      title: "Unified Squad format",
+      title: "Unified Squad & 100% IP",
       icon: Users,
-      copy: `All entries run under the Squad format (1–4 members) at a flat ${event.squadFee} fee per entry—whether participating alone or as a team for one unified project submission.`,
+      copy: `All entries participate under the unified Squad format (1–4 members) at a flat ${event.squadFee} entry fee, retaining 100% intellectual property and copyright over everything built.`,
     },
   ];
 
@@ -31,20 +31,20 @@ export default function AboutPage() {
       <div className="container-site section-pad">
         <div className="max-w-3xl">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-[#8e7a68]">
-            About the Event
+            Event Philosophy
           </p>
           <h1 className="mt-4 font-serif text-4xl sm:text-6xl lg:text-7xl font-normal leading-[1.08] tracking-tight text-[#f0eae1]">
-            A 24-hour test of <br />
+            Build with purpose. <br />
             <span className="font-serif italic font-normal text-[#c89f6d]">
-              ideas, execution & proof.
+              Compete with integrity.
             </span>
           </h1>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-            HyperLearningTech – Winter Hackathon ’26 is the inaugural edition of an independently organised online competition designed for serious individual builders and collaborative squads.
+            HyperLearningTech Winter Hackathon 2026 is a 24-hour open innovation competition designed to encourage practical learning, meaningful problem-solving, creativity, collaboration, and responsible technological development.
           </p>
         </div>
 
-        {/* Pillars Grid - Clean open layout */}
+        {/* Pillars Grid */}
         <div className="mt-16 grid gap-10 md:grid-cols-2 divide-y md:divide-y-0 md:gap-x-12 border-t border-sand-border/15 pt-10">
           {pillars.map(({ title, icon: Icon, copy }) => (
             <article
@@ -69,13 +69,13 @@ export default function AboutPage() {
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
             <div className="max-w-2xl">
               <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.25em] text-[#c89f6d]">
-                Guiding Principle
+                Core Philosophy
               </span>
               <h3 className="mt-2 font-serif text-3xl font-normal tracking-tight text-[#f0eae1] sm:text-4xl">
-                {event.tagline}
+                Practical Learning Over Pre-Built Complexity
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-[#9e8e7c]">
-                We believe in verifiable progress over exaggerated pitches. Every team will maintain an inspectable git commit log from kickoff to the final reveal.
+                Participants are encouraged to explore unfamiliar technologies, experiment with ideas, and build solutions they genuinely understand. An honest prototype with meaningful original work is more valuable than an impressive pre-built application submitted without genuine comprehension.
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap gap-4">

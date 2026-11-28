@@ -97,8 +97,8 @@ public/         Static assets
 - Solo registration: ₹99
 - Squad registration: ₹200 flat for 2–4 members
 - Total guaranteed cash prize pool: ₹14,992 (Maximum planned competition reward budget: ₹15,000)
-- Results: Announced up to 3 hours after hackathon ends  
-- Prize distribution target: Within 30 minutes of result declaration
+- Results: Following completion of final judging
+- Prize distribution target: UPI transfer within 2–4 hours after official result announcement (subject to verification)
 
 ## Building for production
 

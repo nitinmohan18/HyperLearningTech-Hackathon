@@ -57,7 +57,7 @@ export default function PrizesPage() {
             <h2 className="font-serif text-2xl font-normal text-[#f0eae1]">
               Overall Rankings (Top 5)
             </h2>
-            <span className="font-mono text-xs text-[#8e7a68]">IST Distribution by 11:05 PM</span>
+            <span className="font-mono text-xs text-[#8e7a68]">UPI transfer within 2–4 hours post-results</span>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">

@@ -1,7 +1,7 @@
 export interface ScheduleMilestone {
   date: string;
   time: string;
-  phase: "Preparation" | "Sprint" | "Reveal" | "Deadline" | "Judging" | "Results";
+  phase: "Preparation" | "Sprint" | "Journey" | "Deadline" | "Judging" | "Results";
   title: string;
   description: string;
   isSprint?: boolean;
@@ -15,25 +15,25 @@ export const scheduleMilestones: ScheduleMilestone[] = [
     phase: "Preparation",
     title: "Registration Closes & Roster Locked",
     description:
-      "All squad registrations (1–4 members) close. Squad rosters and leader details are permanently locked for the competition.",
+      "All squad registrations close. Squad rosters and leader details are locked for the competition.",
     statusBadge: "Pre-Event",
   },
   {
     date: "25 Dec 2026",
     time: "Throughout Day",
     phase: "Preparation",
-    title: "Preparation Day: Setup & Planning",
+    title: "Preparation Day: Setup & Architecture Planning",
     description:
-      "Install dependencies, configure local environments, create private Git repos, and plan architecture. Note: Preparation-day work does not earn 24-hour competition effort points.",
+      "Install dependencies, configure local environments, create dedicated Git repository, invite organiser access, and conduct conceptual planning.",
     statusBadge: "Setup Only",
   },
   {
     date: "26 Dec 2026",
     time: "Before 9:00 PM IST",
     phase: "Preparation",
-    title: "Collaborator Access & Repo Verification",
+    title: "Repository Access & Organiser Verification",
     description:
-      "Organisers verify all registered entries, squad rosters, private repository access, and ensure the official inspection account invitation is accepted.",
+      "Organisers verify registered entries and ensure the official HyperLearningTech GitHub inspection account has verified access.",
     statusBadge: "Verification",
   },
   {
@@ -42,38 +42,28 @@ export const scheduleMilestones: ScheduleMilestone[] = [
     phase: "Preparation",
     title: "Official Final Briefing",
     description:
-      "Live briefing on rules, checkpoint submission format, judging rubric, repository inspection procedures, and support communication channels.",
+      "Live briefing on rules, documentation requirements, 100-point judging rubric, repository inspection procedures, and support communication channels.",
     statusBadge: "Briefing",
   },
   {
     date: "26 Dec 2026",
     time: "10:00 PM IST",
     phase: "Sprint",
-    title: "Competition Begins · Initial Repo Snapshot",
+    title: "24-Hour Competition Kickoff",
     description:
-      "The official 24-hour continuous build challenge begins! The organiser records the initial repository baseline. No pre-kickoff code earns sprint effort points.",
+      "The official 24-hour build window begins! First commit must contain initial README documentation before project implementation starts.",
     isSprint: true,
-    statusBadge: "Sprint Kickoff",
+    statusBadge: "Kickoff",
   },
   {
     date: "26–27 Dec 2026",
     time: "10:00 PM to 10:00 PM IST",
     phase: "Sprint",
-    title: "24-Hour Active Development & Hourly Checkpoints",
+    title: "Recommended 24-Hour Development Journey",
     description:
-      "Continuous build window. Participants commit regularly and log hourly checkpoint updates (completed work, next milestone, blockers, screenshots) to build verifiable effort.",
+      "Hour 0–2: Kickoff & initial README • Hour 2–8: Core solution • Hour 8–16: Feature integration • Hour 16–20: Testing & debugging • Hour 20–23: Docs & demo prep • Hour 23–24: Final submission.",
     isSprint: true,
     statusBadge: "24h Window",
-  },
-  {
-    date: "27 Dec 2026",
-    time: "8:00 PM IST",
-    phase: "Reveal",
-    title: "Planned Public Repository Reveal",
-    description:
-      "Team leaders switch repository visibility from private to public as instructed by organisers for transparent peer and judge inspection before the final sprint hours.",
-    isSprint: true,
-    statusBadge: "Public Reveal",
   },
   {
     date: "27 Dec 2026",
@@ -81,34 +71,52 @@ export const scheduleMilestones: ScheduleMilestone[] = [
     phase: "Deadline",
     title: "Competition Ends · Final Submission Freeze",
     description:
-      "All development freezes. Organiser records final repository snapshot. Final project details, deployment URL, README, and declarations must be submitted.",
+      "The 24-hour development window closes. Final repository commit and updated README are frozen for evaluation. No new evaluated functionality may be added.",
     statusBadge: "Hard Freeze",
   },
   {
     date: "27 Dec 2026",
-    time: "10:00 PM – 11:00 PM IST",
+    time: "Post-Freeze",
     phase: "Judging",
-    title: "Judging, Code Review & Verification",
+    title: "Stage 1: Compliance Verification",
     description:
-      "Judges test live deployments, inspect repo diffs and commit histories, evaluate documentation, check AI/asset disclosures, and lock final 100-point scores.",
+      "Organisers review registration compliance, GitHub repository accessibility, initial and final README documentation, deadline compliance, and Code of Conduct compliance.",
+    statusBadge: "Compliance",
+  },
+  {
+    date: "27 Dec 2026",
+    time: "Post-Freeze",
+    phase: "Judging",
+    title: "Stage 2: Project Evaluation & Shortlisting",
+    description:
+      "Judges evaluate eligible submissions according to the official 100-point rubric. Top 25 eligible teams are shortlisted for the live final round.",
     statusBadge: "Evaluation",
   },
   {
-    date: "27 Dec 2026",
-    time: "11:00 PM IST",
+    date: "Post-Evaluation",
+    time: "Live Session",
+    phase: "Judging",
+    title: "Stage 3: Top 25 Live Final Round",
+    description:
+      "Shortlisted teams present live via Google Meet (5–7 minutes per team) explaining problem, solution, architecture, working demo, and answering jury questions.",
+    statusBadge: "Live Final",
+  },
+  {
+    date: "Post-Judging",
+    time: "Following Final Judging",
     phase: "Results",
     title: "Official Results Announcement",
     description:
-      "Final standings revealed on the official leaderboard and event channels: Overall Top 5, Category Winners, Top 25 Ranked, and Hidden Surprise Recognitions.",
+      "Official results announced following completion of the live final judging process, celebrating Champions, Category Pioneers, and Top 25 certified projects.",
     statusBadge: "Ceremony",
   },
   {
-    date: "27 Dec 2026",
-    time: "By 11:05 PM IST",
+    date: "Post-Announcement",
+    time: "Within 2–4 Hours",
     phase: "Results",
-    title: "Target Direct Prize Distribution",
+    title: "Direct UPI Prize Distribution",
     description:
-      "Organisers initiate immediate electronic prize transfers to verified squad team leaders / winning entry leads (subject to payment-system availability).",
+      "Prize money transferred through UPI within 2–4 hours after official result announcement, subject to winner verification and successful payment processing.",
     statusBadge: "Disbursement",
   },
 ];

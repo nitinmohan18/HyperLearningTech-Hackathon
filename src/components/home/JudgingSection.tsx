@@ -6,16 +6,17 @@ import {
   ChevronDown,
   CheckCircle2,
   Code,
-  Flame,
-  Users,
-  Globe,
+  Sparkles,
   FileText,
-  Video,
+  Target,
+  Globe,
+  BookOpen,
+  MessageSquare,
 } from "lucide-react";
 import { judgingCriteria } from "@/data/judging";
 
 export default function JudgingSection() {
-  const [expandedId, setExpandedId] = useState<string | null>("effort");
+  const [expandedId, setExpandedId] = useState<string | null>("technical");
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
@@ -23,22 +24,24 @@ export default function JudgingSection() {
 
   const getIcon = (id: string) => {
     switch (id) {
-      case "mvp":
+      case "problem":
+        return <Target size={16} className="text-[#e0b885]" />;
+      case "originality":
+        return <Sparkles size={16} className="text-[#e0b885]" />;
+      case "technical":
         return <Code size={16} className="text-[#e0b885]" />;
-      case "effort":
-        return <Flame size={16} className="text-[#e0b885]" />;
-      case "tech":
-        return <Scale size={16} className="text-[#e0b885]" />;
-      case "contribution":
-        return <Users size={16} className="text-[#e0b885]" />;
-      case "deployment":
-        return <Globe size={16} className="text-[#e0b885]" />;
-      case "docs":
-        return <FileText size={16} className="text-[#e0b885]" />;
-      case "demo":
-        return <Video size={16} className="text-[#e0b885]" />;
-      default:
+      case "functionality":
         return <CheckCircle2 size={16} className="text-[#e0b885]" />;
+      case "engineering":
+        return <FileText size={16} className="text-[#e0b885]" />;
+      case "impact":
+        return <Globe size={16} className="text-[#e0b885]" />;
+      case "learning":
+        return <BookOpen size={16} className="text-[#e0b885]" />;
+      case "communication":
+        return <MessageSquare size={16} className="text-[#e0b885]" />;
+      default:
+        return <Scale size={16} className="text-[#e0b885]" />;
     }
   };
 
@@ -48,12 +51,12 @@ export default function JudgingSection() {
         {/* Header */}
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="eyebrow">Transparent Evaluation</p>
+            <p className="eyebrow">Official 100-Point Rubric</p>
             <h2 className="section-title">
               Judging & <span className="font-serif italic text-[#e0b885]">Scoring</span>
             </h2>
             <p className="section-copy">
-              A normalized 100-point rubric rewarding working functionality and verifiable development effort.
+              An objective 100-point rubric evaluating demonstrated technical depth, functionality, and genuine understanding.
             </p>
           </div>
 
@@ -77,36 +80,40 @@ export default function JudgingSection() {
           </div>
 
           <div className="flex h-2 w-full overflow-hidden rounded-full bg-white/[0.08]">
-            <div style={{ width: "25%" }} className="bg-[#e0b885]" title="Working MVP (25pts)" />
-            <div style={{ width: "25%" }} className="bg-[#edd2b1]" title="Verified Effort (25pts)" />
-            <div style={{ width: "15%" }} className="bg-[#c49a65]" title="Technical Implementation (15pts)" />
-            <div style={{ width: "15%" }} className="bg-[#af8654]" title="Team Contribution (15pts)" />
-            <div style={{ width: "10%" }} className="bg-[#8d693d]" title="Deployment (10pts)" />
-            <div style={{ width: "5%" }} className="bg-[#71522d]" title="Documentation (5pts)" />
-            <div style={{ width: "5%" }} className="bg-[#563c1f]" title="Demonstration (5pts)" />
+            <div style={{ width: "15%" }} className="bg-[#e0b885]" title="Problem Understanding (15pts)" />
+            <div style={{ width: "15%" }} className="bg-[#edd2b1]" title="Originality & Innovation (15pts)" />
+            <div style={{ width: "20%" }} className="bg-[#d4a366]" title="Technical Implementation (20pts)" />
+            <div style={{ width: "15%" }} className="bg-[#ba874a]" title="Functionality & Usability (15pts)" />
+            <div style={{ width: "10%" }} className="bg-[#9c6f37]" title="Engineering & Documentation (10pts)" />
+            <div style={{ width: "10%" }} className="bg-[#835c2b]" title="Impact & Feasibility (10pts)" />
+            <div style={{ width: "10%" }} className="bg-[#6b4a20]" title="Learning & Understanding (10pts)" />
+            <div style={{ width: "5%" }} className="bg-[#513615]" title="Communication (5pts)" />
           </div>
 
           <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] text-[#d6cec2]">
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#e0b885]" /> MVP: 25 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#e0b885]" /> Problem: 15 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#edd2b1]" /> Verified: 25 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#edd2b1]" /> Innovation: 15 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#c49a65]" /> Tech: 15 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#d4a366]" /> Tech: 20 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#af8654]" /> Squad: 15 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#ba874a]" /> Function: 15 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#8d693d]" /> Deploy: 10 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#9c6f37]" /> Engineering: 10 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#71522d]" /> Docs: 5 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#835c2b]" /> Impact: 10 pts
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#563c1f]" /> Demo: 5 pts
+              <span className="h-1.5 w-1.5 rounded-full bg-[#6b4a20]" /> Learning: 10 pts
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#513615]" /> Comm: 5 pts
             </span>
           </div>
         </div>

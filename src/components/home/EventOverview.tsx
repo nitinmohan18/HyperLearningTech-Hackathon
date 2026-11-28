@@ -45,10 +45,10 @@ export default function EventOverview() {
           </div>
           <div className="space-y-4">
             <p className="text-base leading-relaxed text-[#9e8e7c] sm:text-lg">
-              Winter Hackathon ’26 brings independent builders together for a focused, transparent online competition. Participants receive a project brief, develop an original working solution, maintain inspectable repository progress, and present a complete submission.
+              Winter Hackathon 2026 is a 24-hour open innovation competition designed to encourage practical learning, meaningful problem-solving, and responsible technological development across diverse domains including AI, Sustainability, EdTech, and Developer Tools.
             </p>
             <p className="text-sm leading-relaxed text-[#8e7a68]">
-              Genuine development effort matters: AI tools may assist, but use must be disclosed, existing work cannot substitute for the hackathon build, and the project must remain the participant’s or squad’s own original work.
+              Build with purpose. Learn through experimentation. Compete with integrity. The competition prioritises genuine learning and original development; an honest prototype with original effort is far more valuable than an uncomprehended pre-built submission.
             </p>
           </div>
         </div>

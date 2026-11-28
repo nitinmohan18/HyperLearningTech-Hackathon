@@ -7,19 +7,19 @@ export default function Timeline() {
       date: "25 Dec 2026",
       label: "Preparation Day",
       icon: CalendarDays,
-      copy: "Registration closes at 11:59 PM. Repository guidance is sent, and participant briefings begin.",
+      copy: "Registration closes at the published time. Environment configuration, private repository setup, and conceptual planning.",
     },
     {
       date: "26 Dec · 10:00 PM IST",
       label: "Competition Kickoff",
       icon: Flame,
-      copy: "The 24-hour competition begins with the official repository snapshot. Hourly checkpoints start.",
+      copy: "The 24-hour continuous build begins. The first commit must contain initial README documentation before development starts.",
     },
     {
-      date: "27 Dec · 8–11 PM IST",
-      label: "Reveal, Judging & Results",
+      date: "27 Dec · 10:00 PM IST",
+      label: "Freeze & Evaluation",
       icon: Trophy,
-      copy: "Public repo reveal at 8 PM, final submissions close at 10 PM, judging concludes, and results are declared at 11 PM.",
+      copy: "Final freeze at 10:00 PM. Three-stage evaluation leads to Top 25 live Google Meet presentations and UPI prize distribution.",
     },
   ];
 
