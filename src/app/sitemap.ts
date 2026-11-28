@@ -60,6 +60,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.7,
         },
         {
+            url: `${BASE_URL}/campus-ambassador`,
+            lastModified: new Date(),
+            changeFrequency: "weekly",
+            priority: 0.8,
+        },
+        {
             url: `${BASE_URL}/register`,
             lastModified: new Date(),
             changeFrequency: "weekly",

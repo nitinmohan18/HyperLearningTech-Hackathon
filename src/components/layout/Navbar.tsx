@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, ArrowRight } from "lucide-react";
 import Logo from "./Logo";
 import { LiquidMetalButton } from "@/components/core/liquid-metal-button";
+import { RegisterChoiceModal, openRegisterModal } from "@/components/common/RegisterChoiceModal";
 import { event } from "@/data/event";
 
 const navLinks = [
@@ -136,44 +137,40 @@ export default function Navbar() {
 
           {/* Action CTAs (Desktop) */}
           <div className="hidden sm:flex items-center gap-3.5">
-            <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
-              <LiquidMetalButton
-                borderWidth={2}
-                metalConfig={{
-                  colorBack: "#c99a5e",
-                  colorTint: "#ffffff",
-                  speed: 0.6,
-                  distortion: 0.2,
-                  repetition: 4,
-                }}
-              >
-                <span>Register Now</span>
-                <ArrowRight size={13} />
-              </LiquidMetalButton>
-            </a>
+            <LiquidMetalButton
+              type="button"
+              onClick={openRegisterModal}
+              borderWidth={2}
+              metalConfig={{
+                colorBack: "#c99a5e",
+                colorTint: "#ffffff",
+                speed: 0.6,
+                distortion: 0.2,
+                repetition: 4,
+              }}
+            >
+              <span>Register Now</span>
+              <ArrowRight size={13} />
+            </LiquidMetalButton>
           </div>
 
           {/* Mobile Menu Actions (Visible below lg) */}
           <div className="flex items-center gap-2 lg:hidden">
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <LiquidMetalButton
+              type="button"
+              onClick={openRegisterModal}
               className="sm:hidden"
+              borderWidth={1.5}
+              metalConfig={{
+                colorBack: "#c99a5e",
+                colorTint: "#ffffff",
+                speed: 0.45,
+                distortion: 0.16,
+                repetition: 4,
+              }}
             >
-              <LiquidMetalButton
-                borderWidth={1.5}
-                metalConfig={{
-                  colorBack: "#c99a5e",
-                  colorTint: "#ffffff",
-                  speed: 0.45,
-                  distortion: 0.16,
-                  repetition: 4,
-                }}
-              >
-                <span className="text-[11px]">Register</span>
-              </LiquidMetalButton>
-            </a>
+              <span className="text-[11px]">Register</span>
+            </LiquidMetalButton>
             <button
               type="button"
               className="rounded-full p-2 text-white hover:bg-white/10 transition-colors"
@@ -213,20 +210,22 @@ export default function Navbar() {
               })}
 
               <div className="mt-4 flex flex-col gap-2.5 border-t border-white/[0.1] pt-4">
-                <a
-                  href={event.registrationUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
                   className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#f5efe6] to-[#ded2c3] text-xs font-semibold text-[#120d09] shadow-md"
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setOpen(false);
+                    openRegisterModal();
+                  }}
                 >
                   Register Now <ArrowRight size={15} />
-                </a>
+                </button>
               </div>
             </div>
           </div>
         )}
       </header>
+      <RegisterChoiceModal />
     </>
   );
 }

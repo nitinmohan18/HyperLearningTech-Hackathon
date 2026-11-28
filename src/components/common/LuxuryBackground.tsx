@@ -1,5 +1,10 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+
 export default function LuxuryBackground() {
-  return (
-    <div className="live-bg" aria-hidden="true" />
-  );
+  const pathname = usePathname();
+  if (pathname !== "/") return null;
+
+  return <div className="live-bg" aria-hidden="true" />;
 }

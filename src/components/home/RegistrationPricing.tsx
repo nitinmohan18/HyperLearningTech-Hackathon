@@ -7,6 +7,7 @@ import { Users, ArrowRight } from "lucide-react";
 import { event } from "@/data/event";
 import GlowBorderCard from "@/components/ui/GlowBorderCard";
 import { CreepyButton } from "@/components/core/creepy-button";
+import { openRegisterModal } from "@/components/common/RegisterChoiceModal";
 
 const squadGlowColors = [
   "#2a1e14",
@@ -156,26 +157,21 @@ function MinimalPricingCard({
 
           {/* CTA */}
           <div className="relative z-10 mt-4 sm:mt-8 pt-0 sm:pt-2">
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full"
+            <CreepyButton
+              type="button"
+              onClick={openRegisterModal}
+              className="w-full min-h-[40px] sm:min-h-[48px]"
+              coverClassName={
+                featured
+                  ? "bg-gradient-to-b from-[#fbf8f3] to-[#e8decb] text-[#18110b] font-semibold text-xs sm:text-sm shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]"
+                  : "border border-white/[0.14] bg-[#221810] text-[#f5efe5] font-medium text-xs sm:text-sm shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+              }
             >
-              <CreepyButton
-                className="w-full min-h-[40px] sm:min-h-[48px]"
-                coverClassName={
-                  featured
-                    ? "bg-gradient-to-b from-[#fbf8f3] to-[#e8decb] text-[#18110b] font-semibold text-xs sm:text-sm shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]"
-                    : "border border-white/[0.14] bg-[#221810] text-[#f5efe5] font-medium text-xs sm:text-sm shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
-                }
-              >
-                <span className="flex items-center gap-2">
-                  <span>{ctaText}</span>
-                  <ArrowRight size={14} className="sm:h-[15px] sm:w-[15px]" />
-                </span>
-              </CreepyButton>
-            </a>
+              <span className="flex items-center gap-2">
+                <span>{ctaText}</span>
+                <ArrowRight size={14} className="sm:h-[15px] sm:w-[15px]" />
+              </span>
+            </CreepyButton>
           </div>
         </div>
       </GlowBorderCard>

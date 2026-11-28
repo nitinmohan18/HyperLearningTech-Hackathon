@@ -8,6 +8,7 @@ import { TextRoll } from "@/components/core/text-roll";
 import { CreepyButton } from "@/components/core/creepy-button";
 import LuxuryBackground from "@/components/common/LuxuryBackground";
 import { UnstopLogo } from "@/components/common/UnstopLogo";
+import { openRegisterModal } from "@/components/common/RegisterChoiceModal";
 
 export default function Hero() {
   return (
@@ -61,22 +62,17 @@ export default function Hero() {
 
           {/* Action Buttons with Creepy Peek-Eye Effect */}
           <div className="mt-7 sm:mt-9 flex flex-col gap-3.5 sm:gap-4 sm:flex-row sm:items-center">
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto"
+            <CreepyButton
+              type="button"
+              onClick={openRegisterModal}
+              className="w-full sm:w-auto min-h-[48px]"
+              coverClassName="bg-gradient-to-b from-[#fbf8f3] to-[#e8decb] text-[#18110b] font-semibold text-sm shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]"
             >
-              <CreepyButton
-                className="w-full sm:w-auto min-h-[48px]"
-                coverClassName="bg-gradient-to-b from-[#fbf8f3] to-[#e8decb] text-[#18110b] font-semibold text-sm shadow-[0_4px_20px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.9)]"
-              >
-                <span className="flex items-center gap-2">
-                  <span>Register Now</span>
-                  <ArrowRight size={15} />
-                </span>
-              </CreepyButton>
-            </a>
+              <span className="flex items-center gap-2">
+                <span>Register Now</span>
+                <ArrowRight size={15} />
+              </span>
+            </CreepyButton>
 
             <a href="#overview" className="w-full sm:w-auto">
               <CreepyButton

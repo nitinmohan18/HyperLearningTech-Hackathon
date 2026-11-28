@@ -126,6 +126,11 @@ export default function Footer() {
                     FAQ
                   </Link>
                 </li>
+                <li>
+                  <Link href="/campus-ambassador" className="text-[#d6cec2] transition-colors hover:text-white">
+                    Campus Ambassador
+                  </Link>
+                </li>
               </ul>
             </div>
 
